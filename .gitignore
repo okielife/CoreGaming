@@ -1,4 +1,5 @@
 .idea/
+docs/docs_out/
 
 # Prerequisites
 *.d
