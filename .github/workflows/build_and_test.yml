@@ -24,7 +24,7 @@ jobs:
         if: runner.os == 'Linux'
         run: |
           sudo apt-get update
-          sudo apt-get install -y libx11-dev libxrandr-dev libudev-dev libgl1-mesa-dev libopenal-dev libvorbis-dev libogg-dev libflac-dev libxcursor-dev
+          sudo apt-get install -y libx11-dev libxrandr-dev libudev-dev libgl1-mesa-dev libopenal-dev libvorbis-dev libogg-dev libflac-dev libxcursor-dev libfreetype-dev libfreetype6 libfreetype6-dev
 
       - name: Configure CMake
         run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
