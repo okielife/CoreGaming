@@ -1,64 +1,45 @@
-#include "game.h"
-
+#include "constants.h"
 #include "assets.h"
+#include "game.h"
 #include "input.h"
+#include "scenes/base.h"
+#include "scenes/title.h"
+#include "scenes/level1.h"
 
-Game::Game(Platform& platform) : platform_(platform), renderer_(platform.renderer()), input_(platform.input()) {
-    camera_.w = 800;
-    camera_.h = 600;
-    this->audio.setAndPlayBackgroundMusic(AssetManager::music("area2.wav"));
+Game::Game(Renderer& renderer, Input& input, AudioManager& audio) : renderer(renderer), input(input), audio(audio) {
+    this->audio.playMusic(MusicID::Area2);
 
+    // build the map of scenes, all in memory all at the beginning
+    this->scenes.insert({SceneID::Title, std::move(std::make_unique<SceneTitle>(*this))});
+    this->scenes.insert({SceneID::Level1, std::move(std::make_unique<SceneLevel1>())});
+
+    // initialize the current scene
+    this->currentSceneID = SceneID::Title;
+    this->currentScene = this->scenes[this->currentSceneID].get();
 }
 
-Game::~Game()
+void Game::frame(const float dt_ms)
 {
-    // Close audio device and mixer
-    Mix_CloseAudio();
-    Mix_Quit();
-    // Quit SDL
-    SDL_Quit();
+    this->update(dt_ms);
+    this->currentScene->update(*this, dt_ms);
+    this->currentScene->render((*this));
 }
 
-void Game::frame(const float dt)
+void Game::update([[maybe_unused]] const float dt_ms)
 {
-    this->update(dt);
-    this->render();
-}
-
-void Game::update(const float dt) {
-    const auto& input = platform_.input();
-
-    if (input.isDown(Action::MoveUp))    playerY_ -= speed_ * dt;
-    if (input.isDown(Action::MoveDown))  playerY_ += speed_ * dt;
-    if (input.isDown(Action::MoveLeft))  playerX_ -= speed_ * dt;
-    if (input.isDown(Action::MoveRight)) playerX_ += speed_ * dt;
-
-    camera_.x = playerX_ - static_cast<float>(camera_.w) / 2;
-    camera_.y = playerY_ - static_cast<float>(camera_.h) / 2;
-}
-
-void Game::render()
-{
-    renderer_.begin();
-
-    // Draw some text
-    renderer_.drawText(20, 50, "Hello world", {255, 0, 0, 255});
-
-    // Draw simple map (grid)
-    for (int y = 0; y < 50; ++y) {
-        for (int x = 0; x < 50; ++x) {
-            renderer_.drawRect(
-                static_cast<float>(x) * 32, static_cast<float>(y) * 32, 30, 30,
-                camera_, {40, 40, 40, 255}
-            );
+    if (this->currentScene->done) {
+        switch (this->currentSceneID)
+        {
+        case SceneID::Title:
+            this->currentSceneID = SceneID::Level1;
+            this->currentScene = this->scenes[this->currentSceneID].get();
+            break;
+        case SceneID::Level1:
+            this->running = false;
+            break;
+        default:
+            return;
         }
     }
-
-    // Draw player
-    renderer_.drawRect(
-        playerX_, playerY_, 28, 28,
-        camera_, {200, 80, 80, 255}
-    );
-
-    renderer_.end();
 }
+

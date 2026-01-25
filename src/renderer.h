@@ -1,21 +1,135 @@
 #pragma once
 
-#include <SDL2/SDL.h>
-#include <SDL_ttf.h>
-
 #include "camera.h"
+#include "textures.h"
 
+struct SDL_Color;
+struct SDL_Renderer;
+struct _TTF_Font;
+
+/**
+ * @file renderer.h
+ * @brief Centralized rendering class, providing utilities for displaying on the screen
+ *
+ * The basic expectation for rendering goes like this:
+ * - The Platform class holds the game event loop, and each frame asks the game to perform a frame
+ * - The game class frame routine should do any updates, and then call the appropriate render method
+ * - The render method has a reference to this Renderer class, and so it should call begin(), any draw*()
+ *   methods, and then end()
+ * - The Platform class will then flip the screen to show the new window to the user.
+ *
+ * @ingroup render
+ */
+
+/**
+ * @brief Rendering management class for visual rendering on the screen
+ *
+ * This class is responsible for handling the "screen/window".
+ * When anything in the game wants to display something on the screen, such as
+ * shapes, text, sprites, background images, this class should provide convenient
+ * methods for doing that, using either world coordinates (the player's location), or
+ * direct screen coordinates (the heads-up display or a health bar).
+ * It is expected that this will be added to a lot initially as we figure out what
+ * the game needs to render.
+ *
+ * @ingroup render
+ */
 class Renderer {
 public:
+    /**
+     * @brief Primary constructor for the game engine renderer class
+     *
+     * This class sets up internal connections to SDL stuff and initializes things
+     * necessary for the client-facing API.  The constructor is responsible for:
+     * - Initializing all fonts and textures that will be used in the game (inefficiently
+     *   all at once for now, because it's easy)
+     * @param r The platform (SDL) rendering instance
+     */
     explicit Renderer(SDL_Renderer* r);
 
-    void begin();
-    void end();
+    /**
+     * @brief This function does any rendering initialization
+     *
+     * For now, the initialization for the renderer consists of just setting the draw color
+     * and calling RenderClear to paint the background the draw color.  This must be called by
+     * each scene at the beginning of their render step to clear the screen before immediately
+     * drawing their assets.
+     */
+    void begin() const;
 
-    void drawRect(float x, float y, float w, float h, const Camera& cam, SDL_Color color);
-    void drawText(float x, float y, const char * text, SDL_Color color);
+    /**
+     * @brief This function wraps up any rendering once the drawn assets have been added
+     *
+     * As of now this function does not do anything, but we may need to add things later.
+     * Game/scene render methods should call this at the end of their render function to
+     * futureproof it in case this function does more later.
+     */
+    static void end();
 
-    TTF_Font *font;
+    /**
+     * @brief Transforms a game-world rectangle position/size into a screen geometry rectangle.
+     *
+     * @param x The x-coordinate in the game world, in game-units
+     * @param y The y-coordinate in the game world, in game-units
+     * @param w The width in the game world, in game-units
+     * @param h The height in the game world, in game-units
+     * @param cam The camera instance which tells how to transform world geometry into screen geometry
+     * @return A screen-coordinate (pixel) rectangle which can be displayed using the platform SDL renderer
+     */
+    static SDL_FRect worldRectangleToScreenRectangle(float x, float y, float w, float h, const Camera& cam);
+
+    /**
+     * @brief Draws a game-world rectangle on the screen based on camera position and zoom
+     *
+     * @param x The x-coordinate in the game world, in game-units
+     * @param y The y-coordinate in the game world, in game-units
+     * @param w The width in the game world, in game-units
+     * @param h The height in the game world, in game-units
+     * @param cam The camera instance which tells how to transform world geometry into screen geometry
+     * @param color The outline color of the rectangle
+     */
+    void drawWorldRectangleOutline(float x, float y, float w, float h, const Camera& cam, SDL_Color color) const;
+
+    /**
+     * @brief Draws text on the screen given screen coordinates, not world coordinates
+     *
+     * @param x The x-coordinate on the screen, in pixels
+     * @param y The y-coordinate on the screen, in pixels
+     * @param text The text string to write on the screen
+     * @param color The color of the text
+     */
+    void drawScreenText(float x, float y, const char * text, SDL_Color color) const;
+
+    /**
+     * @brief Draws a given texture to the screen given screen coordinates
+     *
+     * @param tex The texture ID to draw, based on the loadTexture method return value
+     * @param x The x-coordinate on the screen, in pixels
+     * @param y The y-coordinate on the screen, in pixels
+     * @param w The width of the texture to draw, in pixels
+     * @param h The height of the texture to draw, in pixels
+     */
+    void drawScreenTexture(TextureID tex, float x, float y, float w, float h) const;
+
+    /**
+     * @brief A thin wrapper around the texture manager's load method
+     *
+     * @param path A filesystem path object to the texture file
+     * @return A TextureID, which can be passed to the draw*Texture methods here as needed
+     */
+    TextureID loadTexture(const std::filesystem::path& path);
+
+    // void drawSprite(
+    //      TextureID texture,
+    //      const SDL_Rect& src,
+    //      float worldX,
+    //      float worldY,
+    //      const Camera& cam
+    //  );
+
+private:
+    _TTF_Font *font;
     SDL_Renderer* r_;
     SDL_Color textColor;
+    TextureManager textures_;
 };

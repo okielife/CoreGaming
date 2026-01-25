@@ -22,7 +22,7 @@ FILE_PATTERNS          = \
   *.md
 
 MARKDOWN_SUPPORT       = YES
-USE_MDFILE_AS_MAINPAGE = README.md
+USE_MDFILE_AS_MAINPAGE =
 
 EXTRACT_ALL            = YES
 EXTRACT_PRIVATE        = NO
@@ -35,3 +35,5 @@ MACRO_EXPANSION       = YES
 # Good defaults
 WARN_IF_UNDOCUMENTED  = YES
 QUIET                 = NO
+
+FULL_PATH_NAMES       = NO

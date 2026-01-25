@@ -1,36 +1,37 @@
+#include <SDL2/SDL_render.h>
 #include <SDL2/SDL_ttf.h>
 
 #include "assets.h"
+#include "constants.h"
 #include "renderer.h"
 
-Renderer::Renderer(SDL_Renderer* r) : r_(r)
+Renderer::Renderer(SDL_Renderer* r) : r_(r), textColor(RED), textures_(r_)
 {
     TTF_Init();
     auto font_path = AssetManager::font("Ubuntu-Regular.ttf");
     this->font = TTF_OpenFont(font_path.string().c_str(), 24);
-    this->textColor = {255, 255, 255, 0};
 }
 
-void Renderer::begin() {
-    TTF_Init();
+void Renderer::begin() const
+{
     SDL_SetRenderDrawColor(r_, 20, 20, 20, 255);
     SDL_RenderClear(r_);
 }
 
 void Renderer::end() {}
 
-void Renderer::drawRect(const float x, const float y, const float w, const float h, const Camera& cam, const SDL_Color color) {
-    const SDL_FRect rect{
-        x - cam.x,
-        y - cam.y,
-        w,
-        h
-    };
+SDL_FRect Renderer::worldRectangleToScreenRectangle(float const x, float const y, float const w, float const h, const Camera& cam) {
+    return {(x - cam.x) * cam.zoom, (y - cam.y) * cam.zoom, w * cam.zoom, h * cam.zoom};
+}
+
+void Renderer::drawWorldRectangleOutline(const float x, const float y, const float w, const float h, const Camera& cam, const SDL_Color color) const
+{
+    SDL_FRect const rect = worldRectangleToScreenRectangle(x, y, w, h, cam);
     SDL_SetRenderDrawColor(r_, color.r, color.g, color.b, color.a);
     SDL_RenderFillRectF(r_, &rect);
 }
 
-void Renderer::drawText(float x, float y, const char* text, SDL_Color color)
+void Renderer::drawScreenText(float x, float y, const char* text, SDL_Color color) const
 {
     SDL_Surface* surface = TTF_RenderText_Solid(font, text, color);
     if (!surface) {
@@ -45,14 +46,45 @@ void Renderer::drawText(float x, float y, const char* text, SDL_Color color)
         return;
     }
 
-    SDL_Rect rect;
-    rect.x = static_cast<int>(x);
-    rect.y = static_cast<int>(y);
-    rect.w = surface->w;
-    rect.h = surface->h;
-
+    SDL_Rect const rect{static_cast<int>(x), static_cast<int>(y), surface->w, surface->h};
     SDL_FreeSurface(surface);
-
     SDL_RenderCopy(r_, texture, nullptr, &rect);
     SDL_DestroyTexture(texture);
 }
+
+void Renderer::drawScreenTexture(
+    TextureID const tex,
+    float const x, float const y,
+    float const w, float const h
+) const
+{
+    SDL_Texture* texture = textures_.get(tex);
+    const SDL_FRect dst { x, y, w, h };
+    SDL_RenderCopyF(r_, texture, nullptr, &dst);
+}
+
+TextureID Renderer::loadTexture(const std::filesystem::path& path) {
+    return textures_.load(path);
+}
+
+// void Renderer::drawSprite(
+//     TextureID texture,
+//     const SDL_Rect& src,
+//     float x,
+//     float y,
+//     const Camera& cam
+// ) {
+//     SDL_FRect dst {
+//         (x - cam.x) * cam.zoom,
+//         (y - cam.y) * cam.zoom,
+//         src.w * cam.zoom,
+//         src.h * cam.zoom
+//     };
+//
+//     SDL_RenderCopy(
+//         r_,
+//         textureManager_.get(texture),
+//         &src,
+//         &dst
+//     );
+// }

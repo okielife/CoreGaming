@@ -18,7 +18,7 @@ Check here for the preferred method on your platform: https://git-scm.com/instal
 
 You will need to install SDL-2 differently based on your platform:
 
-- Linux: sudo apt install libsdl2-dev libsdl2-mixer-dev libsdl2-ttf-dev
+- Linux: sudo apt install libsdl2-dev libsdl2-mixer-dev libsdl2-ttf-dev libsdl2-image-dev
 - macOS: brew install sdl2
 - Windows: vcpkg install sdl2
 
