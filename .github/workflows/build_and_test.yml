@@ -32,7 +32,7 @@ jobs:
             libopenal-dev
 
       - name: Configure CMake
-        run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=${{ steps.sdl.outputs.prefix }}
+        run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
 
       - name: Build Project
         run: cmake --build build --config Release
