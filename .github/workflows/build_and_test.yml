@@ -29,7 +29,8 @@ jobs:
             libogg-dev \
             libvorbis-dev \
             libflac-dev \
-            libopusfile-dev
+            libopusfile-dev \
+            libfluidsynth-dev
 
       - name: Install SDL_mixer dependencies (macOS)
         if: runner.os == 'macOS'
@@ -41,7 +42,8 @@ jobs:
             flac \
             libxmp \
             mpg123 \
-            opusfile
+            opusfile \
+            fluidsynth
 
       - name: Setup SDL2
         id: sdl
