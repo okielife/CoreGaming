@@ -27,11 +27,5 @@ target_link_libraries(engine_tests
         GTest::gtest_main
 )
 
-# Allow tests to include engine headers
-target_include_directories(engine_tests
-        PRIVATE
-        ${PROJECT_SOURCE_DIR}/src
-)
-
 include(GoogleTest)
 gtest_discover_tests(engine_tests)

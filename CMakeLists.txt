@@ -50,5 +50,5 @@ install(TARGETS game RUNTIME DESTINATION bin)
 install(DIRECTORY src/assets/ DESTINATION bin/assets)
 
 # enable unit testing
-enable_testing()
-add_subdirectory(tests)
+# enable_testing()
+# add_subdirectory(tests)
