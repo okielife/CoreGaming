@@ -42,15 +42,16 @@ jobs:
             mpg123
 
       - name: Setup SDL2
+        id: sdl
         uses: libsdl-org/setup-sdl@v1
         with:
           version: 2-latest
           version-sdl-ttf: 2-latest
           version-sdl-image: 2-latest
           version-sdl-mixer: 2-latest
-#        env:
-#          SDL_MIXER_CMAKE_ARGS: >
-#            -DSDL2MIXER_OPUS=OFF
+        env:
+          SDL_MIXER_CMAKE_ARGS: >
+            -DSDL2MIXER_OPUS=OFF
 #            -DSDL2MIXER_WAVPACK=OFF
 #            -DSDL2MIXER_MOD=OFF
 #            -DSDL2MIXER_MIDI=OFF
@@ -62,7 +63,7 @@ jobs:
           choco install pkgconfiglite -y
 
       - name: Configure CMake
-        run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+        run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=${{ steps.sdl.outputs.prefix }}
 
       - name: Build Project
         run: cmake --build build --config Release
