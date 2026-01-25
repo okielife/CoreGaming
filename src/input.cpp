@@ -25,6 +25,7 @@ void Input::update(const SDL_Event& e) {
         case SDL_SCANCODE_S: this->setAsPressed(Action::MoveDown); break;
         case SDL_SCANCODE_A: this->setAsPressed(Action::MoveLeft); break;
         case SDL_SCANCODE_D: this->setAsPressed(Action::MoveRight); break;
+        case SDL_SCANCODE_SPACE: this->setAsPressed(Action::Sword); break;
         case SDL_SCANCODE_KP_PLUS:  this->setAsPressed(Action::ZoomIn); break;
         case SDL_SCANCODE_KP_MINUS: this->setAsPressed(Action::ZoomOut); break;
         default: break;

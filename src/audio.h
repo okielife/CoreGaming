@@ -5,6 +5,7 @@
 #include <unordered_map>
 
 struct _Mix_Music;
+struct Mix_Chunk;
 
 /**
  * @file audio.h
@@ -14,7 +15,7 @@ struct _Mix_Music;
  */
 
 /**
- * The enumerated audio IDs, should be one per available audio in the assets.
+ * The enumerated music IDs, should be one per available music in the assets.
  */
 enum class MusicID
 {
@@ -23,11 +24,28 @@ enum class MusicID
 };
 
 /**
- * A mapping of the audio ID to the filename in the assets/audio directory.
- * Update this accordingly whenever audio is added/changed/removed
+ * A mapping of the music ID to the filename in the assets/audio directory.
+ * Update this accordingly whenever music is added/changed/removed
  */
 inline const std::unordered_map<MusicID, std::string> MusicMap = {
     { MusicID::Area2, "area2.wav" }
+};
+
+/**
+ * The enumerated sound IDs, should be one per available sound in the assets.
+ */
+enum class SoundID
+{
+    None,
+    Sword
+};
+
+/**
+ * A mapping of the sound ID to the filename in the assets/audio directory.
+ * Update this accordingly whenever sound is added/changed/removed
+ */
+inline const std::unordered_map<SoundID, std::string> SoundMap = {
+    { SoundID::Sword, "sword.mp3" }
 };
 
 /**
@@ -97,7 +115,15 @@ public:
      */
     void stopMusic();
 
+    /**
+     * @brief Plays sound based on the ID passed in
+     *
+     * @param soundIDToPlay The SoundID to be played
+     */
+    void playSound(SoundID soundIDToPlay);
+
 private:
     std::map<MusicID, _Mix_Music *> music;
     MusicID currentMusicID = MusicID::None;
+    std::map<SoundID, Mix_Chunk *> sound;
 };

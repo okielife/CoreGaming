@@ -1,11 +1,14 @@
 #pragma once
 
-#include "camera.h"
-#include "textures.h"
+#include <unordered_map>
 
+#include "camera.h"
+
+struct _TTF_Font;
 struct SDL_Color;
 struct SDL_Renderer;
-struct _TTF_Font;
+struct SDL_Texture;
+using TextureID = __uint32_t;
 
 /**
  * @file renderer.h
@@ -22,12 +25,30 @@ struct _TTF_Font;
  */
 
 /**
+ * The enumerated font IDs, should be one per available font in the assets
+ * Since the size must be known at instantiation time, create an enum entry
+ * for each needed font/size combination.
+ */
+enum class FontID
+{
+    None,
+    UbuntuRegular24
+};
+
+/**
+ * A mapping of the font ID to the filename in the assets/fonts directory.
+ * Update this accordingly whenever fonts are added/changed/removed.
+ */
+inline const std::unordered_map<FontID, std::pair<std::string, int>> FontMap = {
+    {FontID::UbuntuRegular24, {"Ubuntu-Regular.ttf", 24}}
+};
+
+/**
  * @brief Rendering management class for visual rendering on the screen
  *
  * This class is responsible for handling the "screen/window".
- * When anything in the game wants to display something on the screen, such as
- * shapes, text, sprites, background images, this class should provide convenient
- * methods for doing that, using either world coordinates (the player's location), or
+ * This class should provide convenient methods to display something on the screen, such as
+ * shapes, text, sprites, background images, using either world coordinates (the player's location), or
  * direct screen coordinates (the heads-up display or a health bar).
  * It is expected that this will be added to a lot initially as we figure out what
  * the game needs to render.
@@ -46,6 +67,11 @@ public:
      * @param r The platform (SDL) rendering instance
      */
     explicit Renderer(SDL_Renderer* r);
+
+    /**
+     * @brief Destructor class, will clean up any owned SDL assets
+     */
+    ~Renderer();
 
     /**
      * @brief This function does any rendering initialization
@@ -97,8 +123,9 @@ public:
      * @param y The y-coordinate on the screen, in pixels
      * @param text The text string to write on the screen
      * @param color The color of the text
+     * @param fontID The FontID enumeration value to use for rendering the text
      */
-    void drawScreenText(float x, float y, const char * text, SDL_Color color) const;
+    void drawScreenText(float x, float y, const char * text, SDL_Color color, FontID fontID = FontID::UbuntuRegular24) const;
 
     /**
      * @brief Draws a given texture to the screen given screen coordinates
@@ -128,8 +155,8 @@ public:
     //  );
 
 private:
-    _TTF_Font *font;
     SDL_Renderer* r_;
-    SDL_Color textColor;
-    TextureManager textures_;
+    std::unordered_map<FontID, _TTF_Font*> fonts;
+    std::unordered_map<TextureID, SDL_Texture*> textures_;
+    TextureID nextId_ = 1;
 };

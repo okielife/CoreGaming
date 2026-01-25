@@ -17,16 +17,20 @@ AudioManager::AudioManager()
         throw std::runtime_error(Mix_GetError());
     }
 
-    if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) != 0) {
+    if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 8, 2048) != 0) {
         throw std::runtime_error(Mix_GetError());
     }
-
-    Mix_AllocateChannels(16);
 
     for (auto const & [id, filename] : MusicMap)
     {
         if (id == MusicID::None) continue;
         this->music.insert({id, Mix_LoadMUS(AssetManager::audio(filename).c_str())});
+    }
+
+    for (auto const & [id, filename]: SoundMap)
+    {
+        if (id == SoundID::None) continue;
+        this->sound.insert({id, Mix_LoadWAV(AssetManager::audio(filename).c_str())});
     }
 
 }
@@ -60,4 +64,10 @@ void AudioManager::stopMusic()
 {
     Mix_HaltMusic();
     this->currentMusicID = MusicID::None;
+}
+
+void AudioManager::playSound(SoundID soundIDToPlay)
+{
+    auto const & soundChunk = this->sound[soundIDToPlay];
+    Mix_PlayChannel(-1, soundChunk, 0);
 }

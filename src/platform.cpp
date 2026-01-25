@@ -1,12 +1,19 @@
 #include <filesystem>
 #include <stdexcept>
 
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
+
 #include "platform.h"
 #include "renderer.h"
 
-Platform::Platform(const int width, const int height, const char* title) : renderer_(nullptr) {
+Platform::Platform(const int width, const int height, const char* title) {
     if (SDL_Init(SDL_INIT_VIDEO) != 0) {
         throw std::runtime_error(SDL_GetError());
+    }
+    if (TTF_Init() == -1)
+    {
+        SDL_Log("TTF_Init failed: %s", TTF_GetError());
     }
 
     this->window_ = SDL_CreateWindow(title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_SHOWN);
@@ -20,12 +27,14 @@ Platform::Platform(const int width, const int height, const char* title) : rende
     }
 
     // Now that we have SDL_Renderer*, rebind renderer_
-    this->renderer_ = Renderer(this->sdlRenderer_);
+    this->renderer_ = new Renderer(this->sdlRenderer_);
 }
 
 Platform::~Platform() {
+    delete this->renderer_;
     SDL_DestroyRenderer(this->sdlRenderer_);
     SDL_DestroyWindow(this->window_);
+    TTF_Quit();
     SDL_Quit();
 }
 

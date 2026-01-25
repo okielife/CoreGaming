@@ -14,17 +14,29 @@ void SceneLevel1::reenter([[maybe_unused]] Game & game)
 
 }
 
-void SceneLevel1::update(Game & game, const float dt)
+void SceneLevel1::update(Game & game, const float dt_ms)
 {
+    // update timers
+    msSinceLastSword += dt_ms;
+
     const auto& input = game.input;
     if (input.wasPressed(Action::Quit)) this->done = true;
 
-    if (input.isDown(Action::MoveUp))    this->playerY_ -= this->speed_ * dt;
-    if (input.isDown(Action::MoveDown))  this->playerY_ += this->speed_ * dt;
-    if (input.isDown(Action::MoveLeft))  this->playerX_ -= this->speed_ * dt;
-    if (input.isDown(Action::MoveRight)) this->playerX_ += this->speed_ * dt;
+    if (input.isDown(Action::MoveUp))    this->playerY_ -= this->speed_ * dt_ms;
+    if (input.isDown(Action::MoveDown))  this->playerY_ += this->speed_ * dt_ms;
+    if (input.isDown(Action::MoveLeft))  this->playerX_ -= this->speed_ * dt_ms;
+    if (input.isDown(Action::MoveRight)) this->playerX_ += this->speed_ * dt_ms;
     if (input.isDown(Action::ZoomIn)) this->overheadCamera.zoom *= 1.01;
     if (input.isDown(Action::ZoomOut)) this->overheadCamera.zoom /= 1.01;
+
+    if (input.wasPressed(Action::Sword))
+    {
+        if (msSinceLastSword >= swordCooldownMS)
+        {
+            game.audio.playSound(SoundID::Sword);  // might want to use Mix_VolumeChunk to set the volume
+            msSinceLastSword = 0.0f;
+        }
+    }
 
     this->overheadCamera.x = this->playerX_ - static_cast<float>(this->overheadCamera.w) / 2;
     this->overheadCamera.y = this->playerY_ - static_cast<float>(this->overheadCamera.h) / 2;
@@ -32,12 +44,12 @@ void SceneLevel1::update(Game & game, const float dt)
 
 void SceneLevel1::render(Game & game)
 {
-    game.renderer.begin();
+    game.renderer->begin();
 
     // Draw simple map (grid)
     for (int y = 0; y < 50; ++y) {
         for (int x = 0; x < 50; ++x) {
-            game.renderer.drawWorldRectangleOutline(
+            game.renderer->drawWorldRectangleOutline(
                 static_cast<float>(x) * 32, static_cast<float>(y) * 32, 30, 30,
                 this->overheadCamera, {40, 40, 40, 255}
             );
@@ -45,15 +57,15 @@ void SceneLevel1::render(Game & game)
     }
 
     // Draw player
-    game.renderer.drawWorldRectangleOutline(
+    game.renderer->drawWorldRectangleOutline(
         this->playerX_, this->playerY_, 28, 28,
         this->overheadCamera, {200, 80, 80, 255}
     );
 
     // Draw some text
-    game.renderer.drawScreenText(20, 50, "Use WASD", RED);
+    game.renderer->drawScreenText(20, 50, "Use WASD", RED);
     std::string const coordsString = "Player X, Y = " + std::to_string(this->playerX_) + ", " + std::to_string(this->playerY_);
-    game.renderer.drawScreenText(200, 70, coordsString.c_str(), RED);
+    game.renderer->drawScreenText(200, 70, coordsString.c_str(), RED);
 
-    game.renderer.end();
+    game.renderer->end();
 }

@@ -1,7 +1,6 @@
 #pragma once
 
 #include "level1.h"
-#include "../textures.h"
 
 struct SceneTitle : SceneBase
 {

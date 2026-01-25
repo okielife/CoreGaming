@@ -24,8 +24,6 @@ add_executable(game
         src/platform.h
         src/renderer.cpp
         src/renderer.h
-        src/textures.cpp
-        src/textures.h
         src/scenes/base.h
         src/scenes/level1.cpp
         src/scenes/level1.h

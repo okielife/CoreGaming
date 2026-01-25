@@ -6,7 +6,7 @@
 #include "scenes/title.h"
 #include "scenes/level1.h"
 
-Game::Game(Renderer& renderer, Input& input, AudioManager& audio) : renderer(renderer), input(input), audio(audio) {
+Game::Game(Renderer* renderer, Input& input, AudioManager& audio) : renderer(renderer), input(input), audio(audio) {
     this->audio.playMusic(MusicID::Area2);
 
     // build the map of scenes, all in memory all at the beginning

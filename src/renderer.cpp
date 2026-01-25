@@ -1,15 +1,32 @@
 #include <SDL2/SDL_render.h>
 #include <SDL2/SDL_ttf.h>
+#include <SDL2/SDL_image.h>
 
 #include "assets.h"
-#include "constants.h"
 #include "renderer.h"
 
-Renderer::Renderer(SDL_Renderer* r) : r_(r), textColor(RED), textures_(r_)
+#include <ranges>
+
+Renderer::Renderer(SDL_Renderer* r) : r_(r)
 {
-    TTF_Init();
-    auto font_path = AssetManager::font("Ubuntu-Regular.ttf");
-    this->font = TTF_OpenFont(font_path.string().c_str(), 24);
+    for (auto const & [id, font] : FontMap)
+    {
+        if (id == FontID::None) continue;
+        auto [filename, size] = font;
+        auto fontInstance = TTF_OpenFont(AssetManager::font(filename).c_str(), size);
+        this->fonts.insert({id, fontInstance});
+    }
+}
+
+Renderer::~Renderer()
+{
+    for (const auto& tex : textures_ | std::views::values) {
+        SDL_DestroyTexture(tex);
+    }
+    for (const auto& font : this->fonts | std::views::values)
+    {
+        TTF_CloseFont(font);
+    }
 }
 
 void Renderer::begin() const
@@ -31,9 +48,10 @@ void Renderer::drawWorldRectangleOutline(const float x, const float y, const flo
     SDL_RenderFillRectF(r_, &rect);
 }
 
-void Renderer::drawScreenText(float x, float y, const char* text, SDL_Color color) const
+void Renderer::drawScreenText(float x, float y, const char* text, const SDL_Color color, FontID const fontID) const
 {
-    SDL_Surface* surface = TTF_RenderText_Solid(font, text, color);
+    auto fontInstance = this->fonts.at(fontID);
+    SDL_Surface* surface = TTF_RenderText_Solid(fontInstance, text, color);
     if (!surface) {
         SDL_Log("TTF_RenderText failed: %s", TTF_GetError());
         return;
@@ -58,13 +76,29 @@ void Renderer::drawScreenTexture(
     float const w, float const h
 ) const
 {
-    SDL_Texture* texture = textures_.get(tex);
+    SDL_Texture* texture = textures_.find(tex)->second;
     const SDL_FRect dst { x, y, w, h };
     SDL_RenderCopyF(r_, texture, nullptr, &dst);
 }
 
 TextureID Renderer::loadTexture(const std::filesystem::path& path) {
-    return textures_.load(path);
+    SDL_Surface* surface = IMG_Load(path.c_str());
+    if (!surface) {
+        SDL_Log("IMG_Load failed: %s", IMG_GetError());
+        return 0;
+    }
+
+    SDL_Texture* texture = SDL_CreateTextureFromSurface(r_, surface);
+    SDL_FreeSurface(surface);
+
+    if (!texture) {
+        SDL_Log("CreateTexture failed: %s", SDL_GetError());
+        return 0;
+    }
+
+    const TextureID id = nextId_++;
+    textures_[id] = texture;
+    return id;
 }
 
 // void Renderer::drawSprite(

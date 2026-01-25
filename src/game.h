@@ -45,7 +45,7 @@ public:
      * @param input An input manager with methods to check for key presses and key down
      * @param audio An audio manager with methods for starting and stopping audio and sound effects
      */
-    Game(Renderer& renderer, Input& input, AudioManager& audio);
+    Game(Renderer* renderer, Input& input, AudioManager& audio);
 
     /**
      * @brief Perform one frame of the game, including inits, updates and renders
@@ -61,7 +61,7 @@ public:
     /**
      * @brief Reference to platform rendering manager
      */
-    Renderer& renderer;
+    Renderer* renderer;
 
     /**
      * @brief Reference to platform input manager

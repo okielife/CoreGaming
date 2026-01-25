@@ -37,9 +37,8 @@ public:
     Platform(int width, int height, const char* title);
     ~Platform();
     void run(Game & game);
-    Renderer& renderer() { return renderer_; }
     Input& input() { return input_; }
-    Renderer renderer_;
+    Renderer * renderer_;
     Input input_;
     AudioManager audio_;
 

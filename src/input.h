@@ -12,6 +12,7 @@ enum class Action {
     MoveDown,
     MoveLeft,
     MoveRight,
+    Sword,
     ZoomIn,
     ZoomOut,
     Quit  // make sure Quit is the last one in this list
