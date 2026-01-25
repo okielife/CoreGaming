@@ -38,7 +38,7 @@ FetchContent_MakeAvailable(SDL2_image)
 set(SDL_TTF_VERSION    release-2.24.0)
 set(SDL2TTF_INSTALL OFF)
 set(SDL2TTF_SAMPLES OFF)
-set(SDL2TTF_VENDORED OFF) # uses bundled freetype
+set(SDL2TTF_VENDORED ON) # uses bundled freetype
 FetchContent_Declare(
         SDL2_ttf
         GIT_REPOSITORY https://github.com/libsdl-org/SDL_ttf.git
