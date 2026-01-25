@@ -28,7 +28,8 @@ jobs:
             libxmp-dev \
             libogg-dev \
             libvorbis-dev \
-            libflac-dev
+            libflac-dev \
+            libopusfile-dev
 
       - name: Install SDL_mixer dependencies (macOS)
         if: runner.os == 'macOS'
@@ -39,7 +40,8 @@ jobs:
             libvorbis \
             flac \
             libxmp \
-            mpg123
+            mpg123 \
+            opusfile
 
       - name: Setup SDL2
         id: sdl
