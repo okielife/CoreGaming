@@ -1,8 +1,8 @@
 #include <gtest/gtest.h>
-#include "../src/OverheadCamera.h"
+#include "../src/camera.h"
 
 TEST(CameraTest, CentersOnTarget) {
-    OverheadCamera cam;
+    Camera cam;
     cam.w = 800;
     cam.h = 600;
 
