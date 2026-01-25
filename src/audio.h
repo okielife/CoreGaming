@@ -4,8 +4,7 @@
 #include <map>
 #include <unordered_map>
 
-struct _Mix_Music;
-struct Mix_Chunk;
+#include <SFML/Audio.hpp>
 
 /**
  * @file audio.h
@@ -45,7 +44,7 @@ enum class SoundID
  * Update this accordingly whenever sound is added/changed/removed
  */
 inline const std::unordered_map<SoundID, std::string> SoundMap = {
-    { SoundID::Sword, "sword.mp3" }
+    { SoundID::Sword, "sword.wav" }
 };
 
 /**
@@ -85,7 +84,7 @@ public:
      *
      * Audio manager destructor must free any owned assets and shut down the SDL audio subsystem.
      */
-    ~AudioManager();
+    ~AudioManager() = default;
 
     /**
      * Deleted copy assignment operator to help ensure a unique instance
@@ -95,18 +94,18 @@ public:
     AudioManager& operator=(const AudioManager&) = delete;
 
     /**
-     * @brief Plays audio based on the ID passed in.
+     * @brief Plays music based on the ID passed in.
      *
-     * If this is the same audio that is already playing, it does nothing.
-     * So if you really want to start this audio over, you need to call stop and start.
-     * If other audio is currently playing, it stops that audio first, then starts this one
-     * By default, this will set the audio to loop forever, but you can specify the number
-     * of loops explicitly in the numLoops argument.
+     * If this is the same music that is already playing, it does nothing.
+     * So if you really want to start this music over, you need to call stop and start.
+     * If other music is currently playing, it stops that music first, then starts this one
+     * By default, this will set the music to loop forever, but that can be disabled by
+     * passing loop = false.
      *
      * @param musicIDToPlay The MusicID to be played
-     * @param numLoops The number of times to loop the audio, or -1 for continuous (the default)
+     * @param loop A flag for whether to loop the music or not, defaults to true
      */
-    void playMusic(MusicID musicIDToPlay, int numLoops = -1);
+    void playMusic(MusicID musicIDToPlay, bool loop = true);
 
     /**
      * @brief Stops any audio currently playing
@@ -122,8 +121,17 @@ public:
      */
     void playSound(SoundID soundIDToPlay);
 
+    /**
+     * @brief An update routine to regularly flush completed sound effects
+     *
+     * Call this routine in the normal game update loop
+     */
+    void update();
+
 private:
-    std::map<MusicID, _Mix_Music *> music;
     MusicID currentMusicID = MusicID::None;
-    std::map<SoundID, Mix_Chunk *> sound;
+    std::map<MusicID, std::string> musicMap;
+    sf::Music currentMusicInstance;
+    std::map<SoundID, sf::SoundBuffer> soundMap;
+    std::vector<sf::Sound> currentSounds;
 };

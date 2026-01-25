@@ -2,13 +2,9 @@
 
 #include <unordered_map>
 
-#include "camera.h"
+#include <SFML/Graphics.hpp>
 
-struct _TTF_Font;
-struct SDL_Color;
-struct SDL_Renderer;
-struct SDL_Texture;
-using TextureID = __uint32_t;
+#include "camera.h"
 
 /**
  * @file renderer.h
@@ -26,8 +22,6 @@ using TextureID = __uint32_t;
 
 /**
  * The enumerated font IDs, should be one per available font in the assets
- * Since the size must be known at instantiation time, create an enum entry
- * for each needed font/size combination.
  */
 enum class FontID
 {
@@ -39,8 +33,25 @@ enum class FontID
  * A mapping of the font ID to the filename in the assets/fonts directory.
  * Update this accordingly whenever fonts are added/changed/removed.
  */
-inline const std::unordered_map<FontID, std::pair<std::string, int>> FontMap = {
-    {FontID::UbuntuRegular24, {"Ubuntu-Regular.ttf", 24}}
+inline const std::unordered_map<FontID, std::string> FontMap = {
+    {FontID::UbuntuRegular24, "Ubuntu-Regular.ttf"}
+};
+
+/**
+ * The enumerated texture IDs, should be one per available texture in the assets
+ */
+enum class TextureID
+{
+    None,
+    Sky
+};
+
+/**
+ * A mapping of the texture ID to the filename in the assets/textures directory.
+ * Update this accordingly whenever textures are added/changed/removed.
+ */
+inline const std::unordered_map<TextureID, std::string> TextureMap = {
+    {TextureID::Sky, "sky.png"}
 };
 
 /**
@@ -60,18 +71,13 @@ public:
     /**
      * @brief Primary constructor for the game engine renderer class
      *
-     * This class sets up internal connections to SDL stuff and initializes things
+     * This class sets up internal connections to SFML stuff and initializes things
      * necessary for the client-facing API.  The constructor is responsible for:
      * - Initializing all fonts and textures that will be used in the game (inefficiently
      *   all at once for now, because it's easy)
-     * @param r The platform (SDL) rendering instance
+     * @param window The platform (SFML) rendering instance
      */
-    explicit Renderer(SDL_Renderer* r);
-
-    /**
-     * @brief Destructor class, will clean up any owned SDL assets
-     */
-    ~Renderer();
+    explicit Renderer(sf::RenderWindow& window);
 
     /**
      * @brief This function does any rendering initialization
@@ -90,7 +96,7 @@ public:
      * Game/scene render methods should call this at the end of their render function to
      * futureproof it in case this function does more later.
      */
-    static void end();
+    void end() const;
 
     /**
      * @brief Transforms a game-world rectangle position/size into a screen geometry rectangle.
@@ -100,12 +106,12 @@ public:
      * @param w The width in the game world, in game-units
      * @param h The height in the game world, in game-units
      * @param cam The camera instance which tells how to transform world geometry into screen geometry
-     * @return A screen-coordinate (pixel) rectangle which can be displayed using the platform SDL renderer
+     * @return A screen-coordinate (pixel) rectangle which can be displayed using the platform renderer
      */
-    static SDL_FRect worldRectangleToScreenRectangle(float x, float y, float w, float h, const Camera& cam);
+    static sf::Rect<float> worldRectangleToScreenRectangle(float x, float y, float w, float h, const Camera& cam);
 
     /**
-     * @brief Draws a game-world rectangle on the screen based on camera position and zoom
+     * @brief Draws a game-world rectangle on the screen from world/game coordinates based on camera position and zoom
      *
      * @param x The x-coordinate in the game world, in game-units
      * @param y The y-coordinate in the game world, in game-units
@@ -114,7 +120,18 @@ public:
      * @param cam The camera instance which tells how to transform world geometry into screen geometry
      * @param color The outline color of the rectangle
      */
-    void drawWorldRectangleOutline(float x, float y, float w, float h, const Camera& cam, SDL_Color color) const;
+    void drawWorldRectangleOutline(float x, float y, float w, float h, const Camera& cam, const sf::Color & color) const;
+
+    /**
+     * @brief Draws a rectangle on the screen given screen coordinates (pixels), not world coordinates
+     *
+    * @param x The x-coordinate on the screen, in pixels
+     * @param y The y-coordinate on the screen, in pixels
+     * @param w The width on the screen, in pixels
+     * @param h The height on the screen, in pixels
+     * @param color The outline color of the rectangle
+     */
+    void drawScreenRectangleOutline(float x, float y, float w, float h, const sf::Color& color) const;
 
     /**
      * @brief Draws text on the screen given screen coordinates, not world coordinates
@@ -124,8 +141,9 @@ public:
      * @param text The text string to write on the screen
      * @param color The color of the text
      * @param fontID The FontID enumeration value to use for rendering the text
+     * @param fontSize The font size for the text
      */
-    void drawScreenText(float x, float y, const char * text, SDL_Color color, FontID fontID = FontID::UbuntuRegular24) const;
+    void drawScreenText(float x, float y, const char * text, sf::Color color, FontID fontID = FontID::UbuntuRegular24, int fontSize = 24) const;
 
     /**
      * @brief Draws a given texture to the screen given screen coordinates
@@ -138,25 +156,8 @@ public:
      */
     void drawScreenTexture(TextureID tex, float x, float y, float w, float h) const;
 
-    /**
-     * @brief A thin wrapper around the texture manager's load method
-     *
-     * @param path A filesystem path object to the texture file
-     * @return A TextureID, which can be passed to the draw*Texture methods here as needed
-     */
-    TextureID loadTexture(const std::filesystem::path& path);
-
-    // void drawSprite(
-    //      TextureID texture,
-    //      const SDL_Rect& src,
-    //      float worldX,
-    //      float worldY,
-    //      const Camera& cam
-    //  );
-
 private:
-    SDL_Renderer* r_;
-    std::unordered_map<FontID, _TTF_Font*> fonts;
-    std::unordered_map<TextureID, SDL_Texture*> textures_;
-    TextureID nextId_ = 1;
+    sf::RenderWindow& window;
+    std::unordered_map<TextureID, sf::Texture> textures;
+    std::unordered_map<FontID, sf::Font> fonts;
 };

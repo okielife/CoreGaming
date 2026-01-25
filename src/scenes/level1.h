@@ -4,19 +4,20 @@
 #include "../camera.h"
 
 class Game;
+class Renderer;
 
 struct SceneLevel1 : SceneBase
 {
     ~SceneLevel1() override = default;
     void reset(Game & game) final;
     void reenter(Game & game) final;
-    void update(Game & game, float dt_ms) final;
-    void render(Game & game) final;
+    void update(Game & game, float dt) final;
+    void render(Game & game, Renderer & renderer) final;
     float playerX_{100};
     float playerY_{100};
-    float speed_{.2};  // think of it like pixels per millisecond
+    float speed_{200};  // think of it like game units per second
     Camera overheadCamera;
 
-    float swordCooldownMS = 1000.0f;   // milliseconds
+    float swordCooldownMS = 1.0f;   // seconds
     float msSinceLastSword = swordCooldownMS; // start "ready"
 };

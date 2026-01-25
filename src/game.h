@@ -8,6 +8,7 @@
 #include "scenes/base.h"
 
 class Platform;
+class Renderer;
 
 /**
  * @file game.h
@@ -41,27 +42,31 @@ public:
      * The constructor is responsible for instantiating the list of game scenes and
      * setting the initial scene state.
      *
-     * @param renderer A rendering manager with methods for drawing to the screen
      * @param input An input manager with methods to check for key presses and key down
      * @param audio An audio manager with methods for starting and stopping audio and sound effects
      */
-    Game(Renderer* renderer, Input& input, AudioManager& audio);
+    Game(Input& input, AudioManager& audio);
 
     /**
-     * @brief Perform one frame of the game, including inits, updates and renders
+     * @brief Perform one frame update of the game.
      *
-     * The game frame() method will consist of any game-level updates and then asking
-     * the current scene to update and render.
+     * The game update() method consists of any game-level updates and then asking
+     * the current scene to update.
      *
-     * @param dt_ms The number of milliseconds since the last frame. Use this for calculations
+     * @param dt The floating point number of seconds since the last frame. Use this for calculations
      *              on movement speed and other physics as needed.
      */
-    void frame(float dt_ms);
+    void update(float dt);
 
     /**
-     * @brief Reference to platform rendering manager
+     * @brief Perform one frame render of the game.
+     *
+     * The game render() method consists of any game-level renders (maybe menus?) and then asking
+     * the current scene to render.
+     *
+     * @param renderer A rendering manager with methods for drawing to the screen
      */
-    Renderer* renderer;
+    void render(Renderer & renderer);
 
     /**
      * @brief Reference to platform input manager
@@ -81,7 +86,6 @@ public:
     bool running = true;
 
 private:
-    void update(float dt_ms);
     std::map<SceneID, std::unique_ptr<SceneBase>> scenes;
     SceneID currentSceneID;
     SceneBase * currentScene;  // non-owning pointer

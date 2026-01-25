@@ -20,6 +20,17 @@ jobs:
           path: ~/.cache/cmake
           key: ${{ runner.os }}-cmake-${{ hashFiles('**/CMakeLists.txt') }}
 
+      - name: Install deps on Linux only
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libx11-dev \
+            libxrandr-dev \
+            libudev-dev \
+            libgl1-mesa-dev \
+            libopenal-dev
+
       - name: Configure CMake
         run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=${{ steps.sdl.outputs.prefix }}
 

@@ -1,11 +1,10 @@
 #pragma once
 
+#include <SFML/Graphics.hpp>
+
 #include "game.h"
 #include "renderer.h"
 #include "input.h"
-
-struct SDL_Window;
-struct SDL_Renderer;
 
 /**
  * @file platform.h
@@ -31,19 +30,18 @@ Event loop timing
 */
 
 class Game;
+class Renderer;
 
 class Platform {
 public:
-    Platform(int width, int height, const char* title);
-    ~Platform();
+    Platform();
     void run(Game & game);
     Input& input() { return input_; }
-    Renderer * renderer_;
+    Renderer renderer;
     Input input_;
     AudioManager audio_;
 
 private:
-    bool running_{true};
-    SDL_Window* window_{nullptr};
-    SDL_Renderer* sdlRenderer_{nullptr};
+    sf::RenderWindow window;
+    sf::Clock clock;
 };

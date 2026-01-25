@@ -1,6 +1,7 @@
 #pragma once
 
 class Game;
+class Renderer;
 
 enum class SceneID
 {
@@ -16,6 +17,6 @@ struct SceneBase
     virtual void reset(Game & game) = 0;
     virtual void reenter(Game & game) = 0;
     virtual void update(Game & game, float dt) = 0;
-    virtual void render(Game & game) = 0;
+    virtual void render(Game & game, Renderer &renderer) = 0;
     bool done = false;
 };

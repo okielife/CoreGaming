@@ -1,11 +1,11 @@
 #pragma once
 
 #include <array>
-#include <bits/types.h>
+#include <unordered_map>
+
+#include <SFML/Window/Event.hpp>
 
 #include "input.h"
-
-union SDL_Event;
 
 enum class Action {
     MoveUp,
@@ -15,23 +15,24 @@ enum class Action {
     Sword,
     ZoomIn,
     ZoomOut,
-    Quit  // make sure Quit is the last one in this list
+    Quit
 };
-constexpr int ActionCount = static_cast<int>(Action::Quit) + 1;
 
-class Input {
-public:
-    virtual ~Input() = default;
+constexpr std::array pressedActions = {
+    Action::Sword,
+    Action::Quit
+};
+
+struct Input {
+    Input();
     void beginFrame();
-    void update();
-    void update(const SDL_Event& e);
+    void update(const sf::Event& e);
 
     [[nodiscard]] bool anyPressed() const;
     [[nodiscard]] bool wasPressed(Action a) const;
-    [[nodiscard]] bool isDown(Action a) const;
+    static bool isDown(Action a) ;
     void setAsPressed(Action a);
 
-    const __uint8_t* keys_{nullptr};
     bool anyPressed_ = false;
-    std::array<bool, ActionCount> pressed_{};
+    std::unordered_map<Action, bool> pressed{};
 };

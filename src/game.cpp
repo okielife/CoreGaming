@@ -1,12 +1,10 @@
-#include "constants.h"
-#include "assets.h"
 #include "game.h"
 #include "input.h"
 #include "scenes/base.h"
 #include "scenes/title.h"
 #include "scenes/level1.h"
 
-Game::Game(Renderer* renderer, Input& input, AudioManager& audio) : renderer(renderer), input(input), audio(audio) {
+Game::Game(Input& input, AudioManager& audio) : input(input), audio(audio) {
     this->audio.playMusic(MusicID::Area2);
 
     // build the map of scenes, all in memory all at the beginning
@@ -18,14 +16,7 @@ Game::Game(Renderer* renderer, Input& input, AudioManager& audio) : renderer(ren
     this->currentScene = this->scenes[this->currentSceneID].get();
 }
 
-void Game::frame(const float dt_ms)
-{
-    this->update(dt_ms);
-    this->currentScene->update(*this, dt_ms);
-    this->currentScene->render((*this));
-}
-
-void Game::update([[maybe_unused]] const float dt_ms)
+void Game::update(const float dt)
 {
     if (this->currentScene->done) {
         switch (this->currentSceneID)
@@ -38,8 +29,13 @@ void Game::update([[maybe_unused]] const float dt_ms)
             this->running = false;
             break;
         default:
-            return;
+            break;
         }
     }
+    this->currentScene->update(*this, dt);
 }
 
+void Game::render(Renderer & renderer)
+{
+    this->currentScene->render(*this, renderer);
+}

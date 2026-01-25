@@ -1,51 +1,31 @@
-#include <SDL.h>
-#include <SDL2/SDL_mixer.h>
+#include <filesystem>
+
+#include <SFML/Audio.hpp>
 
 #include "assets.h"
 #include "audio.h"
 
-#include <filesystem>
-#include <ranges>
 
 AudioManager::AudioManager()
 {
-    if (SDL_InitSubSystem(SDL_INIT_AUDIO) != 0) {
-        throw std::runtime_error(SDL_GetError());
-    }
-
-    if (constexpr int requested = MIX_INIT_OGG; (Mix_Init(requested) & requested) != requested) {
-        throw std::runtime_error(Mix_GetError());
-    }
-
-    if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 8, 2048) != 0) {
-        throw std::runtime_error(Mix_GetError());
-    }
-
     for (auto const & [id, filename] : MusicMap)
     {
         if (id == MusicID::None) continue;
-        this->music.insert({id, Mix_LoadMUS(AssetManager::audio(filename).c_str())});
+        auto path = AssetManager::audio(filename).string();
+        this->musicMap.emplace(id, path);
     }
 
     for (auto const & [id, filename]: SoundMap)
     {
         if (id == SoundID::None) continue;
-        this->sound.insert({id, Mix_LoadWAV(AssetManager::audio(filename).c_str())});
+        auto path = AssetManager::audio(filename).string();
+        sf::SoundBuffer buffer;
+        buffer.loadFromFile(path);
+        this->soundMap.insert({id, buffer});
     }
-
 }
 
-AudioManager::~AudioManager()
-{
-    for (const auto& musicPointer : this->music | std::views::values) {
-        Mix_FreeMusic(musicPointer);
-    }
-    Mix_CloseAudio();
-    Mix_Quit();
-    SDL_QuitSubSystem(SDL_INIT_AUDIO);
-}
-
-void AudioManager::playMusic(MusicID const musicIDToPlay, int const numLoops)
+void AudioManager::playMusic(MusicID const musicIDToPlay, bool const loop)
 {
     if (this->currentMusicID == musicIDToPlay)
     {
@@ -55,19 +35,34 @@ void AudioManager::playMusic(MusicID const musicIDToPlay, int const numLoops)
     {
         stopMusic();  // if we already have some other audio playing, stop it first
     }
-    auto const & musicPointer = this->music[musicIDToPlay];
-    Mix_PlayMusic(musicPointer, numLoops);
+    auto const musicPath = this->musicMap.at(musicIDToPlay);
+    this->currentMusicInstance.openFromFile(musicPath);
+    this->currentMusicInstance.setLoop(loop);
+    this->currentMusicInstance.play();
     this->currentMusicID = musicIDToPlay;
 }
 
 void AudioManager::stopMusic()
 {
-    Mix_HaltMusic();
+    this->currentMusicInstance.stop();
     this->currentMusicID = MusicID::None;
 }
 
-void AudioManager::playSound(SoundID soundIDToPlay)
+void AudioManager::playSound(const SoundID soundIDToPlay)
 {
-    auto const & soundChunk = this->sound[soundIDToPlay];
-    Mix_PlayChannel(-1, soundChunk, 0);
+    sf::Sound sound;
+    sound.setBuffer(this->soundMap.at(soundIDToPlay));
+    this->currentSounds.push_back(std::move(sound));
+    this->currentSounds.back().play();
+}
+
+void AudioManager::update()
+{
+    // remove finished sounds
+    std::erase_if(
+        this->currentSounds,
+        [](const sf::Sound& s) {
+            return s.getStatus() == sf::Sound::Stopped;
+        }
+    );
 }

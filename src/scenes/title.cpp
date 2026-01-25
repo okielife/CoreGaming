@@ -1,22 +1,12 @@
-#include "../assets.h"
-#include "../game.h"
 #include "title.h"
+#include "../game.h"
 #include "../constants.h"
 
-SceneTitle::SceneTitle(const Game &game)
-{
-    this->titleBackground_ = game.renderer->loadTexture(AssetManager::image("sky.png")); // move this out of constructor and into titleInitialize or something
-}
+SceneTitle::SceneTitle(const Game &) {}
 
-void SceneTitle::reset([[maybe_unused]] Game & game)
-{
+void SceneTitle::reset(Game &) {}
 
-}
-
-void SceneTitle::reenter([[maybe_unused]] Game & game)
-{
-
-}
+void SceneTitle::reenter(Game &) {}
 
 void SceneTitle::update(Game & game, const float)
 {
@@ -25,22 +15,18 @@ void SceneTitle::update(Game & game, const float)
     }
 }
 
-void SceneTitle::render(Game & game)
+void SceneTitle::render(Game &, Renderer & renderer)
 {
-    game.renderer->begin();
-
-    game.renderer->drawScreenTexture(
-        titleBackground_,
+    renderer.drawScreenTexture(
+        TextureID::Sky,
         0, 0,
         WINDOW_WIDTH, WINDOW_HEIGHT
     );
 
-    game.renderer->drawScreenText(
+    renderer.drawScreenText(
         10.f,
         10.f,
         "Press any key",
-        RED
+        sf::Color::Red
     );
-
-    Renderer::end();
 }
