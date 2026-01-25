@@ -15,16 +15,15 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      # Use the official SDL setup action for cross-platform consistency
       - name: Setup SDL2
         uses: libsdl-org/setup-sdl@v1
         with:
           version: 2-latest
-          # Optional: add sdl2-image, sdl2-mixer, etc., if needed
-          # version-sdl-image: 2-latest
+          version-sdl-ttf: 2-latest
+          version-sdl-image: 2-latest
+          version-sdl-mixer: 2-latest
 
       - name: Configure CMake
-        # SDL_DIR is set by setup-sdl; we pass it to CMake
         run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
 
       - name: Build Project
