@@ -15,6 +15,32 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
+      - name: Install SDL_mixer dependencies (Linux - trim these down with SDL_MIXER_CMAKE_ARGS below)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libasound2-dev \
+            libpulse-dev \
+            libaudio-dev \
+            libjack-dev \
+            libsamplerate0-dev \
+            libxmp-dev \
+            libogg-dev \
+            libvorbis-dev \
+            libflac-dev
+
+      - name: Install SDL_mixer dependencies (macOS)
+        if: runner.os == 'macOS'
+        run: |
+          brew update
+          brew install \
+            libogg \
+            libvorbis \
+            flac \
+            libxmp \
+            mpg123
+
       - name: Setup SDL2
         uses: libsdl-org/setup-sdl@v1
         with:
@@ -22,6 +48,18 @@ jobs:
           version-sdl-ttf: 2-latest
           version-sdl-image: 2-latest
           version-sdl-mixer: 2-latest
+#        env:
+#          SDL_MIXER_CMAKE_ARGS: >
+#            -DSDL2MIXER_OPUS=OFF
+#            -DSDL2MIXER_WAVPACK=OFF
+#            -DSDL2MIXER_MOD=OFF
+#            -DSDL2MIXER_MIDI=OFF
+#            -DSDL2MIXER_MP3=OFF
+
+      - name: Install pkg-config (Windows)
+        if: runner.os == 'Windows'
+        run: |
+          choco install pkgconfiglite -y
 
       - name: Configure CMake
         run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
