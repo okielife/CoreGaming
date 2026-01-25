@@ -7,14 +7,14 @@ Renderer::Renderer(sf::RenderWindow& window) : window(window)
     {
         if (id == FontID::None) continue;
         sf::Font font;
-        font.loadFromFile(AssetManager::font(filename).c_str());
+        font.loadFromFile(AssetManager::font(filename).string());
         this->fonts.insert({id, font});
     }
     for (auto const & [id, filename] : TextureMap)
     {
         if (id == TextureID::None) continue;
         sf::Texture texture;
-        texture.loadFromFile(AssetManager::texture(filename).c_str());
+        texture.loadFromFile(AssetManager::texture(filename).string());
         this->textures.insert({id, texture});
     }
 }
