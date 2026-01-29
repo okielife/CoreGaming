@@ -17,6 +17,13 @@ Renderer::Renderer(sf::RenderWindow& window) : window(window)
         texture.loadFromFile(AssetManager::texture(filename).string());
         this->textures.insert({id, texture});
     }
+    for (auto const & [id, filename] : SpriteMap)
+    {
+        if (id == SpriteID::None) continue;
+        sf::Texture texture;
+        texture.loadFromFile(AssetManager::sprite(filename).string());
+        this->sprites.insert({id, texture});
+    }
 }
 
 void Renderer::begin() const
@@ -68,3 +75,32 @@ void Renderer::drawScreenTexture(TextureID const tex, float const x, float const
     sprite.setScale(w / static_cast<float>(texture.getSize().x), h / static_cast<float>(texture.getSize().y));
     window.draw(sprite);
 }
+
+void Renderer::drawSprite(SpriteDraw const& s) const
+{
+    auto& texture = sprites.at(s.sprite);
+    sf::Sprite sprite;
+    sprite.setTexture(texture);
+    // TODO: Use this if it's a spritesheet
+    // if (s.rect.width > 0 && s.rect.height > 0) {
+    //     sprite.setTextureRect(s.rect);
+    // }
+    sprite.setPosition(s.position);
+    sprite.setScale(s.scale);
+    sprite.setRotation(s.rotation);
+    sprite.setColor(s.color);
+    window.draw(sprite);
+}
+
+void Renderer::fullScreenOverlay(sf::Color const color) const
+{
+    sf::RectangleShape rect;
+    rect.setSize({
+        static_cast<float>(window.getSize().x),
+        static_cast<float>(window.getSize().y)
+    });
+    rect.setPosition(0.f, 0.f);
+    rect.setFillColor(color);
+    window.draw(rect);
+}
+

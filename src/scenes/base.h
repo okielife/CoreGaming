@@ -6,6 +6,7 @@ class Renderer;
 enum class SceneID
 {
     Title,
+    Opening,
     Level1,
     Pause,
     GameOver

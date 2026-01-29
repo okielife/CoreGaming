@@ -42,3 +42,8 @@ std::filesystem::path AssetManager::texture(std::string_view const texture_file_
 {
     return root() / "textures" / texture_file_name;
 }
+
+std::filesystem::path AssetManager::sprite(std::string_view const sprite_file_name)
+{
+    return root() / "sprites" / sprite_file_name;
+}

@@ -58,4 +58,12 @@ struct AssetManager
      * @return Filesystem path to the texture asset.
      */
     static std::filesystem::path texture(std::string_view texture_file_name);
+
+    /**
+     * @brief Returns the filesystem path to a sprite asset.
+     *
+     * @param sprite_file_name Filename of the sprite asset.
+     * @return Filesystem path to the sprite asset.
+     */
+    static std::filesystem::path sprite(std::string_view sprite_file_name);
 };

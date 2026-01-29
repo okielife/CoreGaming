@@ -26,6 +26,7 @@
 enum class FontID
 {
     None,
+    JollyLodger,
     UbuntuRegular24
 };
 
@@ -34,6 +35,7 @@ enum class FontID
  * Update this accordingly whenever fonts are added/changed/removed.
  */
 inline const std::unordered_map<FontID, std::string> FontMap = {
+    {FontID::JollyLodger, "JollyLodger-Regular.ttf"},
     {FontID::UbuntuRegular24, "Ubuntu-Regular.ttf"}
 };
 
@@ -52,6 +54,41 @@ enum class TextureID
  */
 inline const std::unordered_map<TextureID, std::string> TextureMap = {
     {TextureID::Sky, "sky.png"}
+};
+
+/**
+ * The enumerated sprite IDs, should be one per available sprite in the assets
+ */
+enum class SpriteID
+{
+    None,
+    Wizard
+};
+
+/**
+ * A mapping of the sprite ID to the filename in the assets/sprites directory.
+ * Update this accordingly whenever sprites are added/changed/removed.
+ */
+inline const std::unordered_map<SpriteID, std::string> SpriteMap = {
+    {SpriteID::Wizard, "wizard.png"}
+};
+
+
+struct SpriteDraw {
+    //sf::Texture const* texture;
+    SpriteDraw(SpriteID const spriteID, int const width, int const height, int const x, int const y, float const xScale = 1.0, float const yScale = 1.0, float const rotation = 0.0, const sf::Color color = sf::Color::White)
+    {
+        this->sprite = spriteID;
+        this->rect = {x, y, width, height};
+        this->scale = {xScale, yScale};
+        this->rotation = rotation;
+    }
+    SpriteID sprite;
+    sf::IntRect rect;
+    sf::Vector2f position;
+    sf::Vector2f scale {1.f, 1.f};
+    float rotation = 0.f;
+    sf::Color color = sf::Color::White;
 };
 
 /**
@@ -125,7 +162,7 @@ public:
     /**
      * @brief Draws a rectangle on the screen given screen coordinates (pixels), not world coordinates
      *
-    * @param x The x-coordinate on the screen, in pixels
+     * @param x The x-coordinate on the screen, in pixels
      * @param y The y-coordinate on the screen, in pixels
      * @param w The width on the screen, in pixels
      * @param h The height on the screen, in pixels
@@ -156,8 +193,11 @@ public:
      */
     void drawScreenTexture(TextureID tex, float x, float y, float w, float h) const;
 
+    void drawSprite(SpriteDraw const& s) const;
+    void fullScreenOverlay(sf::Color color) const;
 private:
     sf::RenderWindow& window;
     std::unordered_map<TextureID, sf::Texture> textures;
+    std::unordered_map<SpriteID, sf::Texture> sprites;
     std::unordered_map<FontID, sf::Font> fonts;
 };

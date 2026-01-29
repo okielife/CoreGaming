@@ -28,6 +28,8 @@ add_executable(game
         src/scenes/title.h
         src/doxygen.h
         src/assets.cpp
+        src/scenes/opening.cpp
+        src/scenes/opening.h
 )
 target_link_libraries(game PRIVATE
         sfml-graphics
