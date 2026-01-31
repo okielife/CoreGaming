@@ -13,6 +13,22 @@ enum class ScenePhase
     Title
 };
 
+// eventually I would imagine this has its own update and render class
+// in addition to the needed flexibility, it would be easier to test as well
+struct AnimationStep
+{
+    float startTime = -1.0;
+    float duration = -1.0;
+    float endTime = -1.0;
+    mutable float stepTimer = -1.0f;
+    AnimationStep(float const startTime, float const duration)
+    {
+        this->startTime = startTime;
+        this->duration = duration;
+        this->endTime = startTime + duration;
+    }
+};
+
 class Opening : public SceneBase {
 public:
     void reset(Game & game) override {};
@@ -24,21 +40,10 @@ private:
     float overallSceneTime = 0.f;
     SpriteDraw wizardSprite = SpriteDraw(SpriteID::Wizard, 0, 0, 200, 200);
     ScenePhase phase = ScenePhase::FadingInWizard;
-    // timing for fading in wizard
-    constexpr static float startTimeFadingInWizard = 0.f;
-    constexpr static float durationFadingInWizard = 2.0;
-    constexpr static float endTimeFadingInWizard = startTimeFadingInWizard + durationFadingInWizard;
-    float timerFadingInWizard = -1.0f;
-    // timing for casting the spell
-    constexpr static float durationSpell = 0.25;
-    constexpr static float endTimeSpell = endTimeFadingInWizard + durationSpell;
-    float timeSpell = -1.0f;
-    // timing for flashing the screen
-    constexpr static float durationFlash = 0.25;
-    constexpr static float endTimeFlash = endTimeSpell + durationFlash;
-    float timeFlash = -1.0f;
-    // timing for showing the title
-    constexpr static float durationTitle = 2.0;
-    constexpr static float endTimeTitle = endTimeFlash + durationTitle;
-    float timeTitle = -1.0f;
+    const std::map<ScenePhase, AnimationStep> animationSteps = {
+        {ScenePhase::FadingInWizard, AnimationStep(0.0f, 2.0)},
+        {ScenePhase::Spell, AnimationStep(2.0, 0.25)},
+        {ScenePhase::Flash, AnimationStep(2.25, 0.25)},
+        {ScenePhase::Title, AnimationStep(2.5, 2.0)},
+    };
 };

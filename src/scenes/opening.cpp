@@ -1,46 +1,32 @@
 #include "../game.h"
 #include "opening.h"
 
+#include <iostream>
+
 void Opening::update(Game& game, float const dt)
 {
     this->overallSceneTime += dt;
-    if (this->overallSceneTime < this->endTimeFadingInWizard)
+    for (auto & [phaseID, animation] : this->animationSteps)
     {
-        this->phase = ScenePhase::FadingInWizard;
-        if (this->timerFadingInWizard < 0.0) this->timerFadingInWizard = 0.0;
-        this->timerFadingInWizard += dt;
+        if (this->overallSceneTime < animation.endTime)
+        {
+            this->phase = phaseID;
+            if (animation.stepTimer < 0.0) animation.stepTimer = 0.0;
+            animation.stepTimer += dt;
+            return;
+        }
     }
-    else if (this->overallSceneTime < this->endTimeSpell)
-    {
-        this->phase = ScenePhase::Spell;
-        if (this->timeSpell < 0.0) this->timeSpell = 0.0;
-        this->timeSpell += dt;
-    }
-    else if (this->overallSceneTime < this->endTimeFlash)
-    {
-        this->phase = ScenePhase::Flash;
-        if (this->timeFlash < 0.0) this->timeFlash = 0.0;
-        this->timeFlash += dt;
-    }
-    else if (this->overallSceneTime < this->endTimeTitle)
-    {
-        this->phase = ScenePhase::Title;
-        if (this->timeTitle < 0.0) this->timeTitle = 0.0;
-        this->timeTitle += dt;
-    }
-    else
-    {
-        this->done = true;
-    }
+    this->done = true;  // fall through means we are done with animation steps
 }
 
 void Opening::render(Game& game, Renderer& renderer)
 {
+    const auto animation = this->animationSteps.at(this->phase);
     switch (this->phase)
     {
     case ScenePhase::FadingInWizard:
         {
-            float const scaledTime = std::clamp(this->timerFadingInWizard / this->durationFadingInWizard, 0.f, 1.f);
+            float const scaledTime = std::clamp(animation.stepTimer / animation.duration, 0.f, 1.f);
             this->wizardSprite.color = sf::Color(255, 255, 255,static_cast<int>(255 * scaledTime));
             renderer.drawSprite(this->wizardSprite);
         }
@@ -52,7 +38,7 @@ void Opening::render(Game& game, Renderer& renderer)
         break;
     case ScenePhase::Flash:
         {
-            float const scaledTime = std::clamp(this->timeFlash / this->durationFlash, 0.f, 1.f);
+            float const scaledTime = std::clamp(animation.stepTimer / animation.duration, 0.f, 1.f);
             float const symmetricScaledTime = 1.f - std::abs(2.f * scaledTime - 1.f);
             float const shapedIntensity = symmetricScaledTime * symmetricScaledTime;   // square curve
             sf::Color c = sf::Color::White;
