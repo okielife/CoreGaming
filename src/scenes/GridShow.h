@@ -6,9 +6,9 @@
 class Game;
 class Renderer;
 
-struct SceneLevel1 : SceneBase
+struct SceneGridShow : SceneBase
 {
-    ~SceneLevel1() override = default;
+    ~SceneGridShow() override = default;
     void reset(Game & game) final;
     void reenter(Game & game) final;
     void update(Game & game, float dt) final;

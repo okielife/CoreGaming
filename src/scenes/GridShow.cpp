@@ -1,19 +1,23 @@
 #include "../game.h"
-#include "title.h"
+#include "GridShow.h"
 
 class Game;
 
-void SceneLevel1::reset(Game &) {}
+void SceneGridShow::reset(Game &) {}
 
-void SceneLevel1::reenter(Game &) {}
+void SceneGridShow::reenter(Game &) {}
 
-void SceneLevel1::update(Game & game, const float dt)
+void SceneGridShow::update(Game & game, const float dt)
 {
     // update timers
     msSinceLastSword += dt;
 
     const auto& input = game.input;
-    if (input.wasPressed(Action::Quit)) this->done = true;
+    if (input.wasPressed(Action::Quit))
+    {
+        this->done = true;
+        this->nextScene = SceneID::Exit;
+    }
 
     if (Input::isDown(Action::MoveUp))    this->playerY_ -= this->speed_ * dt;
     if (Input::isDown(Action::MoveDown))  this->playerY_ += this->speed_ * dt;
@@ -35,7 +39,7 @@ void SceneLevel1::update(Game & game, const float dt)
     this->overheadCamera.y = this->playerY_ - static_cast<float>(this->overheadCamera.h) / 2;
 }
 
-void SceneLevel1::render(Game &, Renderer & renderer)
+void SceneGridShow::render(Game &, Renderer & renderer)
 {
     // Draw simple map (grid)
     for (int y = 0; y < 50; ++y) {

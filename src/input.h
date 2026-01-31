@@ -15,12 +15,18 @@ enum class Action {
     Sword,
     ZoomIn,
     ZoomOut,
+    MenuUp,
+    Confirm,
+    MenuDown,
     Quit
 };
 
 constexpr std::array pressedActions = {
     Action::Sword,
-    Action::Quit
+    Action::MenuUp,
+    Action::MenuDown,
+    Action::Quit,
+    Action::Confirm
 };
 
 struct Input {

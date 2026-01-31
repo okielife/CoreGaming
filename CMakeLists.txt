@@ -22,14 +22,14 @@ add_executable(game
         src/renderer.cpp
         src/renderer.h
         src/scenes/base.h
-        src/scenes/level1.cpp
-        src/scenes/level1.h
+        src/scenes/GridShow.cpp
+        src/scenes/GridShow.h
         src/scenes/title.cpp
         src/scenes/title.h
         src/doxygen.h
         src/assets.cpp
-        src/scenes/opening.cpp
-        src/scenes/opening.h
+        src/scenes/WizardSpells.cpp
+        src/scenes/WizardSpells.h
 )
 target_link_libraries(game PRIVATE
         sfml-graphics

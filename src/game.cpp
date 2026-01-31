@@ -1,17 +1,18 @@
 #include "game.h"
 #include "input.h"
 #include "scenes/base.h"
-#include "scenes/opening.h"
+#include "scenes/WizardSpells.h"
 #include "scenes/title.h"
-#include "scenes/level1.h"
+#include "scenes/GridShow.h"
 
-Game::Game(Input& input, AudioManager& audio) : input(input), audio(audio) {
+Game::Game(Input& input, AudioManager& audio) : input(input), audio(audio)
+{
     this->audio.playMusic(MusicID::Area2);
 
     // build the map of scenes, all in memory all at the beginning
     this->scenes.insert({SceneID::Title, std::make_unique<SceneTitle>(*this)});
-    this->scenes.emplace(SceneID::Opening, std::make_unique<Opening>());
-    this->scenes.insert({SceneID::Level1, std::make_unique<SceneLevel1>()});
+    this->scenes.emplace(SceneID::WizardSpells, std::make_unique<SceneWizardSpells>());
+    this->scenes.insert({SceneID::GridShow, std::make_unique<SceneGridShow>()});
 
     // initialize the current scene
     this->currentSceneID = SceneID::Title;
@@ -20,28 +21,30 @@ Game::Game(Input& input, AudioManager& audio) : input(input), audio(audio) {
 
 void Game::update(const float dt)
 {
-    if (this->currentScene->done) {
-        switch (this->currentSceneID)
+    if (this->currentScene->done)
+    {
+        switch (this->currentScene->nextScene)
         {
-        case SceneID::Title:
-            this->currentSceneID = SceneID::Opening;
-            this->currentScene = this->scenes[this->currentSceneID].get();
+        case SceneID::None:
+            // issue error
             break;
-        case SceneID::Opening:
-            this->currentSceneID = SceneID::Level1;
-            this->currentScene = this->scenes[this->currentSceneID].get();
-            break;
-        case SceneID::Level1:
+        case SceneID::Exit:
             this->running = false;
             break;
+        case SceneID::GridShow:
+        case SceneID::WizardSpells:
+            this->currentSceneID = this->currentScene->nextScene;
+            this->currentScene = this->scenes[this->currentSceneID].get();
+            break;
         default:
+            // issue error
             break;
         }
     }
     this->currentScene->update(*this, dt);
 }
 
-void Game::render(Renderer & renderer)
+void Game::render(Renderer& renderer)
 {
     this->currentScene->render(*this, renderer);
 }

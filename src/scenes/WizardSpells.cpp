@@ -1,10 +1,17 @@
 #include "../game.h"
-#include "opening.h"
+#include "WizardSpells.h"
 
 #include <iostream>
 
-void Opening::update(Game& game, float const dt)
+void SceneWizardSpells::update(Game& game, float const dt)
 {
+    if (game.input.wasPressed(Action::Quit))
+    {
+        this->done = true;
+        this->nextScene = SceneID::Exit;
+        return;
+    }
+
     this->overallSceneTime += dt;
     for (auto & [phaseID, animation] : this->animationSteps)
     {
@@ -19,7 +26,7 @@ void Opening::update(Game& game, float const dt)
     this->done = true;  // fall through means we are done with animation steps
 }
 
-void Opening::render(Game& game, Renderer& renderer)
+void SceneWizardSpells::render(Game& game, Renderer& renderer)
 {
     const auto animation = this->animationSteps.at(this->phase);
     switch (this->phase)

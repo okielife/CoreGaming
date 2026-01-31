@@ -29,7 +29,7 @@ struct AnimationStep
     }
 };
 
-class Opening : public SceneBase {
+class SceneWizardSpells : public SceneBase {
 public:
     void reset(Game & game) override {};
     void reenter(Game & game) override {};

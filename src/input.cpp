@@ -28,6 +28,10 @@ void Input::update(const sf::Event& e) {
         anyPressed_ = true;
         switch (e.key.code) {
         case sf::Keyboard::Key::Space: this->setAsPressed(Action::Sword); break;
+        case sf::Keyboard::Key::Up: this->setAsPressed(Action::MenuUp); break;
+        case sf::Keyboard::Key::Down: this->setAsPressed(Action::MenuDown); break;
+        case sf::Keyboard::Key::Escape: this->setAsPressed(Action::Quit); break;
+        case sf::Keyboard::Key::Enter: this->setAsPressed(Action::Confirm); break;
         default: break;
         }
     }
