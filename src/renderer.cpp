@@ -104,3 +104,7 @@ void Renderer::fullScreenOverlay(sf::Color const color) const
     window.draw(rect);
 }
 
+void Renderer::drawScreenSFRectangle(sf::RectangleShape const & rect) const
+{
+    window.draw(rect);
+}

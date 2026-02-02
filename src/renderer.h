@@ -197,6 +197,7 @@ public:
 
     void drawSprite(SpriteDraw const& s) const;
     void fullScreenOverlay(sf::Color color) const;
+    void drawScreenSFRectangle(sf::RectangleShape const & rect) const;
 private:
     sf::RenderWindow& window;
     std::unordered_map<TextureID, sf::Texture> textures;
