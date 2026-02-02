@@ -38,7 +38,7 @@ public:
 private:
     Camera camera;
     float overallSceneTime = 0.f;
-    SpriteDraw wizardSprite = SpriteDraw(SpriteID::Wizard, 0, 0, 200, 200);
+    SpriteDraw wizardSprite = SpriteDraw(SpriteID::Wizard, 0, 0, 60, 60);
     ScenePhase phase = ScenePhase::FadingInWizard;
     const std::map<ScenePhase, AnimationStep> animationSteps = {
         {ScenePhase::FadingInWizard, AnimationStep(0.0f, 2.0)},
