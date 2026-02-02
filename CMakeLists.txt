@@ -32,6 +32,8 @@ add_executable(game
         src/scenes/WizardSpells.h
         src/scenes/Maze.h
         src/scenes/Maze.cpp
+        src/scenes/Platformer.h
+        src/scenes/Platformer.cpp
 )
 target_link_libraries(game PRIVATE
         sfml-graphics

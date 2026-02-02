@@ -5,6 +5,7 @@
 #include "scenes/title.h"
 #include "scenes/GridShow.h"
 #include "scenes/Maze.h"
+#include "scenes/Platformer.h"
 
 Game::Game(Input& input, AudioManager& audio) : input(input), audio(audio)
 {
@@ -15,6 +16,7 @@ Game::Game(Input& input, AudioManager& audio) : input(input), audio(audio)
     this->scenes.emplace(SceneID::WizardSpells, std::make_unique<SceneWizardSpells>());
     this->scenes.insert({SceneID::GridShow, std::make_unique<SceneGridShow>()});
     this->scenes.insert({SceneID::Maze, std::make_unique<SceneMaze>()});
+    this->scenes.insert({SceneID::Platformer, std::make_unique<ScenePlatformer>()});
 
     // initialize the current scene
     this->currentSceneID = SceneID::Title;
@@ -36,6 +38,7 @@ void Game::update(const float dt)
         case SceneID::GridShow:
         case SceneID::WizardSpells:
         case SceneID::Maze:
+        case SceneID::Platformer:
             this->currentSceneID = this->currentScene->nextScene;
             this->currentScene = this->scenes[this->currentSceneID].get();
             break;
