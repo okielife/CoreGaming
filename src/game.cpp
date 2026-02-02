@@ -10,7 +10,7 @@
 
 Game::Game(Input& input, AudioManager& audio) : input(input), audio(audio)
 {
-    this->audio.playMusic(MusicID::Area2);
+    //this->audio.playMusic(MusicID::Area2);
 
     // build the map of scenes, all in memory all at the beginning
     this->scenes.insert({SceneID::Title, std::make_unique<SceneTitle>(*this)});
@@ -21,7 +21,7 @@ Game::Game(Input& input, AudioManager& audio) : input(input), audio(audio)
     this->scenes.insert({SceneID::BulletHell, std::make_unique<SceneBulletHell>()});
 
     // initialize the current scene
-    this->currentSceneID = SceneID::Title;
+    this->currentSceneID = SceneID::BulletHell;
     this->currentScene = this->scenes[this->currentSceneID].get();
 }
 
