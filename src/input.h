@@ -22,6 +22,10 @@ enum class Action {
 };
 
 constexpr std::array pressedActions = {
+    Action::MoveUp,
+    Action::MoveDown,
+    Action::MoveLeft,
+    Action::MoveRight, // I'm starting to think I should have include all actions in the pressedActions list
     Action::Sword,
     Action::MenuUp,
     Action::MenuDown,

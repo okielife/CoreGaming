@@ -4,6 +4,7 @@
 #include "scenes/WizardSpells.h"
 #include "scenes/title.h"
 #include "scenes/GridShow.h"
+#include "scenes/Maze.h"
 
 Game::Game(Input& input, AudioManager& audio) : input(input), audio(audio)
 {
@@ -13,6 +14,7 @@ Game::Game(Input& input, AudioManager& audio) : input(input), audio(audio)
     this->scenes.insert({SceneID::Title, std::make_unique<SceneTitle>(*this)});
     this->scenes.emplace(SceneID::WizardSpells, std::make_unique<SceneWizardSpells>());
     this->scenes.insert({SceneID::GridShow, std::make_unique<SceneGridShow>()});
+    this->scenes.insert({SceneID::Maze, std::make_unique<SceneMaze>()});
 
     // initialize the current scene
     this->currentSceneID = SceneID::Title;
@@ -21,7 +23,7 @@ Game::Game(Input& input, AudioManager& audio) : input(input), audio(audio)
 
 void Game::update(const float dt)
 {
-    if (this->currentScene->done)
+    if (this->currentScene && this->currentScene->done)
     {
         switch (this->currentScene->nextScene)
         {
@@ -33,18 +35,33 @@ void Game::update(const float dt)
             break;
         case SceneID::GridShow:
         case SceneID::WizardSpells:
+        case SceneID::Maze:
             this->currentSceneID = this->currentScene->nextScene;
             this->currentScene = this->scenes[this->currentSceneID].get();
             break;
         default:
             // issue error
+            this->currentScene = nullptr;
             break;
         }
     }
-    this->currentScene->update(*this, dt);
+    if (this->currentScene) this->currentScene->update(*this, dt);
 }
 
 void Game::render(Renderer& renderer)
 {
-    this->currentScene->render(*this, renderer);
+    if (this->currentScene)
+    {
+        this->currentScene->render(*this, renderer);
+    } else
+    {
+        renderer.drawScreenText(
+            50.f,
+            80.f,
+            "This game scene doesn't exist yet...sorry :(",
+            sf::Color::Red,
+            FontID::JollyLodger,
+            60
+        );
+    }
 }

@@ -27,6 +27,10 @@ void Input::update(const sf::Event& e) {
     if (e.type == sf::Event::KeyPressed) {  // && !e.key.repeat) {
         anyPressed_ = true;
         switch (e.key.code) {
+        case sf::Keyboard::Key::W: this->setAsPressed(Action::MoveUp); break;
+        case sf::Keyboard::Key::S: this->setAsPressed(Action::MoveDown); break;
+        case sf::Keyboard::Key::A: this->setAsPressed(Action::MoveLeft); break;
+        case sf::Keyboard::Key::D: this->setAsPressed(Action::MoveRight); break;
         case sf::Keyboard::Key::Space: this->setAsPressed(Action::Sword); break;
         case sf::Keyboard::Key::Up: this->setAsPressed(Action::MenuUp); break;
         case sf::Keyboard::Key::Down: this->setAsPressed(Action::MenuDown); break;

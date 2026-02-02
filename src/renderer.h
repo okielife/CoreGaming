@@ -79,9 +79,11 @@ struct SpriteDraw {
     SpriteDraw(SpriteID const spriteID, int const width, int const height, int const x, int const y, float const xScale = 1.0, float const yScale = 1.0, float const rotation = 0.0, const sf::Color color = sf::Color::White)
     {
         this->sprite = spriteID;
-        this->rect = {x, y, width, height};
+        this->rect = {x, y, width, height}; // this is the texture rectangle I think
         this->scale = {xScale, yScale};
         this->rotation = rotation;
+        this->position.x = x;
+        this->position.y = y;
     }
     SpriteID sprite;
     sf::IntRect rect;
