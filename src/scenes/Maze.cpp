@@ -25,7 +25,7 @@ void SceneMaze::update(Game & game, const float dt)
     if (input.wasPressed(Action::Quit))
     {
         this->done = true;
-        this->nextScene = SceneID::Exit;
+        this->nextScene = SceneID::Title;
     }
     sf::Vector2i nextPos = this->playerPos;
     if (input.wasPressed(Action::MoveUp)) nextPos.y--;
@@ -65,7 +65,7 @@ void SceneMaze::render(Game &, Renderer & renderer)
         renderer.drawScreenText(20, 50, "WINNER!", sf::Color::Green);
     } else
     {
-        renderer.drawScreenText(20, 50, "Use WASD", sf::Color::Red);
+        renderer.drawScreenText(20, 50, "Use Arrow Keys", sf::Color::Red);
         std::string const coordsString = "Player X, Y = " + std::to_string(this->playerPos.x) + ", " + std::to_string(this->playerPos.y);
         renderer.drawScreenText(200, 70, coordsString.c_str(), sf::Color::Red);
     }

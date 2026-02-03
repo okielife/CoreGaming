@@ -12,8 +12,8 @@ enum class SceneID
     Platformer,
     BulletHell,
     Maze,
-    Pause,
-    GameOver,
+    // Pause,
+    // GameOver,
     Exit,
 };
 

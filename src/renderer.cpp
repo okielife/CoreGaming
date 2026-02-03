@@ -76,6 +76,13 @@ void Renderer::drawScreenTexture(TextureID const tex, float const x, float const
     window.draw(sprite);
 }
 
+void Renderer::drawWorldSprite(SpriteDraw const & s, Camera const & camera) const
+{
+    auto const rect = worldRectangleToScreenRectangle(s.position.x, s.position.y, s.rect.width, s.rect.height, camera);
+    auto const newSpriteDraw = SpriteDraw(s.sprite, rect.width, rect.height, rect.left, rect.top, s.scale.x, s.scale.y, s.rotation);
+    this->drawSprite(newSpriteDraw);
+}
+
 void Renderer::drawSprite(SpriteDraw const& s) const
 {
     auto& texture = sprites.at(s.sprite);

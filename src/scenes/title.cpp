@@ -20,7 +20,7 @@ void SceneTitle::update(Game& game, const float)
     // {
     //     this->done = true;
     // }
-    if (game.input.wasPressed(Action::MenuDown))
+    if (game.input.wasPressed(Action::MoveDown))
     {
         switch (this->currentOption)
         {
@@ -32,7 +32,7 @@ void SceneTitle::update(Game& game, const float)
         case MenuOption::Exit: this->currentOption = MenuOption::GridShow; break;
         }
     }
-    if (game.input.wasPressed(Action::MenuUp))
+    if (game.input.wasPressed(Action::MoveUp))
     {
         switch (this->currentOption)
         {
@@ -59,7 +59,7 @@ void SceneTitle::update(Game& game, const float)
     }
     if (game.input.wasPressed(Action::Quit))
     {
-        this->nextScene = SceneID::Exit;
+        this->nextScene = SceneID::Title;
         this->done = true;
     }
 }

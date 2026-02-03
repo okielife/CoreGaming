@@ -196,6 +196,7 @@ public:
     void drawScreenTexture(TextureID tex, float x, float y, float w, float h) const;
 
     void drawSprite(SpriteDraw const& s) const;
+    void drawWorldSprite(SpriteDraw const & s, Camera const & camera) const;
     void fullScreenOverlay(sf::Color color) const;
     void drawScreenSFRectangle(sf::RectangleShape const & rect) const;
 private:

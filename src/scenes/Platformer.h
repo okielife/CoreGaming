@@ -1,13 +1,15 @@
 #pragma once
 
-#include <array>
 #include "base.h"
 
+struct Camera;
 class Game;
 class Renderer;
 
 constexpr float gravity = 1800.f;
 constexpr float jumpSpeed = 650.f;
+
+struct PlatformData {float width, height, xLeft, yTop;};  // for now just basically a rectangle
 
 struct ScenePlatformer : SceneBase
 {
@@ -18,9 +20,10 @@ struct ScenePlatformer : SceneBase
     void update(Game & game, float dt) final;
     void render(Game & game, Renderer & renderer) final;
     sf::RectangleShape player;
-    sf::RectangleShape startPlatform;
+    std::vector<sf::RectangleShape> platforms;
     sf::RectangleShape goalPlatform;
     float velocityY = 0.f;
     bool grounded = false;
     bool won = false;
+    Camera camera;
 };

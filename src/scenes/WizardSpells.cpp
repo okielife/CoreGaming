@@ -8,7 +8,7 @@ void SceneWizardSpells::update(Game& game, float const dt)
     if (game.input.wasPressed(Action::Quit))
     {
         this->done = true;
-        this->nextScene = SceneID::Exit;
+        this->nextScene = SceneID::Title;
         return;
     }
 
@@ -23,6 +23,7 @@ void SceneWizardSpells::update(Game& game, float const dt)
             return;
         }
     }
+    this->nextScene = SceneID::Title;
     this->done = true;  // fall through means we are done with animation steps
 }
 

@@ -1,3 +1,5 @@
+#include <array>
+
 #include "../game.h"
 #include "Platformer.h"
 
@@ -8,14 +10,26 @@ ScenePlatformer::ScenePlatformer()
     // Player
     player = sf::RectangleShape({30.f, 40.f});
     player.setFillColor(sf::Color::Blue);
-    player.setPosition(100.f, 250.f);
+    player.setPosition(100.f, 150.f);
     // Platforms
-    startPlatform = sf::RectangleShape({200.f, 20.f});
-    startPlatform.setFillColor(sf::Color(120, 120, 120));
-    startPlatform.setPosition(50.f, 300.f);
-    goalPlatform = sf::RectangleShape({200.f, 20.f});
+    auto const normalPlatformColor = sf::Color(120, 120, 120);
+    constexpr std::array platformData = {
+        PlatformData{200.0f, 20.0f, 50.0f, 300.0f},
+        PlatformData{200.0f, 20.0f, 400.0f, 230.0f},
+        PlatformData{150.0f, 20.0f, 850.0f, 380.0f},
+    };
+    for (auto const & [width, height, x_left, y_top] : platformData)
+    {
+        auto thisPlatform = sf::RectangleShape({width, height});
+        thisPlatform.setFillColor(normalPlatformColor);
+        thisPlatform.setPosition(x_left, y_top);
+        this->platforms.push_back(thisPlatform);
+    }
+    goalPlatform = sf::RectangleShape({100.f, 2.f});
     goalPlatform.setFillColor(sf::Color::Green);
-    goalPlatform.setPosition(400.f, 230.f);
+    goalPlatform.setPosition(1160.f, 320.f);
+    // Camera
+    this->camera.y = 0;
 }
 
 void ScenePlatformer::reset(Game &) {}
@@ -28,7 +42,7 @@ void ScenePlatformer::update(Game & game, const float dt)
     if (input.wasPressed(Action::Quit))
     {
         this->done = true;
-        this->nextScene = SceneID::Exit;
+        this->nextScene = SceneID::Title;
     }
 
     // move
@@ -36,7 +50,7 @@ void ScenePlatformer::update(Game & game, const float dt)
     if (input.isDown(Action::MoveRight)) player.move(4.5, 0.0);
 
     // Jump
-    if (input.wasPressed(Action::Sword) && grounded) {
+    if (input.wasPressed(Action::Enter) && grounded) {
         velocityY = -jumpSpeed;
         grounded = false;
     }
@@ -70,23 +84,41 @@ void ScenePlatformer::update(Game & game, const float dt)
         }
     };
 
-    checkPlatform(startPlatform, false);
+    for (auto & platform : platforms)
+    {
+        checkPlatform(platform, false);
+    }
     checkPlatform(goalPlatform, true);
+
+    this->camera.x = this->player.getPosition().x - static_cast<float>(this->camera.w) / 2;
+    // this->overheadCamera.y = this->player.getPosition().y - static_cast<float>(this->overheadCamera.h) / 2;
 }
 
 void ScenePlatformer::render(Game &, Renderer & renderer)
 {
     // Draw platforms
-    renderer.drawScreenRectangleOutline(startPlatform.getPosition().x, startPlatform.getPosition().y, startPlatform.getSize().x, startPlatform.getSize().y, sf::Color(120, 120, 120));;
-    renderer.drawScreenRectangleOutline(goalPlatform.getPosition().x, goalPlatform.getPosition().y, goalPlatform.getSize().x, goalPlatform.getSize().y, sf::Color::Green);;
+    for (auto & platform : platforms)
+    {
+        renderer.drawWorldRectangleOutline(platform.getPosition().x, platform.getPosition().y, platform.getSize().x, platform.getSize().y, camera, sf::Color(120, 120, 120));
+    }
+
+    renderer.drawWorldRectangleOutline(goalPlatform.getPosition().x, goalPlatform.getPosition().y, goalPlatform.getSize().x, goalPlatform.getSize().y, camera, sf::Color::Green);;
     // Draw player
-    renderer.drawSprite(SpriteDraw(SpriteID::Wizard, player.getSize().x, player.getSize().y, player.getPosition().x, player.getPosition().y, 0.15, 0.15, 0, sf::Color::White));
+    renderer.drawWorldSprite(
+        SpriteDraw(
+                SpriteID::Wizard,
+                player.getSize().x, player.getSize().y,
+                player.getPosition().x, player.getPosition().y,
+                0.15, 0.15, 0, sf::Color::White
+            ),
+            this->camera
+        );
     if (won)
     {
         renderer.drawScreenText(20, 50, "WINNER!", sf::Color::Green);
     } else
     {
-        renderer.drawScreenText(20, 50, "Use WASD", sf::Color::Red);
+        renderer.drawScreenText(20, 50, "Use Arrow Keys and Space to Jump", sf::Color::Red);
         //std::string const coordsString = "Player X, Y = " + std::to_string(this->playerPos.x) + ", " + std::to_string(this->playerPos.y);
         //renderer.drawScreenText(200, 70, coordsString.c_str(), sf::Color::Red);
     }

@@ -87,6 +87,5 @@ public:
 
 private:
     std::map<SceneID, std::unique_ptr<SceneBase>> scenes;
-    SceneID currentSceneID;
     SceneBase * currentScene;  // non-owning pointer
 };

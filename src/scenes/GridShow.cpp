@@ -16,7 +16,7 @@ void SceneGridShow::update(Game & game, const float dt)
     if (input.wasPressed(Action::Quit))
     {
         this->done = true;
-        this->nextScene = SceneID::Exit;
+        this->nextScene = SceneID::Title;
     }
 
     if (Input::isDown(Action::MoveUp))    this->playerY_ -= this->speed_ * dt;
@@ -26,7 +26,7 @@ void SceneGridShow::update(Game & game, const float dt)
     if (Input::isDown(Action::ZoomIn)) this->overheadCamera.zoom *= 1.01;
     if (Input::isDown(Action::ZoomOut)) this->overheadCamera.zoom /= 1.01;
 
-    if (input.wasPressed(Action::Sword))
+    if (input.wasPressed(Action::Enter))
     {
         if (msSinceLastSword >= swordCooldownMS)
         {
@@ -58,7 +58,7 @@ void SceneGridShow::render(Game &, Renderer & renderer)
     );
 
     // Draw some text
-    renderer.drawScreenText(20, 50, "Use WASD", sf::Color::Red);
+    renderer.drawScreenText(20, 50, "Use Arrow Keys", sf::Color::Red);
     std::string const coordsString = "Player X, Y = " + std::to_string(this->playerX_) + ", " + std::to_string(this->playerY_);
     renderer.drawScreenText(200, 70, coordsString.c_str(), sf::Color::Red);
 }

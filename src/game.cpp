@@ -1,4 +1,7 @@
 #include "game.h"
+
+#include <iostream>
+
 #include "input.h"
 #include "scenes/base.h"
 #include "scenes/WizardSpells.h"
@@ -10,7 +13,7 @@
 
 Game::Game(Input& input, AudioManager& audio) : input(input), audio(audio)
 {
-    //this->audio.playMusic(MusicID::Area2);
+    this->audio.playMusic(MusicID::Area2);
 
     // build the map of scenes, all in memory all at the beginning
     this->scenes.insert({SceneID::Title, std::make_unique<SceneTitle>(*this)});
@@ -21,35 +24,44 @@ Game::Game(Input& input, AudioManager& audio) : input(input), audio(audio)
     this->scenes.insert({SceneID::BulletHell, std::make_unique<SceneBulletHell>()});
 
     // initialize the current scene
-    this->currentSceneID = SceneID::BulletHell;
-    this->currentScene = this->scenes[this->currentSceneID].get();
+    this->currentScene = this->scenes[SceneID::Title].get();
 }
 
 void Game::update(const float dt)
 {
     if (this->currentScene && this->currentScene->done)
     {
+        SceneBase * nextScene;
         switch (this->currentScene->nextScene)
         {
         case SceneID::None:
-            // issue error
-            break;
+            throw std::runtime_error("Invalid scene id None");
         case SceneID::Exit:
             this->running = false;
+            return;
+        case SceneID::Title:
+            nextScene = new SceneTitle(*this);
             break;
         case SceneID::GridShow:
+            nextScene = new SceneGridShow();
+            break;
         case SceneID::WizardSpells:
+            nextScene = new SceneWizardSpells();
+            break;
         case SceneID::Maze:
+            nextScene = new SceneMaze();
+            break;
         case SceneID::Platformer:
+            nextScene = new ScenePlatformer();
+            break;
         case SceneID::BulletHell:
-            this->currentSceneID = this->currentScene->nextScene;
-            this->currentScene = this->scenes[this->currentSceneID].get();
+            nextScene = new SceneBulletHell();
             break;
         default:
-            // issue error
-            this->currentScene = nullptr;
-            break;
+            throw std::runtime_error("Invalid scene id");
         }
+        delete this->currentScene;
+        this->currentScene = nextScene;
     }
     if (this->currentScene) this->currentScene->update(*this, dt);
 }

@@ -12,23 +12,21 @@ enum class Action {
     MoveDown,
     MoveLeft,
     MoveRight,
-    Sword,
+    Enter,
     ZoomIn,
     ZoomOut,
-    MenuUp,
     Confirm,
-    MenuDown,
     Quit
 };
 
-constexpr std::array pressedActions = {
+constexpr std::array actionsList = {
     Action::MoveUp,
     Action::MoveDown,
     Action::MoveLeft,
-    Action::MoveRight, // I'm starting to think I should have include all actions in the pressedActions list
-    Action::Sword,
-    Action::MenuUp,
-    Action::MenuDown,
+    Action::MoveRight,
+    Action::Enter,
+    Action::ZoomIn,
+    Action::ZoomOut,
     Action::Quit,
     Action::Confirm
 };

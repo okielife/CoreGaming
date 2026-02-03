@@ -15,6 +15,13 @@ SceneBulletHell::SceneBulletHell()
 
 void SceneBulletHell::update(Game& game, float const dt)
 {
+    const auto& input = game.input;
+    if (input.wasPressed(Action::Quit))
+    {
+        this->done = true;
+        this->nextScene = SceneID::Title;
+    }
+
     // Player movement
     sf::Vector2f move{0.f, 0.f};
     if (Input::isDown(Action::MoveUp)) move.y -= playerSpeed * dt;
