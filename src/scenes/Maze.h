@@ -3,21 +3,25 @@
 #include <array>
 
 #include <scenes/base.h>
+#include <drawables.h>
 
-constexpr int TILE_SIZE = 32;
+constexpr int TILE_WIDTH = WINDOW_WIDTH / 17;
+constexpr int TILE_HEIGHT = WINDOW_HEIGHT / 15;
 
 struct SceneMaze : SceneBase
 {
     void update(Game & game, float dt) final;
     void render(Game & game, Renderer & renderer) final;
-    Rect player {.w = TILE_SIZE, .h = TILE_SIZE, .color = sf::Color::White};
-    Rect wall {.w = TILE_SIZE, .h = TILE_SIZE, .color = {60, 60, 60, 255}};
-    Rect path {.w = TILE_SIZE, .h = TILE_SIZE, .color = {180, 180, 180, 255}};
-    Rect final {.w = TILE_SIZE, .h = TILE_SIZE, .color = sf::Color::Red};
+    Rect player {.w = TILE_WIDTH, .h = TILE_HEIGHT, .color = sf::Color::White};
+    Rect wall {.w = TILE_WIDTH, .h = TILE_HEIGHT, .color = {60, 60, 60, 255}};
+    Rect path {.w = TILE_WIDTH, .h = TILE_HEIGHT, .color = {180, 180, 180, 255}};
+    Rect final {.w = TILE_WIDTH, .h = TILE_HEIGHT, .color = sf::Color::Red};
     int playerXIndex = 1; // make sure these are on the valid path in the map
     int playerYIndex = 2;
     Transform playerTransform;
     Transform mapTileTransform;
+    Text message {.text = "", .color = sf::Color::Blue, .fontID = FontID::UbuntuRegular, .fontSize = 24};
+    Transform messageTransform {.x = 20, .y = 20};
     static constexpr std::array<std::string_view, 15> map = {
         "XXXXXXXXXXXXXXXXX",
         "XXXXXXXXXXXXXXXXX",

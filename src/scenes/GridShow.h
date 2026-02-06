@@ -11,6 +11,10 @@ struct SceneGridShow : SceneBase
     Transform playerTransform {.x = 100, .y = 100};
     Rect mapGridRect {.w = 32, .h = 32, .outlineColor = {40, 40, 40, 255}, .outlineThickness = 1.0};
     Transform mapGridTransform {.x = 0, .y = 0};
+    Text instructions {.text = "Use Arrow Keys; ESC to exit", .color = sf::Color::Red, .fontID = FontID::UbuntuRegular, .fontSize=24};
+    Transform instructionsTransform {.x = 20, .y = 50};
+    Text coordinates {.text="", .color = sf::Color::Red, .fontID = FontID::UbuntuRegular, .fontSize=24};
+    Transform coordinatesTransform {.x = 20, .y = 80, .rotation=10, .sx = 0.5};
     Camera camera;
     float swordCooldownMS = 1.0f;   // seconds
     float msSinceLastSword = swordCooldownMS; // start "ready"

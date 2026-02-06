@@ -10,14 +10,14 @@ Renderer::Renderer(sf::RenderWindow& window) : window(window)
         if (id == FontID::None) continue;
         sf::Font font;
         font.loadFromFile(AssetManager::font(filename).string());
-        this->fonts.insert({id, font});
+        this->fontInstances.insert({id, font});
     }
     for (auto const & [id, filename] : SpriteMap)
     {
         if (id == SpriteID::None) continue;
         sf::Texture texture;
         texture.loadFromFile(AssetManager::sprite(filename).string());
-        this->sprites.insert({id, texture});
+        this->spriteTextures.insert({id, texture});
     }
 }
 
@@ -34,18 +34,11 @@ void Renderer::end() const
     this->window.display();
 }
 
-void Renderer::drawScreenText(float x, float y, const char* text, const sf::Color color, FontID const fontID, int const fontSize) const
+void Renderer::draw(const Text& t, const Transform& tr) const
 {
-    auto& font = this->fonts.at(fontID);
-    sf::Text drawable;
-    drawable.setFont(font);
-    drawable.setString(sf::String(text));
-    drawable.setCharacterSize(fontSize);
-    drawable.setFillColor(sf::Color(color.r, color.g, color.b, color.a));
-    drawable.setPosition(x, y);
-    window.draw(drawable);
+    this->setWorldView();
+    this->drawText(t, tr);
 }
-
 void Renderer::draw(const Sprite& s, const Transform& t) const
 {
     this->setWorldView();
@@ -55,6 +48,11 @@ void Renderer::draw(const Rect& r, const Transform& t) const
 {
     this->setWorldView();
     this->drawRectangle(r, t);
+}
+void Renderer::drawUI(const Text& t, const Transform& tr) const
+{
+    this->setUIView();
+    this->drawText(t, tr);
 }
 void Renderer::drawUI(const Sprite& s, const Transform& t) const
 {
@@ -77,9 +75,23 @@ void Renderer::setUIView() const
     this->window.setView(this->screenView);
 }
 
+void Renderer::drawText(const Text& t, const Transform& tr) const
+{
+    auto& font = this->fontInstances.at(t.fontID);
+    sf::Text text;
+    text.setFont(font);
+    text.setString(sf::String(t.text));
+    text.setCharacterSize(t.fontSize);
+    text.setFillColor(sf::Color(t.color.r, t.color.g, t.color.b, static_cast<sf::Uint8>(t.color.a * tr.visibility)));
+    text.setPosition(tr.x, tr.y);
+    text.setRotation(tr.rotation);
+    text.setScale(tr.sx, tr.sy);
+    window.draw(text);
+}
+
 void Renderer::drawSprite(const Sprite& s, const Transform& t) const
 {
-    auto& texture = sprites.at(s.id);
+    auto& texture = spriteTextures.at(s.id);
     sf::Sprite sprite;
     sprite.setTexture(texture);
     sprite.setTextureRect(s.texRect);

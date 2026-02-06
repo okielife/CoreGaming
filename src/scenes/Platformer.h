@@ -1,11 +1,8 @@
 #pragma once
 
 #include <scenes/base.h>
-
-constexpr float gravity = 1800.f;
-constexpr float jumpSpeed = 650.f;
-
-struct PlatformData {float width, height, xLeft, yTop;};  // for now just basically a rectangle
+#include <camera.h>
+#include <drawables.h>
 
 struct ScenePlatformer : SceneBase
 {
@@ -21,6 +18,8 @@ struct ScenePlatformer : SceneBase
     static constexpr Transform platform3Transform = {.x = 850, .y = 380};
     Rect goalPlatform {.w = 100, .h = 2, .color = sf::Color::Green};
     static constexpr Transform goalPlatformTransform = {.x = 1160, .y = 320};
+    Text message {.fontID = FontID::UbuntuRegular, .fontSize = 24};
+    Transform messageTransform;
 
     float velocityY = 0.f;
     bool grounded = false;

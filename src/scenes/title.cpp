@@ -55,42 +55,21 @@ void SceneTitle::render(Game&, Renderer& renderer)
     renderer.begin(fixedDefaultCamera);
     renderer.draw(this->sky, this->skyTransform);
 
-    renderer.drawScreenText(
-        150.f,
-        80.f,
-        "This is a great menu screen!",
-        sf::Color::Red,
-        FontID::JollyLodger,
-        60
-    );
-
-    renderer.drawScreenText(
-        30.f,
-        140.f,
-        "Use up/down to select an option and press enter to continue",
-        sf::Color::Red,
-        FontID::JollyLodger,
-        40
-    );
+    renderer.drawUI(title, titleTransform);
+    renderer.drawUI(subTitle, subTitleTransform);
 
     float yValue = 200.0;
     for (auto const& option : optionOrder)
     {
         yValue += 50;
         bool const selected = option == this->currentOption;
-        renderer.drawScreenText(
-            200.0f, yValue,
-            menuOptions.at(option),
-            selected ? sf::Color::Green : sf::Color::White,
-            FontID::JollyLodger,
-            selected ? 40 : 36
-        );
-        if (selected)
-        {
-            selectedTransform.x = 180;
-            selectedTransform.y = yValue + 20;
-            renderer.draw(selectedRect, selectedTransform);
-        }
+        optionText.text = menuOptions.at(option);
+        optionText.color = selected ? sf::Color::Green : sf::Color::White;
+        optionText.fontSize = selected ? 40 : 36;
+        optionTextTransform.y = yValue;
+        renderer.drawUI(optionText, optionTextTransform);
+        selectedTransform.y = yValue + 20;
+        if (selected) renderer.draw(selectedRect, selectedTransform);
     }
     renderer.end();
 }

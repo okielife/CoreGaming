@@ -51,9 +51,8 @@ void SceneGridShow::render(Game &, Renderer & renderer)
     renderer.draw(playerRect, playerTransform);
 
     // Draw some text
-    renderer.setUIView();
-    renderer.drawScreenText(20, 50, "Use Arrow Keys", sf::Color::Red);
-    std::string const coordsString = "Player X, Y = " + std::to_string(this->playerTransform.x) + ", " + std::to_string(this->playerTransform.y);
-    renderer.drawScreenText(200, 70, coordsString.c_str(), sf::Color::Red);
+    renderer.drawUI(instructions, instructionsTransform);
+    coordinates.text = "Player X, Y = " + std::to_string(this->playerTransform.x) + ", " + std::to_string(this->playerTransform.y);
+    renderer.drawUI(coordinates, coordinatesTransform);
     renderer.end();
 }

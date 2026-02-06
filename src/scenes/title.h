@@ -46,5 +46,12 @@ struct SceneTitle : SceneBase
     };
     Transform skyTransform;
     Rect selectedRect {.w = 10, .h = 10, .outlineColor = sf::Color::Green, .outlineThickness = 1.f};
-    Transform selectedTransform;
+    Transform selectedTransform {.x = 180};
+    Text title {.text = "This is a great menu screen!", .color = sf::Color::Red, .fontID = FontID::JollyLodger, .fontSize = 60};
+    Transform titleTransform {.x = 150, .y = 80};
+    Text subTitle {.text = "Use up/down to select an option and press enter to continue", .color = sf::Color::Red, .fontID = FontID::JollyLodger, .fontSize = 40};
+    Transform subTitleTransform {.x = 30, .y = 140};
+    Text optionText {.text = "", .fontID = FontID::JollyLodger};
+    Transform optionTextTransform {.x = 200};
+
 };

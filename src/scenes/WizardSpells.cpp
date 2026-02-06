@@ -42,7 +42,7 @@ void SceneWizardSpells::render(Game& game, Renderer& renderer)
         break;
     case ScenePhase::Spell:
         {
-            renderer.drawScreenText(100, 200, "*Spell*", sf::Color::Green);
+            renderer.drawUI(spell, spellTransform);
         }
         break;
     case ScenePhase::Flash:
@@ -57,7 +57,7 @@ void SceneWizardSpells::render(Game& game, Renderer& renderer)
         break;
     case ScenePhase::Title:
         {
-            renderer.drawScreenText(150, 150, "Flashy Wizard Spells", sf::Color::White, FontID::JollyLodger, 88);
+            renderer.drawUI(title, titleTransform);
         }
         break;
     }

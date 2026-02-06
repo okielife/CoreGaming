@@ -5,7 +5,7 @@
 #include <SFML/Graphics.hpp>
 
 #include <camera.h>
-#include <geometry.h>
+#include <drawables.h>
 
 /**
  * @file renderer.h
@@ -20,49 +20,6 @@
  *
  * @ingroup render
  */
-
-/**
- * The enumerated font IDs, should be one per available font in the assets
- */
-enum class FontID
-{
-    None,
-    JollyLodger,
-    UbuntuRegular24
-};
-
-/**
- * A mapping of the font ID to the filename in the assets/fonts directory.
- * Update this accordingly whenever fonts are added/changed/removed.
- */
-inline const std::unordered_map<FontID, std::string> FontMap = {
-    {FontID::JollyLodger, "JollyLodger-Regular.ttf"},
-    {FontID::UbuntuRegular24, "Ubuntu-Regular.ttf"}
-};
-
-/**
- * The enumerated sprite IDs, should be one per available sprite in the assets
- */
-enum class SpriteID
-{
-    None,
-    Wizard,
-    Sky
-};
-
-/**
- * A mapping of the sprite ID to the filename in the assets/sprites directory.
- * Update this accordingly whenever sprites are added/changed/removed.
- */
-inline const std::unordered_map<SpriteID, std::string> SpriteMap = {
-    {SpriteID::Wizard, "wizard.png"},
-    {SpriteID::Sky, "sky.png"}
-};
-
-struct Sprite {
-    SpriteID id;
-    sf::IntRect texRect;
-};
 
 /**
  * @brief Rendering management class for visual rendering on the screen
@@ -108,34 +65,42 @@ public:
      */
     void end() const;
 
-    /**
-     * @brief Draws text on the screen given screen coordinates, not world coordinates
-     *
-     * @param x The x-coordinate on the screen, in pixels
-     * @param y The y-coordinate on the screen, in pixels
-     * @param text The text string to write on the screen
-     * @param color The color of the text
-     * @param fontID The FontID enumeration value to use for rendering the text
-     * @param fontSize The font size for the text
-     */
-    void drawScreenText(float x, float y, const char * text, sf::Color color, FontID fontID = FontID::UbuntuRegular24, int fontSize = 24) const;
-
     void fullScreenOverlay(sf::Color color) const;
+    void draw(const Text& t, const Transform& tr) const;
     void draw(const Sprite& s, const Transform& t) const;
     void draw(const Rect& r, const Transform& t) const;
+    void drawUI(const Text& t, const Transform& tr) const;
     void drawUI(const Sprite& s, const Transform& t) const;
     void drawUI(const Rect& r, const Transform& t) const;
     //void addScreenShake(float time);
-    void setUIView() const;
 
 private:
     void setWorldView() const;
+    void setUIView() const;
     void drawSprite(const Sprite& s, const Transform& t) const;
     void drawRectangle(const Rect& r, const Transform& t) const;
+    void drawText(const Text& t, const Transform& tr) const;
 
     sf::View worldView;
     sf::View screenView;
     sf::RenderWindow& window;
-    std::unordered_map<SpriteID, sf::Texture> sprites;
-    std::unordered_map<FontID, sf::Font> fonts;
+    std::unordered_map<SpriteID, sf::Texture> spriteTextures;
+    std::unordered_map<FontID, sf::Font> fontInstances;
+
+    /**
+     * A mapping of the sprite ID to the filename in the assets/sprites directory.
+     * Update this accordingly whenever sprites are added/changed/removed.
+     */
+    const std::unordered_map<SpriteID, std::string> SpriteMap = {
+        {SpriteID::Wizard, "wizard.png"},
+        {SpriteID::Sky, "sky.png"}
+    };
+    /**
+     * A mapping of the font ID to the filename in the assets/fonts directory.
+     * Update this accordingly whenever fonts are added/changed/removed.
+     */
+    const std::unordered_map<FontID, std::string> FontMap = {
+        {FontID::JollyLodger, "JollyLodger-Regular.ttf"},
+        {FontID::UbuntuRegular, "Ubuntu-Regular.ttf"}
+    };
 };

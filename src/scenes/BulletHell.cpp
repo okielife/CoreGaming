@@ -80,13 +80,17 @@ void SceneBulletHell::render(Game& game, Renderer& renderer)
     renderer.draw(playerRect, playerTransform);
     if (won)
     {
-        renderer.drawScreenText(25, 25, "You won!", sf::Color::Green);
+        outcome.text = "You won!";
+        outcome.color = sf::Color::Green;
+        renderer.drawUI(outcome, outcomeTransform);
     }
     else if (lost)
     {
-        renderer.drawScreenText(25, 25, "You LOST!", sf::Color::Red);
+        outcome.text = "You lost!";
+        outcome.color = sf::Color::Red;
+        renderer.drawUI(outcome, outcomeTransform);
     }
-    for (const auto& bullet : bullets)
-        renderer.draw(bulletRect, bullet.transform);
+    for (const auto& [transform, _] : bullets)
+        renderer.draw(bulletRect, transform);
     renderer.end();
 }

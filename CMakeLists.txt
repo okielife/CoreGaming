@@ -37,6 +37,7 @@ add_executable(game
         src/scenes/Platformer.cpp
         src/scenes/BulletHell.cpp
         src/scenes/BulletHell.h
+        src/drawables.h
 )
 target_include_directories(game PRIVATE src)
 target_link_libraries(game PRIVATE

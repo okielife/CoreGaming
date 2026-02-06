@@ -21,11 +21,7 @@ public:
     void update(Game & game, float dt) override;
     void render(Game & game, Renderer &renderer) override;
 private:
-    Rect playerRect {
-        .w = 25.0,
-        .h = 25.0,
-        .color = sf::Color::Blue
-    };
+    Rect playerRect {.w = 25.0, .h = 25.0, .color = sf::Color::Blue};
     Transform playerTransform {
         .x = WINDOW_WIDTH / 2.0f - playerRect.w / 2.0f,
         .y = WINDOW_HEIGHT / 2.0f - playerRect.h / 2.0f
@@ -46,6 +42,8 @@ private:
         .h = 5.0,
         .color = sf::Color::Red
     };
+    Text outcome {.fontID = FontID::UbuntuRegular, .fontSize = 24};
+    static constexpr Transform outcomeTransform {.x = 25, .y = 25};
     std::vector<Bullet> bullets;
     bool lost = false;
     bool won = false;

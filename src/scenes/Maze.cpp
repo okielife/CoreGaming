@@ -26,8 +26,8 @@ void SceneMaze::update(Game & game, const float dt)
     {
         winner = true;
     }
-    playerTransform.x = playerXIndex * TILE_SIZE;
-    playerTransform.y = playerYIndex * TILE_SIZE;
+    playerTransform.x = playerXIndex * TILE_WIDTH;
+    playerTransform.y = playerYIndex * TILE_HEIGHT;
 }
 
 void SceneMaze::render(Game &, Renderer & renderer)
@@ -36,8 +36,8 @@ void SceneMaze::render(Game &, Renderer & renderer)
     // Draw map
     for (int y = 0; y < this->map.size(); ++y) {
         for (int x = 0; x < this->map[0].size(); ++x) {
-            mapTileTransform.x = x * TILE_SIZE;
-            mapTileTransform.y = y * TILE_SIZE;
+            mapTileTransform.x = x * TILE_WIDTH;
+            mapTileTransform.y = y * TILE_HEIGHT;
             if (char const c = map[y][x]; c == 'X')
                 renderer.draw(wall, mapTileTransform);
             else if (c == '1' || c == '0')
@@ -51,12 +51,14 @@ void SceneMaze::render(Game &, Renderer & renderer)
 
     if (winner)
     {
-        renderer.drawScreenText(20, 50, "WINNER!", sf::Color::Green);
+        message.text = "WINNER!";
+        message.color = sf::Color::Green;
+        renderer.drawUI(message, messageTransform);
     } else
     {
-        renderer.drawScreenText(20, 50, "Use Arrow Keys", sf::Color::Red);
-        std::string const coordsString = "Player X, Y = " + std::to_string(this->playerXIndex) + ", " + std::to_string(this->playerYIndex);
-        renderer.drawScreenText(200, 70, coordsString.c_str(), sf::Color::Red);
+        message.text = "Use Arrow Keys; Player X, Y = " + std::to_string(this->playerXIndex) + ", " + std::to_string(this->playerYIndex);
+        message.color = sf::Color::Blue;
+        renderer.drawUI(message, messageTransform);
     }
     renderer.end();
 }

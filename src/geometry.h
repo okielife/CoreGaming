@@ -1,23 +1,6 @@
 #pragma once
 
-#include <SFML/Graphics/Color.hpp>
-
-struct Transform {
-    float x = 0;
-    float y = 0;
-    float rotation = 0;
-    float sx = 1;
-    float sy = 1;
-    float visibility = 1.0;
-};
-
-struct Rect {
-    float w;
-    float h;
-    sf::Color color;
-    sf::Color outlineColor;
-    float outlineThickness;
-};
+#include <drawables.h>
 
 struct AABB {
     float x;

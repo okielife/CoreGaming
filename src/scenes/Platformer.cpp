@@ -1,4 +1,5 @@
 #include <game.h>
+#include <geometry.h>
 #include <scenes/Platformer.h>
 
 void ScenePlatformer::update(Game & game, const float dt)
@@ -14,13 +15,16 @@ void ScenePlatformer::update(Game & game, const float dt)
     if (input.isDown(Action::MoveLeft)) playerTransform.x -= 4.5;
     if (input.isDown(Action::MoveRight)) playerTransform.x += 4.5;
 
+
     // Jump
     if (input.wasPressed(Action::Enter) && grounded) {
+        constexpr float jumpSpeed = 650.f;
         velocityY = -jumpSpeed;
         grounded = false;
     }
 
     // Gravity
+    constexpr float gravity = 1800.f;
     velocityY += gravity * dt;
     playerTransform.y += velocityY * dt;
     grounded = false;
@@ -66,23 +70,16 @@ void ScenePlatformer::render(Game &, Renderer & renderer)
     renderer.draw(platform3, platform3Transform);
     renderer.draw(goalPlatform, goalPlatformTransform);
     renderer.draw(player, playerTransform);
-    // // Draw player
-    // renderer.drawWorldSprite(
-    //     SpriteDraw(
-    //             SpriteID::Wizard,
-    //             player.getSize().x, player.getSize().y,
-    //             player.getPosition().x, player.getPosition().y,
-    //             0.15, 0.15, 0, sf::Color::White
-    //         ),
-    //         this->camera
-    //     );
-    renderer.setUIView();
     if (won)
     {
-        renderer.drawScreenText(20, 50, "WINNER!", sf::Color::Green);
+        message.text = "WINNER!";
+        message.color = sf::Color::Green;
+        renderer.drawUI(message, messageTransform);
     } else
     {
-        renderer.drawScreenText(20, 50, "Use Arrow Keys and Space to Jump", sf::Color::Red);
+        message.text = "Use Arrow Keys and Space to Jump";
+        message.color = sf::Color::Blue;
+        renderer.drawUI(message, messageTransform);
     }
     renderer.end();
 }
