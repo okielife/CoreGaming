@@ -1,7 +1,5 @@
 #pragma once
 
-#include <map>
-
 #include <audio.h>
 #include <input.h>
 #include <renderer.h>
@@ -86,6 +84,5 @@ public:
     bool running = true;
 
 private:
-    std::map<SceneID, std::unique_ptr<SceneBase>> scenes;
     SceneBase * currentScene;  // non-owning pointer
 };

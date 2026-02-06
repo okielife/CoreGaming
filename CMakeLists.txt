@@ -31,8 +31,8 @@ add_executable(game
         src/scenes/title.h
         src/scenes/WizardSpells.cpp
         src/scenes/WizardSpells.h
-        #        src/scenes/Maze.h
-        #        src/scenes/Maze.cpp
+        src/scenes/Maze.h
+        src/scenes/Maze.cpp
         #        src/scenes/Platformer.h
         #        src/scenes/Platformer.cpp
         src/scenes/BulletHell.cpp
