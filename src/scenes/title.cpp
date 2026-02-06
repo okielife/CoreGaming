@@ -43,7 +43,7 @@ void SceneTitle::update(Game& game, const float)
     }
     if (game.input.wasPressed(Action::Quit))
     {
-        this->nextScene = SceneID::Title;
+        this->nextScene = SceneID::Exit;
         this->done = true;
     }
 }

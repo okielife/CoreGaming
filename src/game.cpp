@@ -4,14 +4,13 @@
 #include <scenes/title.h>
 #include <scenes/GridShow.h>
 #include <scenes/Maze.h>
-// #include <scenes/Platformer.h>
+#include <scenes/Platformer.h>
 #include <scenes/BulletHell.h>
 
 Game::Game(Input& input, AudioManager& audio) : input(input), audio(audio)
 {
     this->audio.playMusic(MusicID::Area2);
-    // initialize the current scene
-    this->currentScene = new SceneTitle();
+    this->currentScene = new SceneTitle();  // initialize the current scene
 }
 
 void Game::update(const float dt)
@@ -38,9 +37,9 @@ void Game::update(const float dt)
         case SceneID::Maze:
             nextScene = new SceneMaze();
             break;
-        // case SceneID::Platformer:
-        //     nextScene = new ScenePlatformer();
-        //     break;
+        case SceneID::Platformer:
+            nextScene = new ScenePlatformer();
+            break;
         case SceneID::BulletHell:
             nextScene = new SceneBulletHell();
             break;

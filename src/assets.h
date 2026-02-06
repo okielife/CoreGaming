@@ -52,14 +52,6 @@ struct AssetManager
     static std::filesystem::path audio(std::string_view audio_file_name);
 
     /**
-     * @brief Returns the filesystem path to a texture asset.
-     *
-     * @param texture_file_name Filename of the texture asset.
-     * @return Filesystem path to the texture asset.
-     */
-    static std::filesystem::path texture(std::string_view texture_file_name);
-
-    /**
      * @brief Returns the filesystem path to a sprite asset.
      *
      * @param sprite_file_name Filename of the sprite asset.

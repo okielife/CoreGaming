@@ -41,23 +41,6 @@ inline const std::unordered_map<FontID, std::string> FontMap = {
 };
 
 /**
- * The enumerated texture IDs, should be one per available texture in the assets
- */
-enum class TextureID
-{
-    None,
-    Sky
-};
-
-/**
- * A mapping of the texture ID to the filename in the assets/textures directory.
- * Update this accordingly whenever textures are added/changed/removed.
- */
-inline const std::unordered_map<TextureID, std::string> TextureMap = {
-    {TextureID::Sky, "sky.png"}
-};
-
-/**
  * The enumerated sprite IDs, should be one per available sprite in the assets
  */
 enum class SpriteID
@@ -126,41 +109,6 @@ public:
     void end() const;
 
     /**
-     * @brief Transforms a game-world rectangle position/size into a screen geometry rectangle.
-     *
-     * @param x The x-coordinate in the game world, in game-units
-     * @param y The y-coordinate in the game world, in game-units
-     * @param w The width in the game world, in game-units
-     * @param h The height in the game world, in game-units
-     * @param cam The camera instance which tells how to transform world geometry into screen geometry
-     * @return A screen-coordinate (pixel) rectangle which can be displayed using the platform renderer
-     */
-    static sf::Rect<float> worldRectangleToScreenRectangle(float x, float y, float w, float h, const Camera& cam);
-
-    /**
-     * @brief Draws a game-world rectangle on the screen from world/game coordinates based on camera position and zoom
-     *
-     * @param x The x-coordinate in the game world, in game-units
-     * @param y The y-coordinate in the game world, in game-units
-     * @param w The width in the game world, in game-units
-     * @param h The height in the game world, in game-units
-     * @param cam The camera instance which tells how to transform world geometry into screen geometry
-     * @param color The outline color of the rectangle
-     */
-    void drawWorldRectangleOutline(float x, float y, float w, float h, const Camera& cam, const sf::Color & color) const;
-
-    /**
-     * @brief Draws a rectangle on the screen given screen coordinates (pixels), not world coordinates
-     *
-     * @param x The x-coordinate on the screen, in pixels
-     * @param y The y-coordinate on the screen, in pixels
-     * @param w The width on the screen, in pixels
-     * @param h The height on the screen, in pixels
-     * @param color The outline color of the rectangle
-     */
-    void drawScreenRectangleOutline(float x, float y, float w, float h, const sf::Color& color) const;
-
-    /**
      * @brief Draws text on the screen given screen coordinates, not world coordinates
      *
      * @param x The x-coordinate on the screen, in pixels
@@ -171,17 +119,6 @@ public:
      * @param fontSize The font size for the text
      */
     void drawScreenText(float x, float y, const char * text, sf::Color color, FontID fontID = FontID::UbuntuRegular24, int fontSize = 24) const;
-
-    /**
-     * @brief Draws a given texture to the screen given screen coordinates
-     *
-     * @param tex The texture ID to draw, based on the loadTexture method return value
-     * @param x The x-coordinate on the screen, in pixels
-     * @param y The y-coordinate on the screen, in pixels
-     * @param w The width of the texture to draw, in pixels
-     * @param h The height of the texture to draw, in pixels
-     */
-    void drawScreenTexture(TextureID tex, float x, float y, float w, float h) const;
 
     void fullScreenOverlay(sf::Color color) const;
     void draw(const Sprite& s, const Transform& t) const;
@@ -199,7 +136,6 @@ private:
     sf::View worldView;
     sf::View screenView;
     sf::RenderWindow& window;
-    std::unordered_map<TextureID, sf::Texture> textures;
     std::unordered_map<SpriteID, sf::Texture> sprites;
     std::unordered_map<FontID, sf::Font> fonts;
 };

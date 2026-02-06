@@ -6,7 +6,6 @@
 #include <scenes/base.h>
 
 class Platform;
-class Renderer;
 
 /**
  * @file game.h
