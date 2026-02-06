@@ -1,6 +1,6 @@
-#include "title.h"
-#include "../game.h"
-#include "../constants.h"
+#include <scenes/title.h>
+#include <game.h>
+#include <constants.h>
 
 SceneTitle::SceneTitle(const Game&)
 {

@@ -1,5 +1,5 @@
-#include "platform.h"
-#include "game.h"
+#include <platform.h>
+#include <game.h>
 
 int main() {
     Platform platform;

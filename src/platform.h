@@ -2,9 +2,9 @@
 
 #include <SFML/Graphics.hpp>
 
-#include "game.h"
-#include "renderer.h"
-#include "input.h"
+#include <game.h>
+#include <renderer.h>
+#include <input.h>
 
 /**
  * @file platform.h

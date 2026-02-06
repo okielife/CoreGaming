@@ -1,7 +1,7 @@
 #include <array>
 
-#include "../game.h"
-#include "Platformer.h"
+#include <game.h>
+#include <scenes/Platformer.h>
 
 class Game;
 

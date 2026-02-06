@@ -1,5 +1,5 @@
-#include "../game.h"
-#include "Maze.h"
+#include <game.h>
+#include <scenes/Maze.h>
 
 class Game;
 

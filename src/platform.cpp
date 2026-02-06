@@ -1,7 +1,7 @@
 #include <filesystem>
 
-#include "platform.h"
-#include "renderer.h"
+#include <platform.h>
+#include <renderer.h>
 
 Platform::Platform() : renderer(window), window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), WINDOW_TITLE, sf::Style::Titlebar | sf::Style::Close) {
     // set ONE of these two options, not both

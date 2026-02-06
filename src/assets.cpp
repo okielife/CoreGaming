@@ -3,7 +3,7 @@
 
 #include <SFML/System.hpp>
 
-#include "assets.h"
+#include <assets.h>
 
 #ifdef _WIN32
 #    include <Shlwapi.h>

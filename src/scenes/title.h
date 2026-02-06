@@ -3,7 +3,7 @@
 #include <array>
 #include <map>
 
-#include "base.h"
+#include <scenes/base.h>
 
 class Game;
 class Renderer;

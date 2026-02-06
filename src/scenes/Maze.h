@@ -1,7 +1,8 @@
 #pragma once
 
 #include <array>
-#include "base.h"
+
+#include <scenes/base.h>
 
 class Game;
 class Renderer;

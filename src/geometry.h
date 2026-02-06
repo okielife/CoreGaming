@@ -8,6 +8,7 @@ struct Transform {
     float rotation = 0;
     float sx = 1;
     float sy = 1;
+    sf::Color color = sf::Color::White;
 };
 
 struct Rect {

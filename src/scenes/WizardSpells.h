@@ -1,6 +1,6 @@
 #pragma once
 
-#include "base.h"
+#include <scenes/base.h>
 
 class Game;
 class Renderer;
@@ -31,14 +31,24 @@ struct AnimationStep
 
 class SceneWizardSpells : public SceneBase {
 public:
-    void reset(Game & game) override {};
-    void reenter(Game & game) override {};
     void update(Game & game, float dt) override;
     void render(Game & game, Renderer &renderer) override;
 private:
-    Camera camera;
     float overallSceneTime = 0.f;
-    SpriteDraw wizardSprite = SpriteDraw(SpriteID::Wizard, 0, 0, 60, 60);
+    Sprite wizard {
+        .id = SpriteID::Wizard,
+        .texRect = {0, 0, 193, 241}
+    };
+    Transform wizardTransform = {
+        .x = 10, .y = 10, .rotation = 0.0f, .sx = 2, .sy = 2
+    };
+    Rect spellRect {
+        .w = 60.0,
+        .h = 85.0,
+        .color = sf::Color::Red
+    };
+    Transform spellTransform {.x = 25, .y = 25};
+
     ScenePhase phase = ScenePhase::FadingInWizard;
     const std::map<ScenePhase, AnimationStep> animationSteps = {
         {ScenePhase::FadingInWizard, AnimationStep(0.0f, 2.0)},

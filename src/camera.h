@@ -1,6 +1,6 @@
 #pragma once
 
-#include "constants.h"
+#include <constants.h>
 
 /**
  * @file camera.h
@@ -23,4 +23,8 @@ struct Camera {
     int w = WINDOW_WIDTH;
     int h = WINDOW_HEIGHT;
     float zoom = 1.0f; // 1.0 = 100%
+};
+
+constexpr Camera defaultCamera {
+    .x = WINDOW_WIDTH / 2.0f, .y = WINDOW_HEIGHT / 2.0f, .w = WINDOW_WIDTH, .h = WINDOW_HEIGHT, .zoom = 1.0f
 };

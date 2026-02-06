@@ -20,8 +20,8 @@ enum class SceneID
 struct SceneBase
 {
     virtual ~SceneBase() = default;
-    virtual void reset(Game & game) = 0;
-    virtual void reenter(Game & game) = 0;
+    virtual void reset(Game & game) {};
+    virtual void reenter(Game & game) {};
 
     /**
      * The update() method should handle all aspects of this scene based on:

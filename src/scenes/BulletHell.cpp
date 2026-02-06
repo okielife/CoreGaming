@@ -1,6 +1,6 @@
-#include "../geometry.h"
-#include "../game.h"
-#include "BulletHell.h"
+#include <geometry.h>
+#include <game.h>
+#include <scenes/BulletHell.h>
 
 void SceneBulletHell::update(Game& game, float const dt)
 {
@@ -11,25 +11,32 @@ void SceneBulletHell::update(Game& game, float const dt)
     }
 
     // Player movement
+    constexpr float playerSpeed = 300.f;
     if (Input::isDown(Action::MoveUp)) this->playerTransform.y -= playerSpeed * dt;
     if (Input::isDown(Action::MoveDown)) this->playerTransform.y += playerSpeed * dt;
     if (Input::isDown(Action::MoveLeft)) this->playerTransform.x -= playerSpeed * dt;;
     if (Input::isDown(Action::MoveRight)) this->playerTransform.x += playerSpeed * dt;
 
     // Keep player in action window
-    this->playerTransform.x = std::clamp(this->playerTransform.x, actionWindowX, actionWindowX + actionWindowWidth - playerWidth);
-    this->playerTransform.y = std::clamp(this->playerTransform.y, actionWindowY, actionWindowY + actionWindowHeight - playerHeight);
+    this->playerTransform.x = std::clamp(
+        this->playerTransform.x, actionWindowPosition.x, actionWindowPosition.x + actionWindowRect.w - playerRect.w
+        );
+    this->playerTransform.y = std::clamp(
+        this->playerTransform.y, actionWindowPosition.y, actionWindowPosition.y + actionWindowRect.h - playerRect.h
+        );
 
     if (!lost && !won)
     {
         // Spawn bullets for limited time
+        constexpr float bulletSpawnInterval = 0.05f;
+        constexpr float bulletSpawnDuration = 4.f;
         if (lifetimeClock.getElapsedTime().asSeconds() < bulletSpawnDuration)
         {
             if (spawnClock.getElapsedTime().asSeconds() >= bulletSpawnInterval)
             {
                 spawnClock.restart();
                 Bullet b;
-                b.transform.x = WINDOW_WIDTH + bulletWidth;
+                b.transform.x = WINDOW_WIDTH + bulletRect.w;
                 b.transform.y =  bulletHeightDistribution(gen);
                 b.speed = bulletSpeedDistribution(gen);
                 this->bullets.push_back(b);
@@ -68,9 +75,9 @@ void SceneBulletHell::update(Game& game, float const dt)
 
 void SceneBulletHell::render(Game& game, Renderer& renderer)
 {
-    renderer.begin(this->camera);
-    renderer.drawUI(actionWindowRect, actionWindowTransform);
-    renderer.drawUI(playerRect, playerTransform);
+    renderer.begin(defaultCamera);
+    renderer.draw(actionWindowRect, actionWindowPosition);
+    renderer.draw(playerRect, playerTransform);
     if (won)
     {
         renderer.drawScreenText(25, 25, "You won!", sf::Color::Green);
@@ -80,6 +87,6 @@ void SceneBulletHell::render(Game& game, Renderer& renderer)
         renderer.drawScreenText(25, 25, "You LOST!", sf::Color::Red);
     }
     for (const auto& bullet : bullets)
-        renderer.drawUI(bulletRect, bullet.transform);
+        renderer.draw(bulletRect, bullet.transform);
     renderer.end();
 }

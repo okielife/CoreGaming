@@ -1,5 +1,5 @@
-#include "../game.h"
-#include "GridShow.h"
+#include <game.h>
+#include <scenes/GridShow.h>
 
 class Game;
 

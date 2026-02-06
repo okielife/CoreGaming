@@ -2,10 +2,10 @@
 
 #include <map>
 
-#include "audio.h"
-#include "input.h"
-#include "renderer.h"
-#include "scenes/base.h"
+#include <audio.h>
+#include <input.h>
+#include <renderer.h>
+#include <scenes/base.h>
 
 class Platform;
 class Renderer;

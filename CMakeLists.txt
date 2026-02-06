@@ -16,6 +16,7 @@ add_executable(game
         src/doxygen.h
         src/game.cpp
         src/game.h
+        src/geometry.h
         src/input.cpp
         src/input.h
         src/main.cpp
@@ -24,20 +25,20 @@ add_executable(game
         src/renderer.cpp
         src/renderer.h
         src/scenes/base.h
-#        src/scenes/GridShow.cpp
-#        src/scenes/GridShow.h
-#        src/scenes/title.cpp
-#        src/scenes/title.h
-#        src/scenes/WizardSpells.cpp
-#        src/scenes/WizardSpells.h
-#        src/scenes/Maze.h
-#        src/scenes/Maze.cpp
-#        src/scenes/Platformer.h
-#        src/scenes/Platformer.cpp
+        #        src/scenes/GridShow.cpp
+        #        src/scenes/GridShow.h
+        #        src/scenes/title.cpp
+        #        src/scenes/title.h
+        src/scenes/WizardSpells.cpp
+        src/scenes/WizardSpells.h
+        #        src/scenes/Maze.h
+        #        src/scenes/Maze.cpp
+        #        src/scenes/Platformer.h
+        #        src/scenes/Platformer.cpp
         src/scenes/BulletHell.cpp
         src/scenes/BulletHell.h
-        src/geometry.h
 )
+target_include_directories(game PRIVATE src)
 target_link_libraries(game PRIVATE
         sfml-graphics
         sfml-window

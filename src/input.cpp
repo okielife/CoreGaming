@@ -1,7 +1,8 @@
-#include "input.h"
-
 #include <ranges>
+
 #include <SFML/Window/Event.hpp>
+
+#include <input.h>
 
 Input::Input()
 {

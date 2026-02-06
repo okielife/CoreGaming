@@ -1,7 +1,7 @@
 #pragma once
 
-#include "base.h"
-#include "../camera.h"
+#include <scenes/base.h>
+#include <camera.h>
 
 class Game;
 class Renderer;

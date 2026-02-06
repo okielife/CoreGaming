@@ -1,5 +1,5 @@
-#include "assets.h"
-#include "renderer.h"
+#include <assets.h>
+#include <renderer.h>
 
 Renderer::Renderer(sf::RenderWindow& window) : window(window)
 {
@@ -116,17 +116,13 @@ void Renderer::setUIView() const
 void Renderer::drawSprite(const Sprite& s, const Transform& t) const
 {
     auto& texture = sprites.at(s.id);
-
     sf::Sprite sprite;
     sprite.setTexture(texture);
-
-    if (s.hasTextureRectangle)
-        sprite.setTextureRect(s.texRect);
-
+    sprite.setTextureRect(s.texRect);
     sprite.setPosition(t.x, t.y);
     sprite.setRotation(t.rotation);
     sprite.setScale(t.sx, t.sy);
-
+    sprite.setColor(t.color);
     window.draw(sprite);
 }
 
@@ -168,17 +164,17 @@ void Renderer::drawRectangle(const Rect& r, const Transform& t) const
 //     window.draw(sprite);
 // }
 //
-// void Renderer::fullScreenOverlay(sf::Color const color) const
-// {
-//     sf::RectangleShape rect;
-//     rect.setSize({
-//         static_cast<float>(window.getSize().x),
-//         static_cast<float>(window.getSize().y)
-//     });
-//     rect.setPosition(0.f, 0.f);
-//     rect.setFillColor(color);
-//     window.draw(rect);
-// }
+void Renderer::fullScreenOverlay(sf::Color const color) const
+{
+    sf::RectangleShape rect;
+    rect.setSize({
+        static_cast<float>(window.getSize().x),
+        static_cast<float>(window.getSize().y)
+    });
+    rect.setPosition(0.f, 0.f);
+    rect.setFillColor(color);
+    window.draw(rect);
+}
 //
 // void Renderer::drawScreenSFRectangle(sf::RectangleShape const & rect) const
 // {

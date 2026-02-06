@@ -4,8 +4,8 @@
 
 #include <SFML/Graphics.hpp>
 
-#include "camera.h"
-#include "geometry.h"
+#include <camera.h>
+#include <geometry.h>
 
 /**
  * @file renderer.h
@@ -76,8 +76,7 @@ inline const std::unordered_map<SpriteID, std::string> SpriteMap = {
 
 struct Sprite {
     SpriteID id;
-    bool hasTextureRectangle = false;
-    sf::IntRect texRect;   // optional later
+    sf::IntRect texRect;
 };
 
 /**
@@ -182,6 +181,7 @@ public:
      */
     void drawScreenTexture(TextureID tex, float x, float y, float w, float h) const;
 
+    void fullScreenOverlay(sf::Color color) const;
     void draw(const Sprite& s, const Transform& t) const;
     void draw(const Rect& r, const Transform& t) const;
     void drawUI(const Sprite& s, const Transform& t) const;
