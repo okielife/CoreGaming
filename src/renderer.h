@@ -5,6 +5,7 @@
 #include <SFML/Graphics.hpp>
 
 #include "camera.h"
+#include "geometry.h"
 
 /**
  * @file renderer.h
@@ -73,24 +74,10 @@ inline const std::unordered_map<SpriteID, std::string> SpriteMap = {
     {SpriteID::Wizard, "wizard.png"}
 };
 
-
-struct SpriteDraw {
-    //sf::Texture const* texture;
-    SpriteDraw(SpriteID const spriteID, int const width, int const height, int const x, int const y, float const xScale = 1.0, float const yScale = 1.0, float const rotation = 0.0, const sf::Color color = sf::Color::White)
-    {
-        this->sprite = spriteID;
-        this->rect = {x, y, width, height}; // this is the texture rectangle I think
-        this->scale = {xScale, yScale};
-        this->rotation = rotation;
-        this->position.x = x;
-        this->position.y = y;
-    }
-    SpriteID sprite;
-    sf::IntRect rect;
-    sf::Vector2f position;
-    sf::Vector2f scale {1.f, 1.f};
-    float rotation = 0.f;
-    sf::Color color = sf::Color::White;
+struct Sprite {
+    SpriteID id;
+    bool hasTextureRectangle = false;
+    sf::IntRect texRect;   // optional later
 };
 
 /**
@@ -126,7 +113,7 @@ public:
      * each scene at the beginning of their render step to clear the screen before immediately
      * drawing their assets.
      */
-    void begin() const;
+    void begin(const Camera& cam);
 
     /**
      * @brief This function wraps up any rendering once the drawn assets have been added
@@ -195,11 +182,19 @@ public:
      */
     void drawScreenTexture(TextureID tex, float x, float y, float w, float h) const;
 
-    void drawSprite(SpriteDraw const& s) const;
-    void drawWorldSprite(SpriteDraw const & s, Camera const & camera) const;
-    void fullScreenOverlay(sf::Color color) const;
-    void drawScreenSFRectangle(sf::RectangleShape const & rect) const;
+    void draw(const Sprite& s, const Transform& t) const;
+    void draw(const Rect& r, const Transform& t) const;
+    void drawUI(const Sprite& s, const Transform& t) const;
+    void drawUI(const Rect& r, const Transform& t) const;
+    //void addScreenShake(float time);
 private:
+    void setWorldView() const;
+    void setUIView() const;
+    void drawSprite(const Sprite& s, const Transform& t) const;
+    void drawRectangle(const Rect& r, const Transform& t) const;
+
+    sf::View worldView;
+    sf::View screenView;
     sf::RenderWindow& window;
     std::unordered_map<TextureID, sf::Texture> textures;
     std::unordered_map<SpriteID, sf::Texture> sprites;

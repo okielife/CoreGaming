@@ -7,11 +7,13 @@ include(cmake/sfml.cmake)
 
 # build the game binary and link it to the SFML libraries
 add_executable(game
+        src/assets.cpp
         src/assets.h
         src/audio.cpp
         src/audio.h
         src/camera.h
         src/constants.h
+        src/doxygen.h
         src/game.cpp
         src/game.h
         src/input.cpp
@@ -22,20 +24,19 @@ add_executable(game
         src/renderer.cpp
         src/renderer.h
         src/scenes/base.h
-        src/scenes/GridShow.cpp
-        src/scenes/GridShow.h
-        src/scenes/title.cpp
-        src/scenes/title.h
-        src/doxygen.h
-        src/assets.cpp
-        src/scenes/WizardSpells.cpp
-        src/scenes/WizardSpells.h
-        src/scenes/Maze.h
-        src/scenes/Maze.cpp
-        src/scenes/Platformer.h
-        src/scenes/Platformer.cpp
+#        src/scenes/GridShow.cpp
+#        src/scenes/GridShow.h
+#        src/scenes/title.cpp
+#        src/scenes/title.h
+#        src/scenes/WizardSpells.cpp
+#        src/scenes/WizardSpells.h
+#        src/scenes/Maze.h
+#        src/scenes/Maze.cpp
+#        src/scenes/Platformer.h
+#        src/scenes/Platformer.cpp
         src/scenes/BulletHell.cpp
         src/scenes/BulletHell.h
+        src/geometry.h
 )
 target_link_libraries(game PRIVATE
         sfml-graphics

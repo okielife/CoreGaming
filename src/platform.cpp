@@ -55,9 +55,7 @@ void Platform::run(Game & game) {
         game.update(dt);
         this->audio_.update();
 
-        renderer.begin();
         game.render(renderer);
-        renderer.end();
 
     }
 }
