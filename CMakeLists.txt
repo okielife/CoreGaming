@@ -25,10 +25,10 @@ add_executable(game
         src/renderer.cpp
         src/renderer.h
         src/scenes/base.h
-        #        src/scenes/GridShow.cpp
-        #        src/scenes/GridShow.h
-        #        src/scenes/title.cpp
-        #        src/scenes/title.h
+        src/scenes/GridShow.cpp
+        src/scenes/GridShow.h
+        src/scenes/title.cpp
+        src/scenes/title.h
         src/scenes/WizardSpells.cpp
         src/scenes/WizardSpells.h
         #        src/scenes/Maze.h

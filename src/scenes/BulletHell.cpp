@@ -75,7 +75,7 @@ void SceneBulletHell::update(Game& game, float const dt)
 
 void SceneBulletHell::render(Game& game, Renderer& renderer)
 {
-    renderer.begin(defaultCamera);
+    renderer.begin(fixedDefaultCamera);
     renderer.draw(actionWindowRect, actionWindowPosition);
     renderer.draw(playerRect, playerTransform);
     if (won)

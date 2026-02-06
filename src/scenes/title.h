@@ -4,9 +4,7 @@
 #include <map>
 
 #include <scenes/base.h>
-
-class Game;
-class Renderer;
+#include <renderer.h> // TODO: Why do I have to have this here but not other level headers?
 
 enum class MenuOption
 {
@@ -38,11 +36,15 @@ constexpr std::array optionOrder = {
 
 struct SceneTitle : SceneBase
 {
-    explicit SceneTitle(const Game & game);
     ~SceneTitle() override = default;
-    void reset(Game & game) final;
-    void reenter(Game & game) final;
     void update(Game & game, float) final;
     void render(Game & game, Renderer & renderer) final;
     MenuOption currentOption = MenuOption::GridShow;
+    Sprite sky {
+        .id = SpriteID::Sky,
+        .texRect = {0, 0, 800, 600}
+    };
+    Transform skyTransform;
+    Rect selectedRect {.w = 10, .h = 10, .outlineColor = sf::Color::Green, .outlineThickness = 1.f};
+    Transform selectedTransform;
 };

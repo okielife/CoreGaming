@@ -18,13 +18,13 @@
  * @ingroup render
  */
 struct Camera {
-    float x = 0.0;
-    float y = 0.0;
+    float x = WINDOW_WIDTH / 2.0f;
+    float y = WINDOW_HEIGHT / 2.0f;
     int w = WINDOW_WIDTH;
     int h = WINDOW_HEIGHT;
     float zoom = 1.0f; // 1.0 = 100%
 };
 
-constexpr Camera defaultCamera {
+constexpr Camera fixedDefaultCamera {
     .x = WINDOW_WIDTH / 2.0f, .y = WINDOW_HEIGHT / 2.0f, .w = WINDOW_WIDTH, .h = WINDOW_HEIGHT, .zoom = 1.0f
 };

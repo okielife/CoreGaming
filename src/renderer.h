@@ -63,7 +63,8 @@ inline const std::unordered_map<TextureID, std::string> TextureMap = {
 enum class SpriteID
 {
     None,
-    Wizard
+    Wizard,
+    Sky
 };
 
 /**
@@ -71,7 +72,8 @@ enum class SpriteID
  * Update this accordingly whenever sprites are added/changed/removed.
  */
 inline const std::unordered_map<SpriteID, std::string> SpriteMap = {
-    {SpriteID::Wizard, "wizard.png"}
+    {SpriteID::Wizard, "wizard.png"},
+    {SpriteID::Sky, "sky.png"}
 };
 
 struct Sprite {
@@ -187,9 +189,10 @@ public:
     void drawUI(const Sprite& s, const Transform& t) const;
     void drawUI(const Rect& r, const Transform& t) const;
     //void addScreenShake(float time);
+    void setUIView() const;
+
 private:
     void setWorldView() const;
-    void setUIView() const;
     void drawSprite(const Sprite& s, const Transform& t) const;
     void drawRectangle(const Rect& r, const Transform& t) const;
 

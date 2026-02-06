@@ -2,8 +2,8 @@
 #include <input.h>
 // #include <scenes/base.h>
 #include <scenes/WizardSpells.h>
-// #include <scenes/title.h>
-// #include <scenes/GridShow.h>
+#include <scenes/title.h>
+#include <scenes/GridShow.h>
 // #include <scenes/Maze.h>
 // #include <scenes/Platformer.h>
 #include <scenes/BulletHell.h>
@@ -21,7 +21,7 @@ Game::Game(Input& input, AudioManager& audio) : input(input), audio(audio)
     // this->scenes.insert({SceneID::BulletHell, std::make_unique<SceneBulletHell>()});
 
     // initialize the current scene
-    this->currentScene = new SceneWizardSpells();
+    this->currentScene = new SceneTitle();
 }
 
 void Game::update(const float dt)
@@ -36,12 +36,12 @@ void Game::update(const float dt)
         case SceneID::Exit:
             this->running = false;
             return;
-        // case SceneID::Title:
-        //     nextScene = new SceneTitle(*this);
-        //     break;
-        // case SceneID::GridShow:
-        //     nextScene = new SceneGridShow();
-        //     break;
+        case SceneID::Title:
+            nextScene = new SceneTitle();
+            break;
+        case SceneID::GridShow:
+            nextScene = new SceneGridShow();
+            break;
         case SceneID::WizardSpells:
             nextScene = new SceneWizardSpells();
             break;

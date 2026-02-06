@@ -29,14 +29,14 @@ void SceneWizardSpells::update(Game& game, float const dt)
 
 void SceneWizardSpells::render(Game& game, Renderer& renderer)
 {
-    renderer.begin(defaultCamera);
+    renderer.begin(fixedDefaultCamera);
     const auto animation = this->animationSteps.at(this->phase);
     switch (this->phase)
     {
     case ScenePhase::FadingInWizard:
         {
             float const scaledTime = std::clamp(animation.stepTimer / animation.duration, 0.f, 1.f);
-            this->wizardTransform.color = sf::Color(255, 255, 255,static_cast<int>(255 * scaledTime));
+            this->wizardTransform.visibility = scaledTime;
             renderer.draw(this->wizard, this->wizardTransform);
         }
         break;

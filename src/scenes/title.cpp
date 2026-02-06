@@ -1,25 +1,9 @@
 #include <scenes/title.h>
 #include <game.h>
-#include <constants.h>
 
-SceneTitle::SceneTitle(const Game&)
-{
-}
-
-void SceneTitle::reset(Game&)
-{
-}
-
-void SceneTitle::reenter(Game&)
-{
-}
 
 void SceneTitle::update(Game& game, const float)
 {
-    // if (game.input.anyPressed())
-    // {
-    //     this->done = true;
-    // }
     if (game.input.wasPressed(Action::MoveDown))
     {
         switch (this->currentOption)
@@ -68,11 +52,8 @@ void SceneTitle::render(Game&, Renderer& renderer)
 {
     if (this->done) return;
 
-    renderer.drawScreenTexture(
-        TextureID::Sky,
-        0, 0,
-        WINDOW_WIDTH, WINDOW_HEIGHT
-    );
+    renderer.begin(fixedDefaultCamera);
+    renderer.draw(this->sky, this->skyTransform);
 
     renderer.drawScreenText(
         150.f,
@@ -106,7 +87,10 @@ void SceneTitle::render(Game&, Renderer& renderer)
         );
         if (selected)
         {
-            renderer.drawScreenRectangleOutline(180, yValue + 20, 10, 10, sf::Color::Green);
+            selectedTransform.x = 180;
+            selectedTransform.y = yValue + 20;
+            renderer.draw(selectedRect, selectedTransform);
         }
     }
+    renderer.end();
 }

@@ -122,7 +122,7 @@ void Renderer::drawSprite(const Sprite& s, const Transform& t) const
     sprite.setPosition(t.x, t.y);
     sprite.setRotation(t.rotation);
     sprite.setScale(t.sx, t.sy);
-    sprite.setColor(t.color);
+    sprite.setColor({255, 255, 255, static_cast<sf::Uint8>(255 * t.visibility)});
     window.draw(sprite);
 }
 
@@ -136,7 +136,6 @@ void Renderer::drawRectangle(const Rect& r, const Transform& t) const
     shape.setPosition(t.x, t.y);
     shape.setRotation(t.rotation);
     shape.setScale(t.sx, t.sy);
-
     window.draw(shape);
 }
 

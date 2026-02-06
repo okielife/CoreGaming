@@ -3,21 +3,15 @@
 #include <scenes/base.h>
 #include <camera.h>
 
-class Game;
-class Renderer;
-
 struct SceneGridShow : SceneBase
 {
-    ~SceneGridShow() override = default;
-    void reset(Game & game) final;
-    void reenter(Game & game) final;
     void update(Game & game, float dt) final;
     void render(Game & game, Renderer & renderer) final;
-    float playerX_{100};
-    float playerY_{100};
-    float speed_{200};  // think of it like game units per second
-    Camera overheadCamera;
-
+    Rect playerRect {.w = 28.0, .h = 28.0, .color = {200, 80, 80, 255}};
+    Transform playerTransform {.x = 100, .y = 100};
+    Rect mapGridRect {.w = 32, .h = 32, .outlineColor = {40, 40, 40, 255}, .outlineThickness = 1.0};
+    Transform mapGridTransform {.x = 0, .y = 0};
+    Camera camera;
     float swordCooldownMS = 1.0f;   // seconds
     float msSinceLastSword = swordCooldownMS; // start "ready"
 };

@@ -2,9 +2,6 @@
 
 #include <scenes/base.h>
 
-class Game;
-class Renderer;
-
 enum class ScenePhase
 {
     FadingInWizard,

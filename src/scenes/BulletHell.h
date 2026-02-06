@@ -4,9 +4,6 @@
 
 #include <scenes/base.h>
 
-class Game;
-class Renderer;
-
 struct Bullet {
     Transform transform;
     float speed = 0.0;
