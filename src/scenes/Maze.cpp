@@ -8,8 +8,8 @@ void SceneMaze::update(Game & game, const float dt)
     const auto& input = game.input;
     if (input.wasPressed(Action::Quit))
     {
-        this->done = true;
-        this->nextScene = SceneID::Title;
+        done = true;
+        nextScene = SceneID::Title;
     }
     int nextX = playerXIndex;
     int nextY = playerYIndex;
@@ -18,9 +18,9 @@ void SceneMaze::update(Game & game, const float dt)
     if (input.wasPressed(Action::MoveLeft))  nextX--;
     if (input.wasPressed(Action::MoveRight)) nextX++;
     // assuming that the path is bounded by valid wall tiles here
-    if (this->map[nextY][nextX] != 'X') {
-        this->playerXIndex = nextX;
-        this->playerYIndex = nextY;
+    if (map[nextY][nextX] != 'X') {
+        playerXIndex = nextX;
+        playerYIndex = nextY;
     }
     if (map[playerYIndex][playerXIndex] == '2')
     {
@@ -34,8 +34,8 @@ void SceneMaze::render(Game &, Renderer & renderer)
 {
     renderer.begin(fixedDefaultCamera);
     // Draw map
-    for (int y = 0; y < this->map.size(); ++y) {
-        for (int x = 0; x < this->map[0].size(); ++x) {
+    for (int y = 0; y < map.size(); ++y) {
+        for (int x = 0; x < map[0].size(); ++x) {
             mapTileTransform.x = x * TILE_WIDTH;
             mapTileTransform.y = y * TILE_HEIGHT;
             if (char const c = map[y][x]; c == 'X')
@@ -56,7 +56,7 @@ void SceneMaze::render(Game &, Renderer & renderer)
         renderer.drawUI(message, messageTransform);
     } else
     {
-        message.text = "Use Arrow Keys; Player X, Y = " + std::to_string(this->playerXIndex) + ", " + std::to_string(this->playerYIndex);
+        message.text = "Use Arrow Keys; Player X, Y = " + std::to_string(playerXIndex) + ", " + std::to_string(playerYIndex);
         message.color = sf::Color::Blue;
         renderer.drawUI(message, messageTransform);
     }

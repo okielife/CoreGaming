@@ -34,8 +34,6 @@ private:
     float overallSceneTime = 0.f;
     Sprite wizard {.id = SpriteID::Wizard, .texRect = {0, 0, 193, 241}};
     Transform wizardTransform = {.x = 10, .y = 10, .rotation = 0.0f, .sx = 2, .sy = 2};
-    // Rect spellRect {.w = 60.0, .h = 85.0, .color = sf::Color::Red};
-    // Transform spellTransform {.x = 25, .y = 25};
     Text spell {.text = "*SPELL*", .color = sf::Color::Green, .fontID = FontID::UbuntuRegular, .fontSize = 24};
     Transform spellTransform {.x = 100, .y = 200};
     Text title {.text = "Flashy Wizard Spells", .color = sf::Color::White, .fontID = FontID::JollyLodger, .fontSize = 88};

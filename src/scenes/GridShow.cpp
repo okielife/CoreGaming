@@ -4,22 +4,22 @@
 void SceneGridShow::update(Game & game, const float dt)
 {
     // update timers
-    this->msSinceLastSword += dt;
+    msSinceLastSword += dt;
 
     const auto& input = game.input;
     if (input.wasPressed(Action::Quit))
     {
-        this->done = true;
-        this->nextScene = SceneID::Title;
+        done = true;
+        nextScene = SceneID::Title;
     }
 
     constexpr float speed = 200;
-    if (Input::isDown(Action::MoveUp)) this->playerTransform.y -= speed * dt;
-    if (Input::isDown(Action::MoveDown)) this->playerTransform.y += speed * dt;
-    if (Input::isDown(Action::MoveLeft))this->playerTransform.x -= speed * dt;
-    if (Input::isDown(Action::MoveRight)) this->playerTransform.x += speed * dt;
-    if (Input::isDown(Action::ZoomIn)) this->camera.zoom *= 1.01;
-    if (Input::isDown(Action::ZoomOut)) this->camera.zoom /= 1.01;
+    if (Input::isDown(Action::MoveUp)) playerTransform.y -= speed * dt;
+    if (Input::isDown(Action::MoveDown)) playerTransform.y += speed * dt;
+    if (Input::isDown(Action::MoveLeft))playerTransform.x -= speed * dt;
+    if (Input::isDown(Action::MoveRight)) playerTransform.x += speed * dt;
+    if (Input::isDown(Action::ZoomIn)) camera.zoom *= 1.01;
+    if (Input::isDown(Action::ZoomOut)) camera.zoom /= 1.01;
 
     if (input.wasPressed(Action::Enter))
     {
@@ -30,19 +30,19 @@ void SceneGridShow::update(Game & game, const float dt)
         }
     }
 
-    this->camera.x = this->playerTransform.x; // - static_cast<float>(this->camera.w) / 2;
-    this->camera.y = this->playerTransform.y; // - static_cast<float>(this->camera.h) / 2;
+    camera.x = playerTransform.x; // - static_cast<float>(camera.w) / 2;
+    camera.y = playerTransform.y; // - static_cast<float>(camera.h) / 2;
 }
 
 void SceneGridShow::render(Game &, Renderer & renderer)
 {
-    renderer.begin(this->camera);
+    renderer.begin(camera);
 
     // Draw simple map (grid)
     for (int y = 0; y < 50; ++y) {
         for (int x = 0; x < 50; ++x) {
-            this->mapGridTransform.x = static_cast<float>(x) * 32;
-            this->mapGridTransform.y = static_cast<float>(y) * 32;
+            mapGridTransform.x = static_cast<float>(x) * 32;
+            mapGridTransform.y = static_cast<float>(y) * 32;
             renderer.draw(mapGridRect, mapGridTransform);
         }
     }
@@ -52,7 +52,7 @@ void SceneGridShow::render(Game &, Renderer & renderer)
 
     // Draw some text
     renderer.drawUI(instructions, instructionsTransform);
-    coordinates.text = "Player X, Y = " + std::to_string(this->playerTransform.x) + ", " + std::to_string(this->playerTransform.y);
+    coordinates.text = "Player X, Y = " + std::to_string(playerTransform.x) + ", " + std::to_string(playerTransform.y);
     renderer.drawUI(coordinates, coordinatesTransform);
     renderer.end();
 }

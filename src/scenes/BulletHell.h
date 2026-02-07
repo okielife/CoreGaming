@@ -14,9 +14,9 @@ public:
     SceneBulletHell()
     {
         std::random_device rd;
-        this->gen = std::mt19937(rd());
-        this->bulletHeightDistribution = std::uniform_int_distribution(0, WINDOW_HEIGHT);
-        this->bulletSpeedDistribution = std::uniform_int_distribution(200, 400);
+        gen = std::mt19937(rd());
+        bulletHeightDistribution = std::uniform_int_distribution(0, WINDOW_HEIGHT);
+        bulletSpeedDistribution = std::uniform_int_distribution(200, 400);
     }
     void update(Game & game, float dt) override;
     void render(Game & game, Renderer &renderer) override;

@@ -9,21 +9,21 @@
 
 Game::Game(Input& input, AudioManager& audio) : input(input), audio(audio)
 {
-    this->audio.playMusic(MusicID::Area2);
-    this->currentScene = new SceneTitle();  // initialize the current scene
+    audio.playMusic(MusicID::Area2);
+    currentScene = new SceneTitle();  // initialize the current scene
 }
 
 void Game::update(const float dt)
 {
-    if (this->currentScene && this->currentScene->done)
+    if (currentScene && currentScene->done)
     {
         SceneBase * nextScene;
-        switch (this->currentScene->nextScene)
+        switch (currentScene->nextScene)
         {
         case SceneID::None:
             throw std::runtime_error("Invalid scene id None");
         case SceneID::Exit:
-            this->running = false;
+            running = false;
             return;
         case SceneID::Title:
             nextScene = new SceneTitle();
@@ -46,13 +46,13 @@ void Game::update(const float dt)
         default:
             throw std::runtime_error("Invalid scene id");
         }
-        delete this->currentScene;
-        this->currentScene = nextScene;
+        delete currentScene;
+        currentScene = nextScene;
     }
-    if (this->currentScene) this->currentScene->update(*this, dt);
+    if (currentScene) currentScene->update(*this, dt);
 }
 
 void Game::render(Renderer& renderer)
 {
-    this->currentScene->render(*this, renderer);
+    currentScene->render(*this, renderer);
 }

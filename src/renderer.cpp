@@ -3,81 +3,81 @@
 
 Renderer::Renderer(sf::RenderWindow& window) : window(window)
 {
-    this->screenView.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
-    this->screenView.setCenter(WINDOW_WIDTH / 2.0, WINDOW_HEIGHT / 2.0);
+    screenView.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
+    screenView.setCenter(WINDOW_WIDTH / 2.0, WINDOW_HEIGHT / 2.0);
     for (auto const & [id, filename] : FontMap)
     {
         if (id == FontID::None) continue;
         sf::Font font;
         font.loadFromFile(AssetManager::font(filename).string());
-        this->fontInstances.insert({id, font});
+        fontInstances.insert({id, font});
     }
     for (auto const & [id, filename] : SpriteMap)
     {
         if (id == SpriteID::None) continue;
         sf::Texture texture;
         texture.loadFromFile(AssetManager::sprite(filename).string());
-        this->spriteTextures.insert({id, texture});
+        spriteTextures.insert({id, texture});
     }
 }
 
 void Renderer::begin(const Camera& cam)
 {
-    this->worldView.setCenter(cam.x, cam.y);
-    this->worldView.setSize(static_cast<float>(cam.w), static_cast<float>(cam.h));
-    this->window.setView(this->worldView);
-    this->window.clear(sf::Color::Black);
+    worldView.setCenter(cam.x, cam.y);
+    worldView.setSize(static_cast<float>(cam.w), static_cast<float>(cam.h));
+    window.setView(worldView);
+    window.clear(sf::Color::Black);
 }
 
 void Renderer::end() const
 {
-    this->window.display();
+    window.display();
 }
 
 void Renderer::draw(const Text& t, const Transform& tr) const
 {
-    this->setWorldView();
-    this->drawText(t, tr);
+    setWorldView();
+    drawText(t, tr);
 }
 void Renderer::draw(const Sprite& s, const Transform& t) const
 {
-    this->setWorldView();
-    this->drawSprite(s, t);
+    setWorldView();
+    drawSprite(s, t);
 }
 void Renderer::draw(const Rect& r, const Transform& t) const
 {
-    this->setWorldView();
-    this->drawRectangle(r, t);
+    setWorldView();
+    drawRectangle(r, t);
 }
 void Renderer::drawUI(const Text& t, const Transform& tr) const
 {
-    this->setUIView();
-    this->drawText(t, tr);
+    setUIView();
+    drawText(t, tr);
 }
 void Renderer::drawUI(const Sprite& s, const Transform& t) const
 {
-    this->setUIView();
-    this->drawSprite(s, t);
+    setUIView();
+    drawSprite(s, t);
 }
 void Renderer::drawUI(const Rect& r, const Transform& t) const
 {
-    this->setUIView();
-    this->drawRectangle(r, t);
+    setUIView();
+    drawRectangle(r, t);
 }
 
 void Renderer::setWorldView() const
 {
-    this->window.setView(this->worldView);
+    window.setView(worldView);
 }
 
 void Renderer::setUIView() const
 {
-    this->window.setView(this->screenView);
+    window.setView(screenView);
 }
 
 void Renderer::drawText(const Text& t, const Transform& tr) const
 {
-    auto& font = this->fontInstances.at(t.fontID);
+    auto& font = fontInstances.at(t.fontID);
     sf::Text text;
     text.setFont(font);
     text.setString(sf::String(t.text));

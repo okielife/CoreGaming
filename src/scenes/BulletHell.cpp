@@ -6,23 +6,23 @@ void SceneBulletHell::update(Game& game, float const dt)
 {
     if (game.input.wasPressed(Action::Quit))
     {
-        this->done = true;
-        this->nextScene = SceneID::Title;
+        done = true;
+        nextScene = SceneID::Title;
     }
 
     // Player movement
     constexpr float playerSpeed = 300.f;
-    if (Input::isDown(Action::MoveUp)) this->playerTransform.y -= playerSpeed * dt;
-    if (Input::isDown(Action::MoveDown)) this->playerTransform.y += playerSpeed * dt;
-    if (Input::isDown(Action::MoveLeft)) this->playerTransform.x -= playerSpeed * dt;;
-    if (Input::isDown(Action::MoveRight)) this->playerTransform.x += playerSpeed * dt;
+    if (Input::isDown(Action::MoveUp)) playerTransform.y -= playerSpeed * dt;
+    if (Input::isDown(Action::MoveDown)) playerTransform.y += playerSpeed * dt;
+    if (Input::isDown(Action::MoveLeft)) playerTransform.x -= playerSpeed * dt;;
+    if (Input::isDown(Action::MoveRight)) playerTransform.x += playerSpeed * dt;
 
     // Keep player in action window
-    this->playerTransform.x = std::clamp(
-        this->playerTransform.x, actionWindowPosition.x, actionWindowPosition.x + actionWindowRect.w - playerRect.w
+    playerTransform.x = std::clamp(
+        playerTransform.x, actionWindowPosition.x, actionWindowPosition.x + actionWindowRect.w - playerRect.w
         );
-    this->playerTransform.y = std::clamp(
-        this->playerTransform.y, actionWindowPosition.y, actionWindowPosition.y + actionWindowRect.h - playerRect.h
+    playerTransform.y = std::clamp(
+        playerTransform.y, actionWindowPosition.y, actionWindowPosition.y + actionWindowRect.h - playerRect.h
         );
 
     if (!lost && !won)
@@ -39,26 +39,26 @@ void SceneBulletHell::update(Game& game, float const dt)
                 b.transform.x = WINDOW_WIDTH + bulletRect.w;
                 b.transform.y =  bulletHeightDistribution(gen);
                 b.speed = bulletSpeedDistribution(gen);
-                this->bullets.push_back(b);
+                bullets.push_back(b);
             }
         }
 
         // Move bullets
-        for (auto& [transform, speed] : this->bullets)
+        for (auto& [transform, speed] : bullets)
         {
             transform.x -= speed * dt;
         }
 
         // Collision + cleanup
-        const AABB playerBox = makeAABB(this->playerTransform, this->playerRect);
+        const AABB playerBox = makeAABB(playerTransform, playerRect);
         std::erase_if(
-            this->bullets,
+            bullets,
             [&](const Bullet& b)
             {
-                const AABB bulletBox = makeAABB(b.transform, this->bulletRect);
+                const AABB bulletBox = makeAABB(b.transform, bulletRect);
                 if (intersects(bulletBox, playerBox))
                 {
-                    this->lost = true;
+                    lost = true;
                     return false;
                 }
                 return bulletBox.x + bulletBox.w < 0.f;
@@ -66,9 +66,9 @@ void SceneBulletHell::update(Game& game, float const dt)
         );
 
         // Win condition
-        if (this->lifetimeClock.getElapsedTime().asSeconds() >= bulletSpawnDuration && this->bullets.empty())
+        if (lifetimeClock.getElapsedTime().asSeconds() >= bulletSpawnDuration && bullets.empty())
         {
-            this->won = true;
+            won = true;
         }
     }
 }

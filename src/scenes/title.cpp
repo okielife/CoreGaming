@@ -6,54 +6,54 @@ void SceneTitle::update(Game& game, const float)
 {
     if (game.input.wasPressed(Action::MoveDown))
     {
-        switch (this->currentOption)
+        switch (currentOption)
         {
-        case MenuOption::GridShow: this->currentOption = MenuOption::WizardSpells; break;
-        case MenuOption::WizardSpells: this->currentOption = MenuOption::Platformer; break;
-        case MenuOption::Platformer: this->currentOption = MenuOption::BulletHell; break;
-        case MenuOption::BulletHell: this->currentOption = MenuOption::Maze; break;
-        case MenuOption::Maze: this->currentOption = MenuOption::Exit; break;
-        case MenuOption::Exit: this->currentOption = MenuOption::GridShow; break;
+        case MenuOption::GridShow: currentOption = MenuOption::WizardSpells; break;
+        case MenuOption::WizardSpells: currentOption = MenuOption::Platformer; break;
+        case MenuOption::Platformer: currentOption = MenuOption::BulletHell; break;
+        case MenuOption::BulletHell: currentOption = MenuOption::Maze; break;
+        case MenuOption::Maze: currentOption = MenuOption::Exit; break;
+        case MenuOption::Exit: currentOption = MenuOption::GridShow; break;
         }
     }
     if (game.input.wasPressed(Action::MoveUp))
     {
-        switch (this->currentOption)
+        switch (currentOption)
         {
-        case MenuOption::GridShow: this->currentOption = MenuOption::Exit; break;
-        case MenuOption::WizardSpells: this->currentOption = MenuOption::GridShow; break;
-        case MenuOption::Platformer: this->currentOption = MenuOption::WizardSpells; break;
-        case MenuOption::BulletHell: this->currentOption = MenuOption::Platformer; break;
-        case MenuOption::Maze: this->currentOption = MenuOption::BulletHell; break;
-        case MenuOption::Exit: this->currentOption = MenuOption::Maze; break;
+        case MenuOption::GridShow: currentOption = MenuOption::Exit; break;
+        case MenuOption::WizardSpells: currentOption = MenuOption::GridShow; break;
+        case MenuOption::Platformer: currentOption = MenuOption::WizardSpells; break;
+        case MenuOption::BulletHell: currentOption = MenuOption::Platformer; break;
+        case MenuOption::Maze: currentOption = MenuOption::BulletHell; break;
+        case MenuOption::Exit: currentOption = MenuOption::Maze; break;
         }
     }
     if (game.input.wasPressed(Action::Confirm))
     {
-        switch (this->currentOption)
+        switch (currentOption)
         {
-        case MenuOption::GridShow: this->nextScene = SceneID::GridShow; break;
-        case MenuOption::WizardSpells: this->nextScene = SceneID::WizardSpells; break;
-        case MenuOption::Platformer: this->nextScene = SceneID::Platformer; break;
-        case MenuOption::BulletHell: this->nextScene = SceneID::BulletHell; break;
-        case MenuOption::Maze: this->nextScene = SceneID::Maze; break;
-        case MenuOption::Exit: this->nextScene = SceneID::Exit; break;
+        case MenuOption::GridShow: nextScene = SceneID::GridShow; break;
+        case MenuOption::WizardSpells: nextScene = SceneID::WizardSpells; break;
+        case MenuOption::Platformer: nextScene = SceneID::Platformer; break;
+        case MenuOption::BulletHell: nextScene = SceneID::BulletHell; break;
+        case MenuOption::Maze: nextScene = SceneID::Maze; break;
+        case MenuOption::Exit: nextScene = SceneID::Exit; break;
         }
-        this->done = true;
+        done = true;
     }
     if (game.input.wasPressed(Action::Quit))
     {
-        this->nextScene = SceneID::Exit;
-        this->done = true;
+        nextScene = SceneID::Exit;
+        done = true;
     }
 }
 
 void SceneTitle::render(Game&, Renderer& renderer)
 {
-    if (this->done) return;
+    if (done) return;
 
     renderer.begin(fixedDefaultCamera);
-    renderer.draw(this->sky, this->skyTransform);
+    renderer.draw(sky, skyTransform);
 
     renderer.drawUI(title, titleTransform);
     renderer.drawUI(subTitle, subTitleTransform);
@@ -62,7 +62,7 @@ void SceneTitle::render(Game&, Renderer& renderer)
     for (auto const& option : optionOrder)
     {
         yValue += 50;
-        bool const selected = option == this->currentOption;
+        bool const selected = option == currentOption;
         optionText.text = menuOptions.at(option);
         optionText.color = selected ? sf::Color::Green : sf::Color::White;
         optionText.fontSize = selected ? 40 : 36;

@@ -7,37 +7,37 @@ void SceneWizardSpells::update(Game& game, float const dt)
 {
     if (game.input.wasPressed(Action::Quit))
     {
-        this->done = true;
-        this->nextScene = SceneID::Title;
+        done = true;
+        nextScene = SceneID::Title;
         return;
     }
 
-    this->overallSceneTime += dt;
-    for (auto & [phaseID, animation] : this->animationSteps)
+    overallSceneTime += dt;
+    for (auto & [phaseID, animation] : animationSteps)
     {
-        if (this->overallSceneTime < animation.endTime)
+        if (overallSceneTime < animation.endTime)
         {
-            this->phase = phaseID;
+            phase = phaseID;
             if (animation.stepTimer < 0.0) animation.stepTimer = 0.0;
             animation.stepTimer += dt;
             return;
         }
     }
-    this->nextScene = SceneID::Title;
-    this->done = true;  // fall through means we are done with animation steps
+    nextScene = SceneID::Title;
+    done = true;  // fall through means we are done with animation steps
 }
 
 void SceneWizardSpells::render(Game& game, Renderer& renderer)
 {
     renderer.begin(fixedDefaultCamera);
-    const auto animation = this->animationSteps.at(this->phase);
-    switch (this->phase)
+    const auto animation = animationSteps.at(phase);
+    switch (phase)
     {
     case ScenePhase::FadingInWizard:
         {
             float const scaledTime = std::clamp(animation.stepTimer / animation.duration, 0.f, 1.f);
-            this->wizardTransform.visibility = scaledTime;
-            renderer.draw(this->wizard, this->wizardTransform);
+            wizardTransform.visibility = scaledTime;
+            renderer.draw(wizard, wizardTransform);
         }
         break;
     case ScenePhase::Spell:

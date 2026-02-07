@@ -5,8 +5,8 @@
 
 Platform::Platform() : renderer(window), window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), WINDOW_TITLE, sf::Style::Titlebar | sf::Style::Close) {
     // set ONE of these two options, not both
-    this->window.setVerticalSyncEnabled(true);
-    //this->window.setFramerateLimit(60);
+    window.setVerticalSyncEnabled(true);
+    //window.setFramerateLimit(60);
     // Get the desktop resolution
     sf::VideoMode const desktopMode = sf::VideoMode::getDesktopMode();
     unsigned int const desktopWidth = desktopMode.width;
@@ -53,7 +53,7 @@ void Platform::run(Game & game) {
 
         float const dt = clock.restart().asSeconds();
         game.update(dt);
-        this->audio_.update();
+        audio_.update();
 
         game.render(renderer);
 

@@ -7,14 +7,13 @@ void ScenePlatformer::update(Game & game, const float dt)
     const auto& input = game.input;
     if (input.wasPressed(Action::Quit))
     {
-        this->done = true;
-        this->nextScene = SceneID::Title;
+        done = true;
+        nextScene = SceneID::Title;
     }
 
     // move
     if (input.isDown(Action::MoveLeft)) playerTransform.x -= 4.5;
     if (input.isDown(Action::MoveRight)) playerTransform.x += 4.5;
-
 
     // Jump
     if (input.wasPressed(Action::Enter) && grounded) {
@@ -32,7 +31,7 @@ void ScenePlatformer::update(Game & game, const float dt)
     if (playerTransform.y > 4000) *this = ScenePlatformer(); // probably bad :|
 
     // Platform collision (top-only)
-    const AABB playerBox = makeAABB(this->playerTransform, this->player);
+    const AABB playerBox = makeAABB(playerTransform, player);
 
     auto checkPlatform = [&](const Rect& platform, const Transform & platformTransform, bool const isGoal) {
         const AABB platformBox {.x = platformTransform.x, .y = platformTransform.y, .w = platform.w, .h = 1};
@@ -58,7 +57,7 @@ void ScenePlatformer::update(Game & game, const float dt)
     checkPlatform(platform3, platform3Transform, false);
     checkPlatform(goalPlatform, goalPlatformTransform, true);
 
-    this->camera.x = this->playerTransform.x;
+    camera.x = playerTransform.x;
 }
 
 void ScenePlatformer::render(Game &, Renderer & renderer)

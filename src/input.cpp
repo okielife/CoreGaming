@@ -8,33 +8,33 @@ Input::Input()
 {
     for (auto & a : actionsList)
     {
-        this->pressed[a] = false;
+        pressed[a] = false;
     }
 }
 
 void Input::beginFrame() {
-    this->anyPressed_ = false;
-    for (auto& val : this->pressed | std::views::values) {
+    anyPressed_ = false;
+    for (auto& val : pressed | std::views::values) {
         val = false;
     }
 }
 
 void Input::setAsPressed(const Action a)
 {
-    this->pressed[a] = true;
+    pressed[a] = true;
 }
 
 void Input::update(const sf::Event& e) {
     if (e.type == sf::Event::KeyPressed) {  // && !e.key.repeat) {
         anyPressed_ = true;
         switch (e.key.code) {
-        case sf::Keyboard::Key::Space: this->setAsPressed(Action::Enter); break;
-        case sf::Keyboard::Key::Up: this->setAsPressed(Action::MoveUp); break;
-        case sf::Keyboard::Key::Down: this->setAsPressed(Action::MoveDown); break;
-        case sf::Keyboard::Key::Left: this->setAsPressed(Action::MoveLeft); break;
-        case sf::Keyboard::Key::Right: this->setAsPressed(Action::MoveRight); break;
-        case sf::Keyboard::Key::Escape: this->setAsPressed(Action::Quit); break;
-        case sf::Keyboard::Key::Enter: this->setAsPressed(Action::Confirm); break;
+        case sf::Keyboard::Key::Space: setAsPressed(Action::Enter); break;
+        case sf::Keyboard::Key::Up: setAsPressed(Action::MoveUp); break;
+        case sf::Keyboard::Key::Down: setAsPressed(Action::MoveDown); break;
+        case sf::Keyboard::Key::Left: setAsPressed(Action::MoveLeft); break;
+        case sf::Keyboard::Key::Right: setAsPressed(Action::MoveRight); break;
+        case sf::Keyboard::Key::Escape: setAsPressed(Action::Quit); break;
+        case sf::Keyboard::Key::Enter: setAsPressed(Action::Confirm); break;
         default: break;
         }
     }
