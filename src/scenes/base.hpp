@@ -3,6 +3,8 @@
 class Game;
 class Renderer;
 
+// TODO: Add a basic fighting game with animated characters and sprite sheets, also demonstrating better HUD
+
 /**
  * An enumerated list of known scenes.  I imagine this changing drastically once this is no longer just ap prototype
  * of a bunch of game types.
