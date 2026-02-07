@@ -1,12 +1,13 @@
 #include <collision.hpp>
 #include <game.hpp>
-#include <scenes/BulletHell.hpp>
+#include <scenes/RoomBulletHell.hpp>
 
-void SceneBulletHell::update(Game& game, float const dt)
+void RoomBulletHell::update(Game& game, float const dt)
 {
     if (game.input.wasPressed(Action::Quit))
     {
-        pendingCommand = GameCommand::ReturnToHub;
+        nextRoomID = RoomID::Hub;
+        // roomOutcome = RoomOutcome::LeaveWorld;
         return;
     }
 
@@ -73,7 +74,7 @@ void SceneBulletHell::update(Game& game, float const dt)
     }
 }
 
-void SceneBulletHell::render(Game& game, Renderer& renderer)
+void RoomBulletHell::render(Game& game, Renderer& renderer)
 {
     renderer.begin(fixedDefaultCamera);
     renderer.draw(actionWindowRect, actionWindowPosition);

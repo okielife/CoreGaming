@@ -1,9 +1,9 @@
 #pragma once
 
-#include <scenes/base.hpp>
 #include <camera.hpp>
+#include <scenes/RoomBase.hpp>
 
-struct SceneGridShow : GameState
+struct RoomGridShow : RoomBase
 {
     void update(Game & game, float dt) final;
     void render(Game & game, Renderer & renderer) final;

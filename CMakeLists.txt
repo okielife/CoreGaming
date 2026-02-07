@@ -11,11 +11,13 @@ add_executable(game
         src/audio.cpp
         src/audio.hpp
         src/camera.hpp
+        src/collision.hpp
+        src/command.hpp
         src/constants.hpp
         src/doxygen.hpp
+        src/drawables.hpp
         src/game.cpp
         src/game.hpp
-        src/collision.hpp
         src/input.cpp
         src/input.hpp
         src/main.cpp
@@ -23,21 +25,25 @@ add_executable(game
         src/platform.hpp
         src/renderer.cpp
         src/renderer.hpp
-        src/scenes/base.hpp
-        src/scenes/GridShow.cpp
-        src/scenes/GridShow.hpp
-        src/scenes/hub.cpp
-        src/scenes/hub.hpp
-        src/scenes/WizardSpells.cpp
-        src/scenes/WizardSpells.hpp
-        src/scenes/Maze.hpp
-        src/scenes/Maze.cpp
-        src/scenes/Platformer.hpp
-        src/scenes/Platformer.cpp
-        src/scenes/BulletHell.cpp
-        src/scenes/BulletHell.hpp
-        src/drawables.hpp
-        src/command.hpp
+        src/scenes/CutSceneWizardSpells.cpp
+        src/scenes/CutSceneWizardSpells.hpp
+        src/scenes/RoomBase.hpp
+        src/scenes/RoomBulletHell.cpp
+        src/scenes/RoomBulletHell.hpp
+        src/scenes/RoomGridShow.cpp
+        src/scenes/RoomGridShow.hpp
+        src/scenes/RoomHub.cpp
+        src/scenes/RoomHub.hpp
+        src/scenes/RoomMaze.hpp
+        src/scenes/RoomMaze.cpp
+        src/scenes/RoomPlatformer.hpp
+        src/scenes/RoomPlatformer.cpp
+        src/scenes/StateBase.hpp
+        src/scenes/StatePause.hpp
+        src/scenes/StatePlaying.cpp
+        src/scenes/StatePlaying.hpp
+        src/scenes/World.hpp
+        src/scenes/World.cpp
 )
 target_include_directories(game PRIVATE src)
 target_link_libraries(game PRIVATE

@@ -1,14 +1,15 @@
 #include <game.hpp>
-#include <scenes/Maze.hpp>
+#include <scenes/RoomMaze.hpp>
 
 class Game;
 
-void SceneMaze::update(Game & game, const float dt)
+void RoomMaze::update(Game & game, const float dt)
 {
     const auto& input = game.input;
     if (input.wasPressed(Action::Quit))
     {
-        pendingCommand = GameCommand::ReturnToHub;
+        nextRoomID = RoomID::Hub;
+        // roomOutcome = RoomOutcome::LeaveWorld;
         return;
     }
     int nextX = playerXIndex;
@@ -30,7 +31,7 @@ void SceneMaze::update(Game & game, const float dt)
     playerTransform.y = static_cast<float>(playerYIndex) * TILE_HEIGHT;
 }
 
-void SceneMaze::render(Game &, Renderer & renderer)
+void RoomMaze::render(Game &, Renderer & renderer)
 {
     renderer.begin(fixedDefaultCamera);
     // Draw map

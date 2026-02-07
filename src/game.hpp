@@ -3,7 +3,7 @@
 #include <audio.hpp>
 #include <input.hpp>
 #include <renderer.hpp>
-#include <scenes/base.hpp>
+#include <scenes/StateBase.hpp>
 
 class Platform;
 

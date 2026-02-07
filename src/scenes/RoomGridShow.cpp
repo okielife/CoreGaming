@@ -1,7 +1,7 @@
 #include <game.hpp>
-#include <scenes/GridShow.hpp>
+#include <scenes/RoomGridShow.hpp>
 
-void SceneGridShow::update(Game & game, const float dt)
+void RoomGridShow::update(Game & game, const float dt)
 {
     // update timers
     msSinceLastSword += dt;
@@ -9,7 +9,8 @@ void SceneGridShow::update(Game & game, const float dt)
     const auto& input = game.input;
     if (input.wasPressed(Action::Quit))
     {
-        pendingCommand = GameCommand::ReturnToHub;
+        nextRoomID = RoomID::Hub;
+        // roomOutcome = RoomOutcome::LeaveWorld;
         return;
     }
 
@@ -34,7 +35,7 @@ void SceneGridShow::update(Game & game, const float dt)
     camera.y = playerTransform.y; // - static_cast<float>(camera.h) / 2;
 }
 
-void SceneGridShow::render(Game &, Renderer & renderer)
+void RoomGridShow::render(Game &, Renderer & renderer)
 {
     renderer.begin(camera);
 

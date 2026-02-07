@@ -1,13 +1,14 @@
 #include <iostream>
 
 #include <game.hpp>
-#include <scenes/WizardSpells.hpp>
+#include <scenes/CutSceneWizardSpells.hpp>
 
-void SceneWizardSpells::update(Game& game, float const dt)
+void RoomWizardSpells::update(Game& game, float const dt)
 {
     if (game.input.wasPressed(Action::Quit))
     {
-        pendingCommand = GameCommand::ReturnToHub;
+        nextRoomID = RoomID::Hub;
+        // roomOutcome = RoomOutcome::LeaveWorld;
         return;
     }
     overallSceneTime += dt;
@@ -21,10 +22,11 @@ void SceneWizardSpells::update(Game& game, float const dt)
             return;
         }
     }
-    pendingCommand = GameCommand::ReturnToHub;
+    nextRoomID = RoomID::Hub;
+    // roomOutcome = RoomOutcome::LeaveWorld;
 }
 
-void SceneWizardSpells::render(Game& game, Renderer& renderer)
+void RoomWizardSpells::render(Game& game, Renderer& renderer)
 {
     renderer.begin(fixedDefaultCamera);
     const auto animation = animationSteps.at(phase);

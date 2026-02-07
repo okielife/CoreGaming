@@ -1,13 +1,14 @@
 #include <game.hpp>
 #include <collision.hpp>
-#include <scenes/Platformer.hpp>
+#include <scenes/RoomPlatformer.hpp>
 
-void ScenePlatformer::update(Game & game, const float dt)
+void RoomPlatformer::update(Game & game, const float dt)
 {
     const auto& input = game.input;
     if (input.wasPressed(Action::Quit))
     {
-        pendingCommand = GameCommand::ReturnToHub;
+        nextRoomID = RoomID::Hub;
+        // roomOutcome = RoomOutcome::LeaveWorld;
         return;
     }
 
@@ -28,7 +29,7 @@ void ScenePlatformer::update(Game & game, const float dt)
     playerTransform.y += velocityY * dt;
     grounded = false;
 
-    if (playerTransform.y > 4000) *this = ScenePlatformer(); // probably bad :|
+    if (playerTransform.y > 4000) *this = RoomPlatformer(); // probably bad :|
 
     // Platform collision (top-only)
     const AABB playerBox = makeAABB(playerTransform, player);
@@ -60,7 +61,7 @@ void ScenePlatformer::update(Game & game, const float dt)
     camera.x = playerTransform.x;
 }
 
-void ScenePlatformer::render(Game &, Renderer & renderer)
+void RoomPlatformer::render(Game &, Renderer & renderer)
 {
     renderer.begin(camera);
     // Draw platforms

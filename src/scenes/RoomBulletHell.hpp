@@ -2,16 +2,20 @@
 
 #include <random>
 
-#include <scenes/base.hpp>
+#include <SFML/System.hpp>
+
+#include <constants.hpp>
+#include <drawables.hpp>
+#include <scenes/RoomBase.hpp>
 
 struct Bullet {
     Transform transform;
     float speed = 0.0;
 };
 
-class SceneBulletHell : public GameState {
+class RoomBulletHell : public RoomBase {
 public:
-    SceneBulletHell()
+    RoomBulletHell()
     {
         std::random_device rd;
         gen = std::mt19937(rd());

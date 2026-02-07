@@ -1,6 +1,9 @@
 #pragma once
 
-#include <scenes/base.hpp>
+#include <map>
+
+#include <drawables.hpp>
+#include <scenes/RoomBase.hpp>
 
 enum class ScenePhase
 {
@@ -26,7 +29,7 @@ struct AnimationStep
     }
 };
 
-class SceneWizardSpells : public GameState {
+class RoomWizardSpells : public RoomBase {
 public:
     void update(Game & game, float dt) override;
     void render(Game & game, Renderer &renderer) override;

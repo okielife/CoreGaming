@@ -3,11 +3,34 @@
 
 enum class GameCommand {
     None,
-    ReturnToHub,
+    PushPause,
+    PopPause,
+    Exit,
+    // StartBattle
+    // StartCutScene
+};
+
+enum class RoomID
+{
+    None,
+
+    Hub,
     GridShow,
     WizardSpells,
     Platformer,
     BulletHell,
     Maze,
-    Exit,
+
+    // Others
+};
+
+enum class WorldEvent
+{
+    None,
+    Exit
+};
+
+enum class RoomOutcome {
+    None,
+    LeaveWorld,
 };

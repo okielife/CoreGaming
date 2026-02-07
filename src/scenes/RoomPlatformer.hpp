@@ -1,10 +1,10 @@
 #pragma once
 
-#include <scenes/base.hpp>
+#include <scenes/RoomBase.hpp>
 #include <camera.hpp>
 #include <drawables.hpp>
 
-struct ScenePlatformer : GameState
+struct RoomPlatformer : RoomBase
 {
     void update(Game & game, float dt) final;
     void render(Game & game, Renderer & renderer) final;
