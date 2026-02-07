@@ -44,15 +44,12 @@ void Platform::run(Game & game) {
                 break;
             }
         }
-        if (!game.running)
-        {
-            window.close();
-        }
 
         float const dt = clock.restart().asSeconds();
         game.update(dt);
-        audio_.update();
+        if (!game.running) window.close();
 
+        audio_.update();
         game.render(renderer);
 
     }

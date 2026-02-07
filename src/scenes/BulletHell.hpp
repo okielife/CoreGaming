@@ -9,7 +9,7 @@ struct Bullet {
     float speed = 0.0;
 };
 
-class SceneBulletHell : public SceneBase {
+class SceneBulletHell : public GameState {
 public:
     SceneBulletHell()
     {

@@ -9,8 +9,8 @@ void SceneGridShow::update(Game & game, const float dt)
     const auto& input = game.input;
     if (input.wasPressed(Action::Quit))
     {
-        done = true;
-        nextScene = SceneID::Title;
+        pendingCommand = GameCommand::ReturnToHub;
+        return;
     }
 
     constexpr float speed = 200;

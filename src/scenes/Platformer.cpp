@@ -7,13 +7,13 @@ void ScenePlatformer::update(Game & game, const float dt)
     const auto& input = game.input;
     if (input.wasPressed(Action::Quit))
     {
-        done = true;
-        nextScene = SceneID::Title;
+        pendingCommand = GameCommand::ReturnToHub;
+        return;
     }
 
     // move
-    if (input.isDown(Action::MoveLeft)) playerTransform.x -= 4.5;
-    if (input.isDown(Action::MoveRight)) playerTransform.x += 4.5;
+    if (Input::isDown(Action::MoveLeft)) playerTransform.x -= 4.5;
+    if (Input::isDown(Action::MoveRight)) playerTransform.x += 4.5;
 
     // Jump
     if (input.wasPressed(Action::Enter) && grounded) {

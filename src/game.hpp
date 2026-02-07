@@ -83,5 +83,5 @@ public:
     bool running = true;
 
 private:
-    SceneBase * currentScene;  // non-owning pointer
+    std::unique_ptr<GameState> currentState;
 };

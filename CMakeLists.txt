@@ -26,8 +26,8 @@ add_executable(game
         src/scenes/base.hpp
         src/scenes/GridShow.cpp
         src/scenes/GridShow.hpp
-        src/scenes/title.cpp
-        src/scenes/title.hpp
+        src/scenes/hub.cpp
+        src/scenes/hub.hpp
         src/scenes/WizardSpells.cpp
         src/scenes/WizardSpells.hpp
         src/scenes/Maze.hpp
@@ -37,6 +37,7 @@ add_executable(game
         src/scenes/BulletHell.cpp
         src/scenes/BulletHell.hpp
         src/drawables.hpp
+        src/command.hpp
 )
 target_include_directories(game PRIVATE src)
 target_link_libraries(game PRIVATE

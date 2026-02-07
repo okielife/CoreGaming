@@ -8,7 +8,7 @@
 constexpr int TILE_WIDTH = WINDOW_WIDTH / 17;
 constexpr int TILE_HEIGHT = WINDOW_HEIGHT / 15;
 
-struct SceneMaze : SceneBase
+struct SceneMaze : GameState
 {
     void update(Game & game, float dt) final;
     void render(Game & game, Renderer & renderer) final;

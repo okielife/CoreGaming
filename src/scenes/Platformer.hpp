@@ -4,7 +4,7 @@
 #include <camera.hpp>
 #include <drawables.hpp>
 
-struct ScenePlatformer : SceneBase
+struct ScenePlatformer : GameState
 {
     void update(Game & game, float dt) final;
     void render(Game & game, Renderer & renderer) final;

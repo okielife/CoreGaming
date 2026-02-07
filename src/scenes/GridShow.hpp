@@ -3,7 +3,7 @@
 #include <scenes/base.hpp>
 #include <camera.hpp>
 
-struct SceneGridShow : SceneBase
+struct SceneGridShow : GameState
 {
     void update(Game & game, float dt) final;
     void render(Game & game, Renderer & renderer) final;

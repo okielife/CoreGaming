@@ -8,8 +8,8 @@ void SceneMaze::update(Game & game, const float dt)
     const auto& input = game.input;
     if (input.wasPressed(Action::Quit))
     {
-        done = true;
-        nextScene = SceneID::Title;
+        pendingCommand = GameCommand::ReturnToHub;
+        return;
     }
     int nextX = playerXIndex;
     int nextY = playerYIndex;
@@ -26,8 +26,8 @@ void SceneMaze::update(Game & game, const float dt)
     {
         winner = true;
     }
-    playerTransform.x = playerXIndex * TILE_WIDTH;
-    playerTransform.y = playerYIndex * TILE_HEIGHT;
+    playerTransform.x = static_cast<float>(playerXIndex) * TILE_WIDTH;
+    playerTransform.y = static_cast<float>(playerYIndex) * TILE_HEIGHT;
 }
 
 void SceneMaze::render(Game &, Renderer & renderer)
@@ -36,8 +36,8 @@ void SceneMaze::render(Game &, Renderer & renderer)
     // Draw map
     for (int y = 0; y < map.size(); ++y) {
         for (int x = 0; x < map[0].size(); ++x) {
-            mapTileTransform.x = x * TILE_WIDTH;
-            mapTileTransform.y = y * TILE_HEIGHT;
+            mapTileTransform.x = static_cast<float>(x) * TILE_WIDTH;
+            mapTileTransform.y = static_cast<float>(y) * TILE_HEIGHT;
             if (char const c = map[y][x]; c == 'X')
                 renderer.draw(wall, mapTileTransform);
             else if (c == '1' || c == '0')

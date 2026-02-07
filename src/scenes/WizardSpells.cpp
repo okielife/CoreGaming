@@ -7,11 +7,9 @@ void SceneWizardSpells::update(Game& game, float const dt)
 {
     if (game.input.wasPressed(Action::Quit))
     {
-        done = true;
-        nextScene = SceneID::Title;
+        pendingCommand = GameCommand::ReturnToHub;
         return;
     }
-
     overallSceneTime += dt;
     for (auto & [phaseID, animation] : animationSteps)
     {
@@ -23,8 +21,7 @@ void SceneWizardSpells::update(Game& game, float const dt)
             return;
         }
     }
-    nextScene = SceneID::Title;
-    done = true;  // fall through means we are done with animation steps
+    pendingCommand = GameCommand::ReturnToHub;
 }
 
 void SceneWizardSpells::render(Game& game, Renderer& renderer)

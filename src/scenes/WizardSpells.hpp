@@ -26,7 +26,7 @@ struct AnimationStep
     }
 };
 
-class SceneWizardSpells : public SceneBase {
+class SceneWizardSpells : public GameState {
 public:
     void update(Game & game, float dt) override;
     void render(Game & game, Renderer &renderer) override;

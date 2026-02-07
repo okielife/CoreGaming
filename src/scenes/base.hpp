@@ -1,31 +1,13 @@
 #pragma once
 
+#include <command.hpp>
+
 class Game;
 class Renderer;
 
-// TODO: Add a basic fighting game with animated characters and sprite sheets, also demonstrating better HUD
-
-/**
- * An enumerated list of known scenes.  I imagine this changing drastically once this is no longer just ap prototype
- * of a bunch of game types.
- */
-enum class SceneID
+struct GameState
 {
-    None,
-    Title,
-    GridShow,
-    WizardSpells,
-    Platformer,
-    BulletHell,
-    Maze,
-    // Pause,
-    // GameOver,
-    Exit,
-};
-
-struct SceneBase
-{
-    virtual ~SceneBase() = default;
+    virtual ~GameState() = default;
 
     /**
      * The reset method should provide a way to reset all aspects of the current scene, back to the original state.
@@ -61,16 +43,12 @@ struct SceneBase
      */
     virtual void render(Game & game, Renderer &renderer) = 0;
 
-    /**
-     * A flag indicating that this scene is complete.  When this is set, the
-     * nextScene members variable must be set to the ID so that game knows
-     * what to start next.
-     */
-    bool done = false;
+    virtual GameCommand pollCommand() {
+        GameCommand c = pendingCommand;
+        pendingCommand = GameCommand::None;
+        return c;
+    }
 
-    /**
-     * The scene that should be created once this scene is over.  Set this to the right
-     * ID and set the done member variable to true and the game should switch scenes.
-     */
-    SceneID nextScene = SceneID::None;
+protected:
+    GameCommand pendingCommand = GameCommand::None;
 };

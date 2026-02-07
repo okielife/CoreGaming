@@ -6,8 +6,8 @@ void SceneBulletHell::update(Game& game, float const dt)
 {
     if (game.input.wasPressed(Action::Quit))
     {
-        done = true;
-        nextScene = SceneID::Title;
+        pendingCommand = GameCommand::ReturnToHub;
+        return;
     }
 
     // Player movement
@@ -37,8 +37,8 @@ void SceneBulletHell::update(Game& game, float const dt)
                 spawnClock.restart();
                 Bullet b;
                 b.transform.x = WINDOW_WIDTH + bulletRect.w;
-                b.transform.y =  bulletHeightDistribution(gen);
-                b.speed = bulletSpeedDistribution(gen);
+                b.transform.y = static_cast<float>(bulletHeightDistribution(gen));
+                b.speed = static_cast<float>(bulletSpeedDistribution(gen));
                 bullets.push_back(b);
             }
         }
