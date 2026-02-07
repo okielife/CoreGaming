@@ -7,7 +7,7 @@
 #include <drawables.hpp>
 
 /**
- * @file renderer.h
+ * @file renderer.hpp
  * @brief Centralized rendering class, providing utilities for displaying on the screen
  *
  * The basic expectation for rendering goes like this:
@@ -61,20 +61,20 @@ public:
     void end() const;
 
     void fullScreenOverlay(sf::Color color) const;
-    void draw(const Text& t, const Transform& tr);
-    void draw(const Sprite& s, const Transform& t);
+    void draw(const Text& t, const Transform& tr) const;
+    void draw(const Sprite& s, const Transform& t) const;
     void draw(const Rect& r, const Transform& t) const;
-    void drawUI(const Text& t, const Transform& tr);
-    void drawUI(const Sprite& s, const Transform& t);
+    void drawUI(const Text& t, const Transform& tr) const;
+    void drawUI(const Sprite& s, const Transform& t) const;
     void drawUI(const Rect& r, const Transform& t) const;
     //void addScreenShake(float time);
 
 private:
     void setWorldView() const;
     void setUIView() const;
-    void drawSprite(const Sprite& s, const Transform& t);
+    void drawSprite(const Sprite& s, const Transform& t) const;
     void drawRectangle(const Rect& r, const Transform& t) const;
-    void drawText(const Text& t, const Transform& tr);
+    void drawText(const Text& t, const Transform& tr) const;
 
     sf::View worldView;
     sf::View screenView = sf::View(

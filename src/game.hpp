@@ -8,7 +8,7 @@
 class Platform;
 
 /**
- * @file game.h
+ * @file game.hpp
  * @brief The primary driver for the game itself.
  *
  * This file contains game logic and ownership of overall game assets, such as scenes, player, etc.

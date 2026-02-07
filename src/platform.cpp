@@ -14,16 +14,14 @@ Platform::Platform() : renderer(window), window(sf::VideoMode(WINDOW_WIDTH, WIND
 
     // Calculate the window position for centering
     // The top-left corner of the window should be positioned at:
-    int const windowPosX = (desktopWidth / 2) - (WINDOW_WIDTH / 2);
-    int const windowPosY = (desktopHeight / 2) - (WINDOW_HEIGHT / 2);
+    int const windowPosX = static_cast<int>(desktopWidth / 2) - (WINDOW_WIDTH / 2);
+    int const windowPosY = static_cast<int>(desktopHeight / 2) - (WINDOW_HEIGHT / 2);
 
     // Create the window
     window.setPosition(sf::Vector2i(windowPosX, windowPosY));
 }
 
 void Platform::run(Game & game) {
-
-    //game.init(); as needed to load things like textures
 
     while (window.isOpen())
     {

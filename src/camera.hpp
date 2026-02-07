@@ -3,7 +3,7 @@
 #include <constants.hpp>
 
 /**
- * @file camera.h
+ * @file camera.hpp
  * Classes and functions related to camera and transformation belong in this file
  *
  * @ingroup render

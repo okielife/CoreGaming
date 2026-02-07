@@ -14,12 +14,12 @@ void Renderer::end() const
     window.display();
 }
 
-void Renderer::draw(const Text& t, const Transform& tr)
+void Renderer::draw(const Text& t, const Transform& tr) const
 {
     setWorldView();
     drawText(t, tr);
 }
-void Renderer::draw(const Sprite& s, const Transform& t)
+void Renderer::draw(const Sprite& s, const Transform& t) const
 {
     setWorldView();
     drawSprite(s, t);
@@ -29,12 +29,12 @@ void Renderer::draw(const Rect& r, const Transform& t) const
     setWorldView();
     drawRectangle(r, t);
 }
-void Renderer::drawUI(const Text& t, const Transform& tr)
+void Renderer::drawUI(const Text& t, const Transform& tr) const
 {
     setUIView();
     drawText(t, tr);
 }
-void Renderer::drawUI(const Sprite& s, const Transform& t)
+void Renderer::drawUI(const Sprite& s, const Transform& t) const
 {
     setUIView();
     drawSprite(s, t);
@@ -55,23 +55,24 @@ void Renderer::setUIView() const
     window.setView(screenView);
 }
 
-void Renderer::drawText(const Text& t, const Transform& tr)
+void Renderer::drawText(const Text& t, const Transform& tr) const
 {
-    sf::Font const font = assets.font(t.font);
+    sf::Font const font = AssetManager::font(t.font);
     sf::Text text;
     text.setFont(font);
     text.setString(sf::String(t.text));
     text.setCharacterSize(t.fontSize);
-    text.setFillColor(sf::Color(t.color.r, t.color.g, t.color.b, static_cast<sf::Uint8>(t.color.a * tr.visibility)));
+    auto const alpha = static_cast<sf::Uint8>(static_cast<float>(t.color.a) * tr.visibility);
+    text.setFillColor(sf::Color(t.color.r, t.color.g, t.color.b, alpha));
     text.setPosition(tr.x, tr.y);
     text.setRotation(tr.rotation);
     text.setScale(tr.sx, tr.sy);
     window.draw(text);
 }
 
-void Renderer::drawSprite(const Sprite& s, const Transform& t)
+void Renderer::drawSprite(const Sprite& s, const Transform& t) const
 {
-    sf::Texture texture = assets.texture(s.texture);
+    sf::Texture texture = AssetManager::texture(s.texture);
     sf::Sprite sprite;
     sprite.setTexture(texture);
     sprite.setTextureRect(s.texRect);

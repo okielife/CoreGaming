@@ -15,7 +15,7 @@
 #include <SFML/Audio.hpp>
 
 /**
- * @file assets.h
+ * @file assets.hpp
  * @brief Centralized helpers for resolving filesystem paths to game assets.
  *
  * As of now this file contains only lightweight path logic
