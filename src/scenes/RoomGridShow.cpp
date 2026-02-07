@@ -10,7 +10,7 @@ void RoomGridShow::update(Game & game, const float dt)
     if (input.wasPressed(Action::Quit))
     {
         nextRoomID = RoomID::Hub;
-        // roomOutcome = RoomOutcome::LeaveWorld;
+        markDone();
         return;
     }
 

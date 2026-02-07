@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include <unordered_map>
 
 #include <command.hpp>
 #include <scenes/RoomBase.hpp>
@@ -11,10 +12,16 @@ class World {
 public:
     World();
     void update(Game & game, float dt);
-    void changeRoom(Game & game, RoomID room);
-    void render(Game & game, Renderer & renderer);
+    void changeRoom(RoomID room);
+    void render(Game & game, Renderer & renderer) const;
     WorldEvent pollEvent();
+    bool isRoomCompleted(RoomID room) const
+    {
+        return rooms.at(room)->isDone();
+    }
 private:
-    std::unique_ptr<RoomBase> currentRoom;
+    RoomBase * currentRoom = nullptr;
     WorldEvent pendingEvent = WorldEvent::None;
+    std::unordered_map<RoomID, bool> roomCompleted;
+    std::unordered_map<RoomID, std::unique_ptr<RoomBase>> rooms;
 };

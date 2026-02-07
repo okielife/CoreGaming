@@ -8,54 +8,35 @@
 
 World::World()
 {
-    currentRoom = std::make_unique<RoomHub>();
+    rooms[RoomID::Hub] = std::make_unique<RoomHub>(*this);
+    rooms[RoomID::BulletHell] = std::make_unique<RoomBulletHell>();
+    rooms[RoomID::Maze] = std::make_unique<RoomMaze>();
+    rooms[RoomID::GridShow] = std::make_unique<RoomGridShow>();
+    rooms[RoomID::WizardSpells] = std::make_unique<RoomWizardSpells>();
+    rooms[RoomID::Platformer] = std::make_unique<RoomPlatformer>();
+    changeRoom(RoomID::Hub);
 }
 
 void World::update(Game & game, float dt) {
     currentRoom->update(game, dt);
     if (const auto next = currentRoom->pollExit(); next != RoomID::None) {
-        changeRoom(game, next);
+        changeRoom(next);
+        currentRoom->clearPoll();
+        return;
     }
     if (auto outcome = currentRoom->pollOutcome(); outcome == RoomOutcome::LeaveWorld) {
         pendingEvent = WorldEvent::Exit;
     }
 }
 
-void World::render(Game & game, Renderer & renderer)
+void World::render(Game & game, Renderer & renderer) const
 {
     currentRoom->render(game, renderer);
 }
 
-void World::changeRoom(Game & game, RoomID room)
+void World::changeRoom(RoomID const room)
 {
-    switch (room) {
-    case RoomID::Hub:
-        currentRoom = std::make_unique<RoomHub>();
-        break;
-
-    case RoomID::BulletHell:
-        currentRoom = std::make_unique<RoomBulletHell>();
-        break;
-
-    case RoomID::Maze:
-        currentRoom = std::make_unique<RoomMaze>();
-        break;
-
-    case RoomID::GridShow:
-        currentRoom = std::make_unique<RoomGridShow>();
-        break;
-
-    case RoomID::WizardSpells:
-        currentRoom = std::make_unique<RoomWizardSpells>();
-        break;
-
-    case RoomID::Platformer:
-        currentRoom = std::make_unique<RoomPlatformer>();
-        break;
-
-    default:
-        throw std::runtime_error("Unknown RoomID in changeRoom");
-    }
+    currentRoom = rooms.at(room).get();
 }
 
 WorldEvent World::pollEvent() {

@@ -4,8 +4,10 @@
 #include <map>
 
 #include <scenes/RoomBase.hpp>
-#include <renderer.hpp> // TODO: Why do I have to have this here but not other level headers?
+#include <renderer.hpp>
 #include <command.hpp>
+
+class World;
 
 const std::map<RoomID, const char *> menuOptions = {
     {RoomID::GridShow, "Grid Show"},
@@ -26,6 +28,7 @@ constexpr std::array optionOrder = {
 
 struct RoomHub : RoomBase
 {
+    explicit RoomHub(World& world) : world(world) {}
     ~RoomHub() override = default;
     void update(Game & game, float) final;
     void render(Game & game, Renderer & renderer) final;
@@ -40,6 +43,9 @@ struct RoomHub : RoomBase
     Transform subTitleTransform {.x = 30, .y = 140};
     Text optionText {.text = "", .font = "jolly.ttf"};
     Transform optionTextTransform {.x = 200};
+    Rect crossedOutOption {.w = 120, .h = 4, .color = sf::Color::Red, .outlineColor = sf::Color::Black, .outlineThickness = 1.f};
+    Transform crossedOutTransform {.x = 200, .rotation = -3};
+    World& world;
 private:
     std::unique_ptr<RoomBase> currentRoom;
     bool exitIsSelected = false;

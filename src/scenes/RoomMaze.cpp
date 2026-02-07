@@ -25,6 +25,7 @@ void RoomMaze::update(Game & game, const float dt)
     }
     if (map[playerYIndex][playerXIndex] == '2')
     {
+        markDone();
         winner = true;
     }
     playerTransform.x = static_cast<float>(playerXIndex) * TILE_WIDTH;

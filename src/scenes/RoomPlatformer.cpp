@@ -47,6 +47,7 @@ void RoomPlatformer::update(Game & game, const float dt)
                 grounded = true;
 
                 if (isGoal && !won) {
+                    markDone();
                     won = true;
                 }
             }

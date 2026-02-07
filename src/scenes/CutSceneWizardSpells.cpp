@@ -22,6 +22,7 @@ void RoomWizardSpells::update(Game& game, float const dt)
             return;
         }
     }
+    markDone();
     nextRoomID = RoomID::Hub;
     // roomOutcome = RoomOutcome::LeaveWorld;
 }

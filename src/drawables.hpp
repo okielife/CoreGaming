@@ -23,11 +23,11 @@ struct Text
 };
 
 struct Rect {
-    float w;
-    float h;
+    float w = 0.0;
+    float h = 0.0;
     sf::Color color;
     sf::Color outlineColor;
-    float outlineThickness;
+    float outlineThickness = 0.0;
 };
 
 struct Sprite {

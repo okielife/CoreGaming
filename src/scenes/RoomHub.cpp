@@ -1,6 +1,6 @@
 #include <scenes/RoomHub.hpp>
 #include <game.hpp>
-
+#include <scenes/World.hpp>
 
 void RoomHub::update(Game& game, const float)
 {
@@ -85,6 +85,10 @@ void RoomHub::render(Game&, Renderer& renderer)
         optionText.fontSize = selected ? 40 : 36;
         optionTextTransform.y = yValue;
         renderer.drawUI(optionText, optionTextTransform);
+        if (world.isRoomCompleted(option)) {
+            crossedOutTransform.y = yValue + 25;
+            renderer.drawUI(crossedOutOption, crossedOutTransform);
+        }
         selectedTransform.y = yValue + 20;
         if (selected) renderer.draw(selectedRect, selectedTransform);
     }

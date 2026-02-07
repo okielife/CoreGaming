@@ -69,6 +69,7 @@ void RoomBulletHell::update(Game& game, float const dt)
         // Win condition
         if (lifetimeClock.getElapsedTime().asSeconds() >= bulletSpawnDuration && bullets.empty())
         {
+            markDone();
             won = true;
         }
     }
