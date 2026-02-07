@@ -14,25 +14,13 @@ struct Transform {
     float visibility = 1.0;
 };
 
-/**
- * The enumerated font IDs, should be one per available font in the assets
- */
-enum class FontID
-{
-    None,
-    JollyLodger,
-    UbuntuRegular
-};
-
 struct Text
 {
     std::string text;
     sf::Color color;
-    FontID fontID;
-    int fontSize;
+    std::string font = "ubuntu.ttf";
+    int fontSize = 24;
 };
-
-// TODO: I think each drawable needs its own transform, unless I can make all of them support all transformations
 
 struct Rect {
     float w;
@@ -42,17 +30,7 @@ struct Rect {
     float outlineThickness;
 };
 
-/**
- * The enumerated sprite IDs, should be one per available sprite in the assets
- */
-enum class SpriteID
-{
-    None,
-    Wizard,
-    Sky
-};
-
 struct Sprite {
-    SpriteID id;
+    std::string texture;
     sf::IntRect texRect;
 };

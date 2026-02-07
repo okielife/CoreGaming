@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include "../src/camera.h"
+#include "../src/camera.hpp"
 
 TEST(CameraTest, CentersOnTarget) {
     Camera cam;

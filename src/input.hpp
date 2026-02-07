@@ -5,7 +5,7 @@
 
 #include <SFML/Window/Event.hpp>
 
-#include <input.h>
+#include <input.hpp>
 
 enum class Action {
     MoveUp,

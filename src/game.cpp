@@ -1,15 +1,15 @@
-#include <game.h>
-#include <input.h>
-#include <scenes/WizardSpells.h>
-#include <scenes/title.h>
-#include <scenes/GridShow.h>
-#include <scenes/Maze.h>
-#include <scenes/Platformer.h>
-#include <scenes/BulletHell.h>
+#include <game.hpp>
+#include <input.hpp>
+#include <scenes/WizardSpells.hpp>
+#include <scenes/title.hpp>
+#include <scenes/GridShow.hpp>
+#include <scenes/Maze.hpp>
+#include <scenes/Platformer.hpp>
+#include <scenes/BulletHell.hpp>
 
 Game::Game(Input& input, AudioManager& audio) : input(input), audio(audio)
 {
-    audio.playMusic(MusicID::Area2);
+    audio.playMusic("area2.wav");
     currentScene = new SceneTitle();  // initialize the current scene
 }
 

@@ -2,8 +2,8 @@
 
 #include <array>
 
-#include <scenes/base.h>
-#include <drawables.h>
+#include <scenes/base.hpp>
+#include <drawables.hpp>
 
 constexpr int TILE_WIDTH = WINDOW_WIDTH / 17;
 constexpr int TILE_HEIGHT = WINDOW_HEIGHT / 15;
@@ -20,7 +20,7 @@ struct SceneMaze : SceneBase
     int playerYIndex = 2;
     Transform playerTransform;
     Transform mapTileTransform;
-    Text message {.text = "", .color = sf::Color::Blue, .fontID = FontID::UbuntuRegular, .fontSize = 24};
+    Text message {.text = "", .color = sf::Color::Blue};
     Transform messageTransform {.x = 20, .y = 20};
     static constexpr std::array<std::string_view, 15> map = {
         "XXXXXXXXXXXXXXXXX",

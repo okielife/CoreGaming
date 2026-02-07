@@ -1,5 +1,5 @@
-#include <game.h>
-#include <scenes/GridShow.h>
+#include <game.hpp>
+#include <scenes/GridShow.hpp>
 
 void SceneGridShow::update(Game & game, const float dt)
 {
@@ -25,7 +25,7 @@ void SceneGridShow::update(Game & game, const float dt)
     {
         if (msSinceLastSword >= swordCooldownMS)
         {
-            game.audio.playSound(SoundID::Sword);
+            game.audio.playSound("sword.wav");
             msSinceLastSword = 0.0f;
         }
     }

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <constants.h>
+#include <constants.hpp>
 
 /**
  * @file camera.h

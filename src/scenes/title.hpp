@@ -3,8 +3,8 @@
 #include <array>
 #include <map>
 
-#include <scenes/base.h>
-#include <renderer.h> // TODO: Why do I have to have this here but not other level headers?
+#include <scenes/base.hpp>
+#include <renderer.hpp> // TODO: Why do I have to have this here but not other level headers?
 
 enum class MenuOption
 {
@@ -40,18 +40,15 @@ struct SceneTitle : SceneBase
     void update(Game & game, float) final;
     void render(Game & game, Renderer & renderer) final;
     MenuOption currentOption = MenuOption::GridShow;
-    Sprite sky {
-        .id = SpriteID::Sky,
-        .texRect = {0, 0, 800, 600}
-    };
+    Sprite sky { .texture = "sky.png", .texRect = {0, 0, 800, 600}};
     Transform skyTransform;
     Rect selectedRect {.w = 10, .h = 10, .outlineColor = sf::Color::Green, .outlineThickness = 1.f};
     Transform selectedTransform {.x = 180};
-    Text title {.text = "This is a great menu screen!", .color = sf::Color::Red, .fontID = FontID::JollyLodger, .fontSize = 60};
+    Text title {.text = "This is a great menu screen!", .color = sf::Color::Red, .font = "jolly.ttf", .fontSize = 60};
     Transform titleTransform {.x = 150, .y = 80};
-    Text subTitle {.text = "Use up/down to select an option and press enter to continue", .color = sf::Color::Red, .fontID = FontID::JollyLodger, .fontSize = 40};
+    Text subTitle {.text = "Use up/down to select an option and press enter to continue", .color = sf::Color::Red, .font = "jolly.ttf", .fontSize = 40};
     Transform subTitleTransform {.x = 30, .y = 140};
-    Text optionText {.text = "", .fontID = FontID::JollyLodger};
+    Text optionText {.text = "", .font = "jolly.ttf"};
     Transform optionTextTransform {.x = 200};
 
 };

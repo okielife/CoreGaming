@@ -1,11 +1,10 @@
 #pragma once
 
-#include <unordered_map>
-
 #include <SFML/Graphics.hpp>
 
-#include <camera.h>
-#include <drawables.h>
+#include <assets.hpp>
+#include <camera.hpp>
+#include <drawables.hpp>
 
 /**
  * @file renderer.h
@@ -26,7 +25,7 @@
  *
  * This class is responsible for handling the "screen/window".
  * This class should provide convenient methods to display something on the screen, such as
- * shapes, text, sprites, background images, using either world coordinates (the player's location), or
+ * shapes, text, textures, background images, using either world coordinates (the player's location), or
  * direct screen coordinates (the heads-up display or a health bar).
  * It is expected that this will be added to a lot initially as we figure out what
  * the game needs to render.
@@ -38,13 +37,9 @@ public:
     /**
      * @brief Primary constructor for the game engine renderer class
      *
-     * This class sets up internal connections to SFML stuff and initializes things
-     * necessary for the client-facing API.  The constructor is responsible for:
-     * - Initializing all fonts and textures that will be used in the game (inefficiently
-     *   all at once for now, because it's easy)
      * @param window The platform (SFML) rendering instance
      */
-    explicit Renderer(sf::RenderWindow& window);
+    explicit Renderer(sf::RenderWindow& window): window(window) {};
 
     /**
      * @brief This function does any rendering initialization
@@ -66,41 +61,26 @@ public:
     void end() const;
 
     void fullScreenOverlay(sf::Color color) const;
-    void draw(const Text& t, const Transform& tr) const;
-    void draw(const Sprite& s, const Transform& t) const;
+    void draw(const Text& t, const Transform& tr);
+    void draw(const Sprite& s, const Transform& t);
     void draw(const Rect& r, const Transform& t) const;
-    void drawUI(const Text& t, const Transform& tr) const;
-    void drawUI(const Sprite& s, const Transform& t) const;
+    void drawUI(const Text& t, const Transform& tr);
+    void drawUI(const Sprite& s, const Transform& t);
     void drawUI(const Rect& r, const Transform& t) const;
     //void addScreenShake(float time);
 
 private:
     void setWorldView() const;
     void setUIView() const;
-    void drawSprite(const Sprite& s, const Transform& t) const;
+    void drawSprite(const Sprite& s, const Transform& t);
     void drawRectangle(const Rect& r, const Transform& t) const;
-    void drawText(const Text& t, const Transform& tr) const;
+    void drawText(const Text& t, const Transform& tr);
 
     sf::View worldView;
-    sf::View screenView;
+    sf::View screenView = sf::View(
+        sf::Vector2f(WINDOW_WIDTH / 2.0, WINDOW_HEIGHT / 2.0),
+        sf::Vector2f(WINDOW_WIDTH, WINDOW_HEIGHT)
+        );
     sf::RenderWindow& window;
-    std::unordered_map<SpriteID, sf::Texture> spriteTextures;
-    std::unordered_map<FontID, sf::Font> fontInstances;
-
-    /**
-     * A mapping of the sprite ID to the filename in the assets/sprites directory.
-     * Update this accordingly whenever sprites are added/changed/removed.
-     */
-    const std::unordered_map<SpriteID, std::string> SpriteMap = {
-        {SpriteID::Wizard, "wizard.png"},
-        {SpriteID::Sky, "sky.png"}
-    };
-    /**
-     * A mapping of the font ID to the filename in the assets/fonts directory.
-     * Update this accordingly whenever fonts are added/changed/removed.
-     */
-    const std::unordered_map<FontID, std::string> FontMap = {
-        {FontID::JollyLodger, "JollyLodger-Regular.ttf"},
-        {FontID::UbuntuRegular, "Ubuntu-Regular.ttf"}
-    };
+    AssetManager assets;
 };

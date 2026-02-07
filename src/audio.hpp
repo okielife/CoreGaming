@@ -1,51 +1,15 @@
 #pragma once
 
 #include <filesystem>
-#include <map>
-#include <unordered_map>
 
 #include <SFML/Audio.hpp>
 
 /**
- * @file audio.h
+ * @file audio.hpp
  * @brief Centralized helpers for managing and playing audio in the game.
  *
  * @ingroup audio
  */
-
-/**
- * The enumerated music IDs, should be one per available music in the assets.
- */
-enum class MusicID
-{
-    None,
-    Area2
-};
-
-/**
- * A mapping of the music ID to the filename in the assets/audio directory.
- * Update this accordingly whenever music is added/changed/removed
- */
-inline const std::unordered_map<MusicID, std::string> MusicMap = {
-    { MusicID::Area2, "area2.wav" }
-};
-
-/**
- * The enumerated sound IDs, should be one per available sound in the assets.
- */
-enum class SoundID
-{
-    None,
-    Sword
-};
-
-/**
- * A mapping of the sound ID to the filename in the assets/audio directory.
- * Update this accordingly whenever sound is added/changed/removed
- */
-inline const std::unordered_map<SoundID, std::string> SoundMap = {
-    { SoundID::Sword, "sword.wav" }
-};
 
 /**
  * @brief Audio management class for audio and sound effects
@@ -60,17 +24,8 @@ inline const std::unordered_map<SoundID, std::string> SoundMap = {
 class AudioManager
 {
 public:
-    /**
-     * @brief Primary constructor for the audio manager class
-     *
-     * This constructor:
-     * - calls the audio subsystem initialization routines
-     * - establishes which decoders are initialized
-     * - sets up the mixer
-     * - declares the number of audio channels that may ultimately be used by the game
-     * - instantiates all known audio class instances (inefficient but easy)
-     */
-    AudioManager();
+
+    AudioManager() = default;
 
     /**
      * @brief Deleted copy constructor
@@ -102,10 +57,10 @@ public:
      * By default, this will set the music to loop forever, but that can be disabled by
      * passing loop = false.
      *
-     * @param musicIDToPlay The MusicID to be played
+     * @param music_file_name The MusicID to be played
      * @param loop A flag for whether to loop the music or not, defaults to true
      */
-    void playMusic(MusicID musicIDToPlay, bool loop = true);
+    void playMusic(std::string const & music_file_name, bool loop = true);
 
     /**
      * @brief Stops any audio currently playing
@@ -117,9 +72,9 @@ public:
     /**
      * @brief Plays sound based on the ID passed in
      *
-     * @param soundIDToPlay The SoundID to be played
+     * @param sound_file_name The SoundID to be played
      */
-    void playSound(SoundID soundIDToPlay);
+    void playSound(std::string const & sound_file_name);
 
     /**
      * @brief An update routine to regularly flush completed sound effects
@@ -129,9 +84,7 @@ public:
     void update();
 
 private:
-    MusicID currentMusicID = MusicID::None;
-    std::map<MusicID, std::string> musicMap;
+    std::string currentMusic;
     sf::Music currentMusicInstance;
-    std::map<SoundID, sf::SoundBuffer> soundMap;
     std::vector<sf::Sound> currentSounds;
 };

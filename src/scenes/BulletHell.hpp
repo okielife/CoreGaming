@@ -2,7 +2,7 @@
 
 #include <random>
 
-#include <scenes/base.h>
+#include <scenes/base.hpp>
 
 struct Bullet {
     Transform transform;
@@ -42,7 +42,7 @@ private:
         .h = 5.0,
         .color = sf::Color::Red
     };
-    Text outcome {.fontID = FontID::UbuntuRegular, .fontSize = 24};
+    Text outcome{};
     static constexpr Transform outcomeTransform {.x = 25, .y = 25};
     std::vector<Bullet> bullets;
     bool lost = false;

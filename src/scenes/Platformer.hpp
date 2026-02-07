@@ -1,8 +1,8 @@
 #pragma once
 
-#include <scenes/base.h>
-#include <camera.h>
-#include <drawables.h>
+#include <scenes/base.hpp>
+#include <camera.hpp>
+#include <drawables.hpp>
 
 struct ScenePlatformer : SceneBase
 {
@@ -18,7 +18,7 @@ struct ScenePlatformer : SceneBase
     static constexpr Transform platform3Transform = {.x = 850, .y = 380};
     Rect goalPlatform {.w = 100, .h = 2, .color = sf::Color::Green};
     static constexpr Transform goalPlatformTransform = {.x = 1160, .y = 320};
-    Text message {.fontID = FontID::UbuntuRegular, .fontSize = 24};
+    Text message {};
     Transform messageTransform;
 
     float velocityY = 0.f;

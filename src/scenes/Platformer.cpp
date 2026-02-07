@@ -1,6 +1,6 @@
-#include <game.h>
-#include <geometry.h>
-#include <scenes/Platformer.h>
+#include <game.hpp>
+#include <collision.hpp>
+#include <scenes/Platformer.hpp>
 
 void ScenePlatformer::update(Game & game, const float dt)
 {

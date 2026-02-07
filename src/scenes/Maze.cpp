@@ -1,5 +1,5 @@
-#include <game.h>
-#include <scenes/Maze.h>
+#include <game.hpp>
+#include <scenes/Maze.hpp>
 
 class Game;
 

@@ -1,9 +1,9 @@
 #pragma once
 
-#include <audio.h>
-#include <input.h>
-#include <renderer.h>
-#include <scenes/base.h>
+#include <audio.hpp>
+#include <input.hpp>
+#include <renderer.hpp>
+#include <scenes/base.hpp>
 
 class Platform;
 

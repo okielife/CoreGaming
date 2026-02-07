@@ -1,7 +1,7 @@
 #include <iostream>
 
-#include <game.h>
-#include <scenes/WizardSpells.h>
+#include <game.hpp>
+#include <scenes/WizardSpells.hpp>
 
 void SceneWizardSpells::update(Game& game, float const dt)
 {

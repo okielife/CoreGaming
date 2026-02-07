@@ -1,6 +1,6 @@
 #pragma once
 
-#include <drawables.h>
+#include <drawables.hpp>
 
 struct AABB {
     float x;
@@ -16,6 +16,7 @@ inline bool intersects(const AABB& a, const AABB& b)
              a.y + a.h < b.y ||
              b.y + b.h < a.y);
 }
+
 inline AABB makeAABB(const Transform& t, const Rect& r)
 {
     return { t.x, t.y, r.w, r.h };

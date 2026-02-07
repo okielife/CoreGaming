@@ -1,5 +1,5 @@
-#include <scenes/title.h>
-#include <game.h>
+#include <scenes/title.hpp>
+#include <game.hpp>
 
 
 void SceneTitle::update(Game& game, const float)

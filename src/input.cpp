@@ -2,7 +2,7 @@
 
 #include <SFML/Window/Event.hpp>
 
-#include <input.h>
+#include <input.hpp>
 
 Input::Input()
 {

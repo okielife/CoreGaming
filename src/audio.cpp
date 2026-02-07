@@ -2,67 +2,51 @@
 
 #include <SFML/Audio.hpp>
 
-#include <assets.h>
-#include <audio.h>
+#include <assets.hpp>
+#include <audio.hpp>
 
-
-AudioManager::AudioManager()
+void AudioManager::playMusic(std::string const & music_file_name, bool const loop)
 {
-    for (auto const & [id, filename] : MusicMap)
-    {
-        if (id == MusicID::None) continue;
-        auto path = AssetManager::audio(filename).string();
-        musicMap.emplace(id, path);
-    }
-
-    for (auto const & [id, filename]: SoundMap)
-    {
-        if (id == SoundID::None) continue;
-        auto path = AssetManager::audio(filename).string();
-        sf::SoundBuffer buffer;
-        buffer.loadFromFile(path);
-        soundMap.insert({id, buffer});
-    }
-}
-
-void AudioManager::playMusic(MusicID const musicIDToPlay, bool const loop)
-{
-    if (currentMusicID == musicIDToPlay)
+    if (currentMusic == music_file_name)
     {
         return;  // already playing the current audio, if they really want it restarted, call stop and play
     }
-    if (currentMusicID != MusicID::None)
+    if (!currentMusic.empty())
     {
         stopMusic();  // if we already have some other audio playing, stop it first
     }
-    auto const musicPath = musicMap.at(musicIDToPlay);
+    auto const musicPath = AssetManager::music(music_file_name);
     currentMusicInstance.openFromFile(musicPath);
     currentMusicInstance.setLoop(loop);
     currentMusicInstance.play();
-    currentMusicID = musicIDToPlay;
+    currentMusic = music_file_name;
 }
 
 void AudioManager::stopMusic()
 {
     currentMusicInstance.stop();
-    currentMusicID = MusicID::None;
+    currentMusic = "";
 }
 
-void AudioManager::playSound(const SoundID soundIDToPlay)
+void AudioManager::playSound(std::string const & sound_file_name)
 {
     sf::Sound sound;
-    sound.setBuffer(soundMap.at(soundIDToPlay));
+    auto const & buffer = AssetManager::sound(sound_file_name);
+    sound.setBuffer(buffer);
     currentSounds.push_back(std::move(sound));
     currentSounds.back().play();
 }
 
 void AudioManager::update()
 {
-    // remove finished sounds
-    std::erase_if(
-        currentSounds,
-        [](const sf::Sound& s) {
-            return s.getStatus() == sf::Sound::Stopped;
+    for (auto it = currentSounds.begin(); it != currentSounds.end(); )
+    {
+        if (it->getStatus() == sf::Sound::Stopped && it->getPlayingOffset() > sf::Time::Zero)
+        {
+            it = currentSounds.erase(it);;
+        } else
+        {
+            ++it;
         }
-    );
+    }
 }

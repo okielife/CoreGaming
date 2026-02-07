@@ -1,6 +1,6 @@
-#include <geometry.h>
-#include <game.h>
-#include <scenes/BulletHell.h>
+#include <collision.hpp>
+#include <game.hpp>
+#include <scenes/BulletHell.hpp>
 
 void SceneBulletHell::update(Game& game, float const dt)
 {

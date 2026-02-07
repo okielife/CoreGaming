@@ -1,6 +1,6 @@
 #pragma once
 
-#include <scenes/base.h>
+#include <scenes/base.hpp>
 
 enum class ScenePhase
 {
@@ -32,11 +32,11 @@ public:
     void render(Game & game, Renderer &renderer) override;
 private:
     float overallSceneTime = 0.f;
-    Sprite wizard {.id = SpriteID::Wizard, .texRect = {0, 0, 193, 241}};
+    Sprite wizard {.texture = "wizard.png", .texRect = {0, 0, 193, 241}};
     Transform wizardTransform = {.x = 10, .y = 10, .rotation = 0.0f, .sx = 2, .sy = 2};
-    Text spell {.text = "*SPELL*", .color = sf::Color::Green, .fontID = FontID::UbuntuRegular, .fontSize = 24};
+    Text spell {.text = "*SPELL*", .color = sf::Color::Green};
     Transform spellTransform {.x = 100, .y = 200};
-    Text title {.text = "Flashy Wizard Spells", .color = sf::Color::White, .fontID = FontID::JollyLodger, .fontSize = 88};
+    Text title {.text = "Flashy Wizard Spells", .color = sf::Color::White, .font = "jolly.ttf", .fontSize = 88};
     Transform titleTransform {.x = 150, .y = 150};
 
     ScenePhase phase = ScenePhase::FadingInWizard;

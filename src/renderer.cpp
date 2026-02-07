@@ -1,25 +1,5 @@
-#include <assets.h>
-#include <renderer.h>
-
-Renderer::Renderer(sf::RenderWindow& window) : window(window)
-{
-    screenView.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
-    screenView.setCenter(WINDOW_WIDTH / 2.0, WINDOW_HEIGHT / 2.0);
-    for (auto const & [id, filename] : FontMap)
-    {
-        if (id == FontID::None) continue;
-        sf::Font font;
-        font.loadFromFile(AssetManager::font(filename).string());
-        fontInstances.insert({id, font});
-    }
-    for (auto const & [id, filename] : SpriteMap)
-    {
-        if (id == SpriteID::None) continue;
-        sf::Texture texture;
-        texture.loadFromFile(AssetManager::sprite(filename).string());
-        spriteTextures.insert({id, texture});
-    }
-}
+#include <assets.hpp>
+#include <renderer.hpp>
 
 void Renderer::begin(const Camera& cam)
 {
@@ -34,12 +14,12 @@ void Renderer::end() const
     window.display();
 }
 
-void Renderer::draw(const Text& t, const Transform& tr) const
+void Renderer::draw(const Text& t, const Transform& tr)
 {
     setWorldView();
     drawText(t, tr);
 }
-void Renderer::draw(const Sprite& s, const Transform& t) const
+void Renderer::draw(const Sprite& s, const Transform& t)
 {
     setWorldView();
     drawSprite(s, t);
@@ -49,12 +29,12 @@ void Renderer::draw(const Rect& r, const Transform& t) const
     setWorldView();
     drawRectangle(r, t);
 }
-void Renderer::drawUI(const Text& t, const Transform& tr) const
+void Renderer::drawUI(const Text& t, const Transform& tr)
 {
     setUIView();
     drawText(t, tr);
 }
-void Renderer::drawUI(const Sprite& s, const Transform& t) const
+void Renderer::drawUI(const Sprite& s, const Transform& t)
 {
     setUIView();
     drawSprite(s, t);
@@ -75,9 +55,9 @@ void Renderer::setUIView() const
     window.setView(screenView);
 }
 
-void Renderer::drawText(const Text& t, const Transform& tr) const
+void Renderer::drawText(const Text& t, const Transform& tr)
 {
-    auto& font = fontInstances.at(t.fontID);
+    sf::Font const font = assets.font(t.font);
     sf::Text text;
     text.setFont(font);
     text.setString(sf::String(t.text));
@@ -89,9 +69,9 @@ void Renderer::drawText(const Text& t, const Transform& tr) const
     window.draw(text);
 }
 
-void Renderer::drawSprite(const Sprite& s, const Transform& t) const
+void Renderer::drawSprite(const Sprite& s, const Transform& t)
 {
-    auto& texture = spriteTextures.at(s.id);
+    sf::Texture texture = assets.texture(s.texture);
     sf::Sprite sprite;
     sprite.setTexture(texture);
     sprite.setTextureRect(s.texRect);
