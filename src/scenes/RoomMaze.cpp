@@ -8,6 +8,7 @@ void RoomMaze::update(Game & game, const float dt)
     const auto& input = game.input;
     if (input.wasPressed(Action::Quit))
     {
+        // TODO: Use a "won" flag instead so the screen stays on the maze.
         if (status == RoomStatus::None) status = RoomStatus::Incomplete;
         return;
     }

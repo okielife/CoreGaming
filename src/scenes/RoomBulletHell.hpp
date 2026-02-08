@@ -55,4 +55,14 @@ private:
     std::uniform_int_distribution<> bulletSpeedDistribution;
     bool won = false;
     bool lost = false;
+    void resetAfterFailure()
+    {
+        won = false;
+        lost = false;
+        lifetime = 0.0;
+        spawnAccumulator = 0.0;
+        bullets.clear();
+        playerTransform.x = WINDOW_WIDTH / 2.0f - playerRect.w / 2.0f;
+        playerTransform.y = WINDOW_HEIGHT / 2.0f - playerRect.h / 2.0f;
+    }
 };

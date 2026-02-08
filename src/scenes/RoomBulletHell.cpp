@@ -21,6 +21,11 @@ void RoomBulletHell::update(Game& game, float const dt)
         return;
     }
 
+    if (lost)
+    {
+        if (game.input.wasPressed(Action::Confirm)) resetAfterFailure();
+    }
+
     // Player movement
     constexpr float playerSpeed = 300.f;
     if (Input::isDown(Action::MoveUp)) playerTransform.y -= playerSpeed * dt;
@@ -99,7 +104,7 @@ void RoomBulletHell::render(Game& game, Renderer& renderer)
     }
     else if (lost)
     {
-        outcome.text = "You lost!";
+        outcome.text = "Lost: ESC to exit or STAY DETERMINED and press ENTER to restart!";
         outcome.color = sf::Color::Red;
         renderer.drawUI(outcome, outcomeTransform);
     }

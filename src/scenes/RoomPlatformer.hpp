@@ -24,4 +24,5 @@ struct RoomPlatformer : RoomBase
     float velocityY = 0.f;
     bool grounded = false;
     Camera camera {.y = WINDOW_HEIGHT / 2.0};
+    bool won = false;
 };

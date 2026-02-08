@@ -7,7 +7,16 @@ void RoomPlatformer::update(Game & game, const float dt)
     const auto& input = game.input;
     if (input.wasPressed(Action::Quit))
     {
-        if (status == RoomStatus::None) status = RoomStatus::Incomplete;
+        status = won ? RoomStatus::Complete : RoomStatus::Incomplete;
+        return;
+    }
+
+    if (won)
+    {
+        if (input.anyPressed())
+        {
+            status = RoomStatus::Complete;
+        }
         return;
     }
 
@@ -28,7 +37,7 @@ void RoomPlatformer::update(Game & game, const float dt)
     playerTransform.y += velocityY * dt;
     grounded = false;
 
-    if (playerTransform.y > 4000) *this = RoomPlatformer(); // probably bad :|
+    if (playerTransform.y > WINDOW_HEIGHT * 2) *this = RoomPlatformer(); // TODO: just make a reset function!
 
     // Platform collision (top-only)
     const AABB playerBox = makeAABB(playerTransform, player);
@@ -45,8 +54,8 @@ void RoomPlatformer::update(Game & game, const float dt)
                 velocityY = 0.f;
                 grounded = true;
 
-                if (isGoal && status != RoomStatus::Complete) {
-                    status = RoomStatus::Complete;
+                if (isGoal && !won) {
+                    won = true;
                 }
             }
         }
@@ -69,9 +78,9 @@ void RoomPlatformer::render(Game &, Renderer & renderer)
     renderer.draw(platform3, platform3Transform);
     renderer.draw(goalPlatform, goalPlatformTransform);
     renderer.draw(player, playerTransform);
-    if (status == RoomStatus::Complete)
+    if (won)
     {
-        message.text = "WINNER!";
+        message.text = "WINNER! Press any key to exit";
         message.color = sf::Color::Green;
         renderer.drawUI(message, messageTransform);
     } else
