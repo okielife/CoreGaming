@@ -20,7 +20,9 @@ public:
         return rooms.at(room)->status == RoomStatus::Complete;
     }
 private:
+    RoomID currentRoomID = RoomID::None;
     RoomBase * currentRoom = nullptr;
     WorldEvent pendingEvent = WorldEvent::None;
     std::unordered_map<RoomID, std::unique_ptr<RoomBase>> rooms;
+    std::unique_ptr<RoomBase> getNewRoomInstance(RoomID room);
 };

@@ -18,7 +18,7 @@ struct Text
 {
     std::string text;
     sf::Color color;
-    std::string font = "ubuntu.ttf";
+    std::string_view font = "ubuntu.ttf";
     int fontSize = 24;
 };
 

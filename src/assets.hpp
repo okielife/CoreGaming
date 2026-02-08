@@ -29,7 +29,7 @@
 /**
  * @brief Static (inline, global) storage of font assets
  */
-inline std::unordered_map<std::string, sf::Font> fonts;
+inline std::unordered_map<std::string_view, sf::Font> fonts;
 
 /**
  * @brief Static (inline, global) storage of sound buffer assets
@@ -86,7 +86,7 @@ struct AssetManager
      * @param font_file_name Filename of the font (e.g. "main.ttf").
      * @return A loaded (possibly from cache) font asset
      */
-    static sf::Font font(std::string const & font_file_name)
+    static sf::Font font(std::string_view font_file_name)
     {
         auto const it = fonts.find(font_file_name);
         if (it != fonts.end())
@@ -147,21 +147,5 @@ struct AssetManager
         tex.loadFromFile(root() / "textures" / texture_file_name);
         return tex;
     }
-
-    /**
-     * @brief Constants for asset names to catch typos at compile time.
-     *
-     * A small static-only and constexpr set of strings, one for each file in the
-     * "assets" directory.  Using these variables instead of hardcoded strings will
-     * ensure that any typos are caught early at compile time.
-     */
-    struct Naming
-    {
-        static constexpr std::string_view FontJolly = "jolly.ttf";
-        static constexpr std::string_view MusicArea2 = "area2.wav";
-        static constexpr std::string_view SoundSword = "sword.wav";
-        static constexpr std::string_view TextureSky = "sky.png";
-        static constexpr std::string_view TextureWizard = "wizard.png";
-    };
 
 };

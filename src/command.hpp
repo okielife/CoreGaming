@@ -22,7 +22,6 @@ enum class RoomID
     Maze,
 
     // Others
-    ExitGame,
 };
 
 enum class WorldEvent

@@ -5,7 +5,7 @@
 
 void RoomWizardSpells::update(Game& game, float const dt)
 {
-    if (game.input.wasPressed(Action::Quit))
+    if (game.input.anyPressed())
     {
         status = RoomStatus::Complete;
         return;
@@ -54,6 +54,12 @@ void RoomWizardSpells::render(Game& game, Renderer& renderer)
     case ScenePhase::Title:
         {
             renderer.drawUI(title, titleTransform);
+        }
+        break;
+    case ScenePhase::SubTitle:
+        {
+            renderer.drawUI(title, titleTransform);
+            renderer.drawUI(anyKey, anyKeyTransform);
         }
         break;
     }

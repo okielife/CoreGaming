@@ -2,6 +2,7 @@
 
 #include <map>
 
+#include <constants.hpp>
 #include <drawables.hpp>
 #include <scenes/RoomBase.hpp>
 
@@ -10,7 +11,8 @@ enum class ScenePhase
     FadingInWizard,
     Spell,
     Flash,
-    Title
+    Title,
+    SubTitle
 };
 
 // eventually I would imagine this has its own update and render class
@@ -41,6 +43,8 @@ private:
     Transform spellTransform {.x = 100, .y = 200};
     Text title {.text = "Flashy Wizard Spells", .color = sf::Color::White, .font = "jolly.ttf", .fontSize = 88};
     Transform titleTransform {.x = 150, .y = 150};
+    Text anyKey {.text = "Press any key to continue", .color = sf::Color::White, .font = AssetNaming::FontJolly, .fontSize = 40};
+    Transform anyKeyTransform {.x = 240, .y = 350};
 
     ScenePhase phase = ScenePhase::FadingInWizard;
     const std::map<ScenePhase, AnimationStep> animationSteps = {
@@ -48,5 +52,6 @@ private:
         {ScenePhase::Spell, AnimationStep(2.0, 0.25)},
         {ScenePhase::Flash, AnimationStep(2.25, 0.25)},
         {ScenePhase::Title, AnimationStep(2.5, 2.0)},
+        {ScenePhase::SubTitle, AnimationStep(3.5, 1000.0)},
     };
 };

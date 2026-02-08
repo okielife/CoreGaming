@@ -2,8 +2,6 @@
 
 #include <random>
 
-#include <SFML/System.hpp> // TODO: Use C++ clocks instead?
-
 #include <constants.hpp>
 #include <drawables.hpp>
 #include <scenes/RoomBase.hpp>
@@ -24,6 +22,7 @@ public:
     }
     void update(Game & game, float dt) override;
     void render(Game & game, Renderer &renderer) override;
+    void reset() override;
 private:
     Rect playerRect {.w = 25.0, .h = 25.0, .color = sf::Color::Blue};
     Transform playerTransform {
@@ -49,9 +48,11 @@ private:
     Text outcome{};
     static constexpr Transform outcomeTransform {.x = 25, .y = 25};
     std::vector<Bullet> bullets;
-    sf::Clock spawnClock;
-    sf::Clock lifetimeClock;
+    float lifetime = 0.0f;
+    float spawnAccumulator = 0.0f;
     std::mt19937 gen;
     std::uniform_int_distribution<> bulletHeightDistribution;
     std::uniform_int_distribution<> bulletSpeedDistribution;
+    bool won = false;
+    bool lost = false;
 };

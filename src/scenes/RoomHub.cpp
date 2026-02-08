@@ -10,15 +10,27 @@ void RoomHub::update(Game& game, const float)
         {
             currentOption = RoomID::GridShow;
             exitIsSelected = false;
-        } else
+        }
+        else
         {
             switch (currentOption)
             {
-            case RoomID::GridShow: currentOption = RoomID::WizardSpells; break;
-            case RoomID::WizardSpells: currentOption = RoomID::Platformer; break;
-            case RoomID::Platformer: currentOption = RoomID::BulletHell; break;
-            case RoomID::BulletHell: currentOption = RoomID::Maze; break;
-            case RoomID::Maze: currentOption = RoomID::None; exitIsSelected = true; break;
+            case RoomID::GridShow:
+                currentOption = RoomID::WizardSpells;
+                break;
+            case RoomID::WizardSpells:
+                currentOption = RoomID::Platformer;
+                break;
+            case RoomID::Platformer:
+                currentOption = RoomID::BulletHell;
+                break;
+            case RoomID::BulletHell:
+                currentOption = RoomID::Maze;
+                break;
+            case RoomID::Maze:
+                currentOption = RoomID::None;
+                exitIsSelected = true;
+                break;
             default: break;
             }
         }
@@ -29,15 +41,27 @@ void RoomHub::update(Game& game, const float)
         {
             currentOption = RoomID::Maze;
             exitIsSelected = false;
-        } else
+        }
+        else
         {
             switch (currentOption)
             {
-            case RoomID::GridShow: currentOption = RoomID::None; exitIsSelected = true; break;
-            case RoomID::WizardSpells: currentOption = RoomID::GridShow; break;
-            case RoomID::Platformer: currentOption = RoomID::WizardSpells; break;
-            case RoomID::BulletHell: currentOption = RoomID::Platformer; break;
-            case RoomID::Maze: currentOption = RoomID::BulletHell; break;
+            case RoomID::GridShow:
+                currentOption = RoomID::None;
+                exitIsSelected = true;
+                break;
+            case RoomID::WizardSpells:
+                currentOption = RoomID::GridShow;
+                break;
+            case RoomID::Platformer:
+                currentOption = RoomID::WizardSpells;
+                break;
+            case RoomID::BulletHell:
+                currentOption = RoomID::Platformer;
+                break;
+            case RoomID::Maze:
+                currentOption = RoomID::BulletHell;
+                break;
             default: break;
             }
         }
@@ -46,24 +70,39 @@ void RoomHub::update(Game& game, const float)
     {
         if (exitIsSelected)
         {
-            status = RoomStatus::Complete;
-            nextRoomID = RoomID::ExitGame;
+            status = RoomStatus::ExitGame;
             return;
         }
         switch (currentOption)
         {
-        case RoomID::GridShow: status = RoomStatus::Complete; nextRoomID = RoomID::GridShow; break;
-        case RoomID::WizardSpells: status = RoomStatus::Complete; nextRoomID = RoomID::WizardSpells; break;
-        case RoomID::Platformer: status = RoomStatus::Complete; nextRoomID = RoomID::Platformer; break;
-        case RoomID::BulletHell: status = RoomStatus::Complete; nextRoomID = RoomID::BulletHell; break;
-        case RoomID::Maze: status = RoomStatus::Complete; nextRoomID = RoomID::Maze; break;
+        // setting it to incomplete because the hub is never "complete"
+        // should add a room status of Room Change Only
+        case RoomID::GridShow:
+            status = RoomStatus::Incomplete;
+            nextRoomID = RoomID::GridShow;
+            break;
+        case RoomID::WizardSpells:
+            status = RoomStatus::Incomplete;
+            nextRoomID = RoomID::WizardSpells;
+            break;
+        case RoomID::Platformer:
+            status = RoomStatus::Incomplete;
+            nextRoomID = RoomID::Platformer;
+            break;
+        case RoomID::BulletHell:
+            status = RoomStatus::Incomplete;
+            nextRoomID = RoomID::BulletHell;
+            break;
+        case RoomID::Maze:
+            status = RoomStatus::Incomplete;
+            nextRoomID = RoomID::Maze;
+            break;
         default: break;
         }
     }
     if (game.input.wasPressed(Action::Quit))
     {
-        status = RoomStatus::Complete;
-        nextRoomID = RoomID::ExitGame;
+        status = RoomStatus::ExitGame;
     }
 }
 
@@ -85,8 +124,12 @@ void RoomHub::render(Game&, Renderer& renderer)
         optionText.fontSize = selected ? 40 : 36;
         optionTextTransform.y = yValue;
         renderer.drawUI(optionText, optionTextTransform);
-        if (world.isRoomCompleted(option)) {
+        if (world.isRoomCompleted(option))
+        {
             crossedOutTransform.y = yValue + 25;
+            float const stringCharacters = optionText.text.length();
+            float const width = 9.681 * stringCharacters + 27.445;
+            crossedOutOption.w = width;;
             renderer.drawUI(crossedOutOption, crossedOutTransform);
         }
         selectedTransform.y = yValue + 20;

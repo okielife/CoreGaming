@@ -44,7 +44,7 @@ struct RoomHub : RoomBase
     Text optionText {.text = "", .font = "jolly.ttf"};
     Transform optionTextTransform {.x = 200};
     Rect crossedOutOption {.w = 120, .h = 4, .color = sf::Color::Red, .outlineColor = sf::Color::Black, .outlineThickness = 1.f};
-    Transform crossedOutTransform {.x = 200, .rotation = -3};
+    Transform crossedOutTransform {.x = 195, .rotation = -2.8};
     World& world;
 private:
     std::unique_ptr<RoomBase> currentRoom;
