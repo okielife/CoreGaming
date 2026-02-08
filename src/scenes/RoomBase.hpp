@@ -5,19 +5,21 @@
 class Game;
 class Renderer;
 
+enum class RoomStatus
+{
+    None,
+    Complete,
+    Incomplete,
+    Failed
+};
+
 class RoomBase {
 public:
     virtual ~RoomBase() = default;
     virtual void update(Game & game, float dt) = 0;
     virtual void render(Game & game, Renderer & renderer) = 0;
-    [[nodiscard]] RoomOutcome pollOutcome() const { return roomOutcome; }
-    void clearPoll() {nextRoomID = RoomID::None;}
-    [[nodiscard]] RoomID pollExit() const { return nextRoomID; }
-    [[nodiscard]] bool isDone() const { return roomComplete;}
-protected:
-    RoomOutcome roomOutcome = RoomOutcome::None;
+    RoomStatus status = RoomStatus::None;
     RoomID nextRoomID = RoomID::None;
-    void markDone() {roomComplete = true;}
-private:
-    bool roomComplete = false;
+    // TODO: Need a re-enter method that will clear the status and next Room ID and such
+    [[nodiscard]] bool leaveThisRoom() const { return status != RoomStatus::None; }
 };

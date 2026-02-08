@@ -17,16 +17,21 @@ World::World()
     changeRoom(RoomID::Hub);
 }
 
-void World::update(Game & game, float dt) {
+void World::update(Game & game, const float dt) {
     currentRoom->update(game, dt);
-    if (const auto next = currentRoom->pollExit(); next != RoomID::None) {
-        changeRoom(next);
-        currentRoom->clearPoll();
+    if (currentRoom->nextRoomID == RoomID::ExitGame)
+    {
+        pendingEvent = WorldEvent::Exit;
         return;
     }
-    if (auto outcome = currentRoom->pollOutcome(); outcome == RoomOutcome::LeaveWorld) {
-        pendingEvent = WorldEvent::Exit;
+    if (currentRoom->status == RoomStatus::None && currentRoom->nextRoomID == RoomID::None)
+    {
+        return; // nothing to do
     }
+    // at this point, either next room has been set or a completion status update occurred, change rooms
+    RoomID const nextRoomID = currentRoom->nextRoomID != RoomID::None ? currentRoom->nextRoomID : RoomID::Hub;
+    currentRoom->nextRoomID = RoomID::None;
+    changeRoom(nextRoomID);
 }
 
 void World::render(Game & game, Renderer & renderer) const

@@ -39,5 +39,4 @@ struct RoomMaze : RoomBase
         "XXXXXXXXXXX111XXX",
         "XXXXXXXXXXXXXXXXX",
     };
-    bool winner = false;
 };

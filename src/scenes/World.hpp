@@ -15,13 +15,12 @@ public:
     void changeRoom(RoomID room);
     void render(Game & game, Renderer & renderer) const;
     WorldEvent pollEvent();
-    bool isRoomCompleted(RoomID room) const
+    bool isRoomCompleted(RoomID const room) const
     {
-        return rooms.at(room)->isDone();
+        return rooms.at(room)->status == RoomStatus::Complete;
     }
 private:
     RoomBase * currentRoom = nullptr;
     WorldEvent pendingEvent = WorldEvent::None;
-    std::unordered_map<RoomID, bool> roomCompleted;
     std::unordered_map<RoomID, std::unique_ptr<RoomBase>> rooms;
 };

@@ -2,7 +2,7 @@
 
 #include <random>
 
-#include <SFML/System.hpp>
+#include <SFML/System.hpp> // TODO: Use C++ clocks instead?
 
 #include <constants.hpp>
 #include <drawables.hpp>
@@ -49,8 +49,6 @@ private:
     Text outcome{};
     static constexpr Transform outcomeTransform {.x = 25, .y = 25};
     std::vector<Bullet> bullets;
-    bool lost = false;
-    bool won = false;
     sf::Clock spawnClock;
     sf::Clock lifetimeClock;
     std::mt19937 gen;

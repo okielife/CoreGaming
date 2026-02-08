@@ -8,8 +8,7 @@ void RoomMaze::update(Game & game, const float dt)
     const auto& input = game.input;
     if (input.wasPressed(Action::Quit))
     {
-        nextRoomID = RoomID::Hub;
-        // roomOutcome = RoomOutcome::LeaveWorld;
+        if (status == RoomStatus::None) status = RoomStatus::Incomplete;
         return;
     }
     int nextX = playerXIndex;
@@ -25,8 +24,7 @@ void RoomMaze::update(Game & game, const float dt)
     }
     if (map[playerYIndex][playerXIndex] == '2')
     {
-        markDone();
-        winner = true;
+        status = RoomStatus::Complete;
     }
     playerTransform.x = static_cast<float>(playerXIndex) * TILE_WIDTH;
     playerTransform.y = static_cast<float>(playerYIndex) * TILE_HEIGHT;
@@ -51,7 +49,7 @@ void RoomMaze::render(Game &, Renderer & renderer)
     // Draw player
     renderer.draw(player, playerTransform);
 
-    if (winner)
+    if (status == RoomStatus::Complete)
     {
         message.text = "WINNER!";
         message.color = sf::Color::Green;

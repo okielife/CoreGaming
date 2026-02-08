@@ -7,8 +7,7 @@ void RoomWizardSpells::update(Game& game, float const dt)
 {
     if (game.input.wasPressed(Action::Quit))
     {
-        nextRoomID = RoomID::Hub;
-        // roomOutcome = RoomOutcome::LeaveWorld;
+        status = RoomStatus::Complete;
         return;
     }
     overallSceneTime += dt;
@@ -22,9 +21,6 @@ void RoomWizardSpells::update(Game& game, float const dt)
             return;
         }
     }
-    markDone();
-    nextRoomID = RoomID::Hub;
-    // roomOutcome = RoomOutcome::LeaveWorld;
 }
 
 void RoomWizardSpells::render(Game& game, Renderer& renderer)

@@ -16,25 +16,37 @@
 
 /**
  * @file assets.hpp
- * @brief Centralized helpers for resolving filesystem paths to game assets.
+ * @brief Centralized helpers for providing game assets.
  *
- * As of now this file contains only lightweight path logic
- * and does not perform asset loading or caching.
+ * This file contains static (global) storage of the current
+ * asset types, which includes fonts, sound buffers, and textures.
+ *
+ * @note The music asset is a simple filesystem path because it is read on-demand
  *
  * @ingroup assets
  */
 
-
-inline std::unordered_map<std::string, sf::Texture> textures;
+/**
+ * @brief Static (inline, global) storage of font assets
+ */
 inline std::unordered_map<std::string, sf::Font> fonts;
+
+/**
+ * @brief Static (inline, global) storage of sound buffer assets
+ */
 inline std::unordered_map<std::string, sf::SoundBuffer> soundBufferCache;
 
 /**
- * @brief Stateless helper for resolving asset filesystem paths.
+ * @brief Static (inline, global) storage of texture assets
+ */
+inline std::unordered_map<std::string, sf::Texture> textures;
+
+/**
+ * @brief Asset manager for the game instance.
  *
- * AssetManager provides static functions that return filesystem paths to
- * various categories of assets. It does not own or cache assets and is safe
- * to use anywhere in the codebase.
+ * AssetManager provides static functions that return appropriate assets based on
+ * the asset type.  It owns assets, where appropriate, in static storage to avoid
+ * requiring an AssetManager instance to be passed around.
  *
  * @ingroup assets
  */
@@ -44,8 +56,11 @@ struct AssetManager
      * @brief Returns the root directory containing all game assets.
      *
      * The asset root is computed relative to the directory of the running
-     * executable using SDL_GetBasePath(). This allows assets to be located
+     * executable using OS-specific techniques. This allows assets to be located
      * correctly regardless of the process working directory.
+     *
+     * @note In the CMake build system, the assets folder is copied into the build tree
+     *       so that the game works fine in the build tree.
      *
      * @return Filesystem path to the asset root directory.
      */
@@ -56,7 +71,7 @@ struct AssetManager
         //     uint32_t pathSize = sizeof(executableRelativePath);
         //     _NSGetExecutablePath(executableRelativePath, &pathSize);
 #ifdef __linux__
-        ssize_t len = readlink("/proc/self/exe", executableRelativePath, sizeof(executableRelativePath) - 1);
+        const ssize_t len = readlink("/proc/self/exe", executableRelativePath, sizeof(executableRelativePath) - 1);
         executableRelativePath[len] = '\0';
 #elif _WIN32
         GetModuleFileName(NULL, executableRelativePath, sizeof(executableRelativePath));
@@ -66,10 +81,10 @@ struct AssetManager
     }
 
     /**
-     * @brief Returns the filesystem path to a font asset.
+     * @brief Returns an `sf::Font` asset with the given name
      *
      * @param font_file_name Filename of the font (e.g. "main.ttf").
-     * @return Filesystem path to the font asset.
+     * @return A loaded (possibly from cache) font asset
      */
     static sf::Font font(std::string const & font_file_name)
     {
@@ -82,7 +97,11 @@ struct AssetManager
     }
 
     /**
-     * @brief Returns the filesystem path to a music asset.
+     * @brief Returns the filesystem path to a music asset with the given name
+     *
+     * This is different from other asset functions, which usually return
+     * asset instances themselves.  Music is streamed directly from the disk,
+     * so it doesn't make much sense to try to return anything but the path.
      *
      * @param music_file_name Filename of the music file (e.g. "theme.ogg").
      * @return Filesystem path to the music asset.
@@ -93,6 +112,7 @@ struct AssetManager
     }
 
     /**
+     * @brief Returns an `sf::SoundBuffer` asset with the given name
      *
      * @param sound_file_name Filename of the sound asset (e.g. "sword.mps")
      * @return A loaded (possibly from cache) sound buffer asset
@@ -107,11 +127,13 @@ struct AssetManager
     }
 
     /**
-     * @brief Returns the texture asset with the given name
+     * @brief Returns an `sf::Texture` asset with the given name
      *
      * Note that in this context, a texture is "what" we want to draw.
      * Whereas a sprite is "how" we draw it.
-     * Eventually, we could add a second argument here for a subdirectory category inside textures/
+     * As the list of textures grows, we could add a textures/something directory,
+     * which would lead to a second argument to this function for the
+     * category/subdirectory name
      *
      * @param texture_file_name Filename of the texture asset.
      * @return A loaded (possibly from cache) texture asset.
@@ -125,5 +147,21 @@ struct AssetManager
         tex.loadFromFile(root() / "textures" / texture_file_name);
         return tex;
     }
+
+    /**
+     * @brief Constants for asset names to catch typos at compile time.
+     *
+     * A small static-only and constexpr set of strings, one for each file in the
+     * "assets" directory.  Using these variables instead of hardcoded strings will
+     * ensure that any typos are caught early at compile time.
+     */
+    struct Naming
+    {
+        static constexpr std::string_view FontJolly = "jolly.ttf";
+        static constexpr std::string_view MusicArea2 = "area2.wav";
+        static constexpr std::string_view SoundSword = "sword.wav";
+        static constexpr std::string_view TextureSky = "sky.png";
+        static constexpr std::string_view TextureWizard = "wizard.png";
+    };
 
 };

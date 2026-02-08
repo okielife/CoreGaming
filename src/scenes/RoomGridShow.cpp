@@ -9,8 +9,7 @@ void RoomGridShow::update(Game & game, const float dt)
     const auto& input = game.input;
     if (input.wasPressed(Action::Quit))
     {
-        nextRoomID = RoomID::Hub;
-        markDone();
+        status = RoomStatus::Complete;
         return;
     }
 

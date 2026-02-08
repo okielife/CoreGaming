@@ -46,29 +46,29 @@ void RoomHub::update(Game& game, const float)
     {
         if (exitIsSelected)
         {
-            roomOutcome = RoomOutcome::LeaveWorld;
+            status = RoomStatus::Complete;
+            nextRoomID = RoomID::ExitGame;
             return;
         }
         switch (currentOption)
         {
-        case RoomID::GridShow: nextRoomID = RoomID::GridShow; break;
-        case RoomID::WizardSpells: nextRoomID = RoomID::WizardSpells; break;
-        case RoomID::Platformer: nextRoomID = RoomID::Platformer; break;
-        case RoomID::BulletHell: nextRoomID = RoomID::BulletHell; break;
-        case RoomID::Maze: nextRoomID = RoomID::Maze; break;
+        case RoomID::GridShow: status = RoomStatus::Complete; nextRoomID = RoomID::GridShow; break;
+        case RoomID::WizardSpells: status = RoomStatus::Complete; nextRoomID = RoomID::WizardSpells; break;
+        case RoomID::Platformer: status = RoomStatus::Complete; nextRoomID = RoomID::Platformer; break;
+        case RoomID::BulletHell: status = RoomStatus::Complete; nextRoomID = RoomID::BulletHell; break;
+        case RoomID::Maze: status = RoomStatus::Complete; nextRoomID = RoomID::Maze; break;
         default: break;
         }
     }
     if (game.input.wasPressed(Action::Quit))
     {
-        roomOutcome = RoomOutcome::LeaveWorld;
+        status = RoomStatus::Complete;
+        nextRoomID = RoomID::ExitGame;
     }
 }
 
 void RoomHub::render(Game&, Renderer& renderer)
 {
-    if (nextRoomID != RoomID::None) return;
-
     renderer.begin(fixedDefaultCamera);
     renderer.draw(sky, skyTransform);
 

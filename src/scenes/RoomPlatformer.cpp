@@ -7,8 +7,7 @@ void RoomPlatformer::update(Game & game, const float dt)
     const auto& input = game.input;
     if (input.wasPressed(Action::Quit))
     {
-        nextRoomID = RoomID::Hub;
-        // roomOutcome = RoomOutcome::LeaveWorld;
+        if (status == RoomStatus::None) status = RoomStatus::Incomplete;
         return;
     }
 
@@ -46,9 +45,8 @@ void RoomPlatformer::update(Game & game, const float dt)
                 velocityY = 0.f;
                 grounded = true;
 
-                if (isGoal && !won) {
-                    markDone();
-                    won = true;
+                if (isGoal && status != RoomStatus::Complete) {
+                    status = RoomStatus::Complete;
                 }
             }
         }
@@ -71,7 +69,7 @@ void RoomPlatformer::render(Game &, Renderer & renderer)
     renderer.draw(platform3, platform3Transform);
     renderer.draw(goalPlatform, goalPlatformTransform);
     renderer.draw(player, playerTransform);
-    if (won)
+    if (status == RoomStatus::Complete)
     {
         message.text = "WINNER!";
         message.color = sf::Color::Green;

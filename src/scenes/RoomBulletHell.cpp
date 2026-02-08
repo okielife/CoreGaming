@@ -6,8 +6,10 @@ void RoomBulletHell::update(Game& game, float const dt)
 {
     if (game.input.wasPressed(Action::Quit))
     {
-        nextRoomID = RoomID::Hub;
-        // roomOutcome = RoomOutcome::LeaveWorld;
+        if (status == RoomStatus::None)
+        {
+            status = RoomStatus::Incomplete;
+        }
         return;
     }
 
@@ -26,7 +28,7 @@ void RoomBulletHell::update(Game& game, float const dt)
         playerTransform.y, actionWindowPosition.y, actionWindowPosition.y + actionWindowRect.h - playerRect.h
         );
 
-    if (!lost && !won)
+    if (status == RoomStatus::None)
     {
         // Spawn bullets for limited time
         constexpr float bulletSpawnInterval = 0.05f;
@@ -59,7 +61,7 @@ void RoomBulletHell::update(Game& game, float const dt)
                 const AABB bulletBox = makeAABB(b.transform, bulletRect);
                 if (intersects(bulletBox, playerBox))
                 {
-                    lost = true;
+                    status = RoomStatus::Failed;
                     return false;
                 }
                 return bulletBox.x + bulletBox.w < 0.f;
@@ -69,8 +71,7 @@ void RoomBulletHell::update(Game& game, float const dt)
         // Win condition
         if (lifetimeClock.getElapsedTime().asSeconds() >= bulletSpawnDuration && bullets.empty())
         {
-            markDone();
-            won = true;
+            status = RoomStatus::Complete;
         }
     }
 }
@@ -80,13 +81,13 @@ void RoomBulletHell::render(Game& game, Renderer& renderer)
     renderer.begin(fixedDefaultCamera);
     renderer.draw(actionWindowRect, actionWindowPosition);
     renderer.draw(playerRect, playerTransform);
-    if (won)
+    if (status == RoomStatus::Complete)
     {
         outcome.text = "You won!";
         outcome.color = sf::Color::Green;
         renderer.drawUI(outcome, outcomeTransform);
     }
-    else if (lost)
+    else if (status == RoomStatus::Failed)
     {
         outcome.text = "You lost!";
         outcome.color = sf::Color::Red;
