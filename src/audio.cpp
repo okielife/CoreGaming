@@ -16,7 +16,7 @@ void AudioManager::playMusic(std::string const & music_file_name, bool const loo
         stopMusic();  // if we already have some other audio playing, stop it first
     }
     auto const musicPath = AssetManager::music(music_file_name);
-    currentMusicInstance.openFromFile(musicPath);
+    currentMusicInstance.openFromFile(musicPath.string());
     currentMusicInstance.setLoop(loop);
     currentMusicInstance.play();
     currentMusic = music_file_name;
