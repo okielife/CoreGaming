@@ -92,7 +92,9 @@ struct AssetManager
         if (it != fonts.end())
             return it->second;
         auto& font = fonts.emplace(font_file_name, sf::Font{}).first->second;
-        font.loadFromFile(root() / "fonts" / font_file_name);
+        auto const fullPath = root() / "fonts" / font_file_name;
+        std::string const fullPathString = fullPath.string();
+        font.loadFromFile(fullPathString);
         return font;
     }
 
@@ -122,7 +124,9 @@ struct AssetManager
         if (it != soundBufferCache.end())
             return it->second;
         auto& sound = soundBufferCache.emplace(sound_file_name, sf::SoundBuffer{}).first->second;
-        sound.loadFromFile(root() / "sound" / sound_file_name);
+        auto const fullPath = root() / "sound" / sound_file_name;
+        std::string const fullPathString = fullPath.string();
+        sound.loadFromFile(fullPathString);
         return sound;
     }
 
@@ -144,7 +148,9 @@ struct AssetManager
         if (it != textures.end())
             return it->second;
         auto& tex = textures.emplace(texture_file_name, sf::Texture{}).first->second;
-        tex.loadFromFile(root() / "textures" / texture_file_name);
+        auto const fullPath = root() / "textures" / texture_file_name;
+        std::string const fullPathString = fullPath.string();
+        tex.loadFromFile(fullPathString);
         return tex;
     }
 
