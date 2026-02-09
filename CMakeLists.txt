@@ -5,6 +5,11 @@ set(CMAKE_CXX_STANDARD 20)
 # build and setup the sfml libraries
 include(cmake/sfml.cmake)
 
+# on MSVC, the min/max macros are expanded and cause compile failures; disable them
+if (WIN32)
+    add_compile_definitions(NOMINMAX)
+endif()
+
 # build the game binary and link it to the SFML libraries
 add_executable(game
         src/assets.hpp
