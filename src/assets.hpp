@@ -66,11 +66,16 @@ struct AssetManager
      */
     static std::filesystem::path root()
     {
+#ifdef __APPLE__
+        // MyGame.app/Contents/MacOS/MyGame
         char executableRelativePath[1024];
-        // #ifdef __APPLE__
-        //     uint32_t pathSize = sizeof(executableRelativePath);
-        //     _NSGetExecutablePath(executableRelativePath, &pathSize);
-#ifdef __linux__
+        uint32_t pathSize = sizeof(executableRelativePath);
+        _NSGetExecutablePath(executableRelativePath, &pathSize);
+        const std::filesystem::path exePath = executableRelativePath;
+        auto assets = exePath.parent_path() / "Resources" / "assets";
+        return std::filesystem::weakly_canonical(assets);
+#elif __linux__
+        char executableRelativePath[1024];
         if (const char* appdir = std::getenv("APPDIR")) {
             // we are running from the AppImage launcher, so APPDIR gives us the root of the appimage bundle
             auto const p =  std::filesystem::path(appdir) / "usr" / "share" / "coregaming" / "assets";
@@ -89,9 +94,16 @@ struct AssetManager
         auto const p = exeDir.parent_path().parent_path() / "usr" / "share" / "coregaming" / "assets";
         return std::filesystem::weakly_canonical(p);
 #elif _WIN32
-        GetModuleFileName(NULL, executableRelativePath, sizeof(executableRelativePath));
+        char executablePath[MAX_PATH];
+        DWORD len = GetModuleFileNameA(NULL, executablePath, MAX_PATH);
+        if (len == 0 || len == MAX_PATH) {
+            throw std::runtime_error("GetModuleFileNameA failed");
+        }
+        std::filesystem::path exe(executablePath);
+        std::filesystem::path exeDir = exe.parent_path();
+        auto assets = exeDir / "assets";
+        return std::filesystem::weakly_canonical(assets);
 #endif
-        // std::filesystem::path const exe = executableRelativePath;
 
     }
 
