@@ -91,7 +91,7 @@ if (UNIX AND NOT APPLE)
     install(DIRECTORY ${CMAKE_SOURCE_DIR}/src/assets DESTINATION usr/share/coregaming)
 elseif (WIN32)
     install(TARGETS coregaming RUNTIME DESTINATION .)
-    install(FILES $<TARGET_RUNTIME_DLLS:game> DESTINATION .)
+    install(FILES $<TARGET_RUNTIME_DLLS:coregaming> DESTINATION .)
     install(DIRECTORY ${CMAKE_SOURCE_DIR}/src/assets DESTINATION assets)
 endif ()
 
