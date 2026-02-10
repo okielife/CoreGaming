@@ -12,6 +12,7 @@ endif()
 
 # build the game binary and link it to the SFML libraries
 add_executable(game
+        MACOSX_BUNDLE
         src/assets.hpp
         src/audio.cpp
         src/audio.hpp
@@ -66,11 +67,63 @@ add_custom_command(TARGET game POST_BUILD
         $<TARGET_FILE_DIR:game>/assets
 )
 
-# at install time the game will be in bin/ and the assets will be in bin/assets
-# this ensures that the assets can always be found at executable_path.parent / assets
-install(TARGETS game RUNTIME DESTINATION bin)
-install(DIRECTORY src/assets/ DESTINATION bin/assets)
+if (APPLE)
+    set_target_properties(game PROPERTIES
+            MACOSX_BUNDLE_BUNDLE_NAME "CoreGaming"
+    )
+    install(
+            DIRECTORY ${CMAKE_SOURCE_DIR}/src/assets
+            DESTINATION CoreGaming.app/Contents/Resources
+    )
+    include(BundleUtilities)
+    install(TARGETS game BUNDLE DESTINATION .
+    )
+    install(CODE [[
+        include(BundleUtilities)
+        fixup_bundle(
+            "${CMAKE_INSTALL_PREFIX}/CoreGaming.app"
+            ""
+            ""
+        )
+    ]])
+elseif (UNIX)  # AND NOT APPLE
+    install(TARGETS game RUNTIME DESTINATION usr/bin)
+    install(DIRECTORY ${CMAKE_SOURCE_DIR}/src/assets DESTINATION .)
+    # Define the content you want to write
+    set(FILE_CONTENT [=[
+"#!/bin/sh
+HERE="$(dirname "$(readlink -f "$0")")"
+export LD_LIBRARY_PATH="$HERE/usr/lib:$LD_LIBRARY_PATH"
+exec "$HERE/usr/bin/game" "$@"
+]=]
+    )
+    set(OUTPUT_FILE "${CMAKE_BINARY_DIR}/cmake/AppRun.in")
+    file(WRITE "${OUTPUT_FILE}" "${FILE_CONTENT}")
+    install(PROGRAMS
+            ${CMAKE_SOURCE_DIR}/cmake/AppRun.in
+            DESTINATION .
+            RENAME AppRun
+    )
+elseif (WIN32)
+    install(TARGETS game RUNTIME DESTINATION .)
+    install(DIRECTORY ${CMAKE_SOURCE_DIR}/src/assets DESTINATION assets)
+    include(InstallRequiredSystemLibraries)
 
-# enable unit testing
-# enable_testing()
-# add_subdirectory(tests)
+    set(CPACK_PACKAGE_NAME "CoreGaming")
+    set(CPACK_PACKAGE_VENDOR "Name")
+    set(CPACK_PACKAGE_VERSION "1.0.0")
+
+    set(CPACK_PACKAGE_INSTALL_DIRECTORY "CoreGaming")
+
+    set(CPACK_NSIS_DISPLAY_NAME "CoreGaming")
+    set(CPACK_NSIS_PACKAGE_NAME "CoreGaming")
+    set(CPACK_NSIS_CONTACT "notlee@notlee.notlee")
+
+    set(CPACK_NSIS_MODIFY_PATH OFF)
+    set(CPACK_NSIS_ENABLE_UNINSTALL_BEFORE_INSTALL ON)
+
+    set(CPACK_GENERATOR "NSIS")
+
+    include(CPack)
+    set(CPACK_NSIS_CREATE_ICONS_EXTRA "${CPACK_NSIS_CREATE_ICONS_EXTRA} CreateShortCut '$DESKTOP\\\\MyGame.lnk' '$INSTDIR\\\\game.exe'")
+endif ()

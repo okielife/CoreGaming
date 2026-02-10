@@ -33,45 +33,25 @@ jobs:
         run: cmake --build build --config Release
 
       - name: Run Tests
-        run: cd build && ctest -C Release --output-on-failure
+        working-directory: build
+        run: ctest -C Release --output-on-failure
 
-      - name: Linux packaging  # eventually use AppImage
-        if: runner.os == 'Linux'
+      - name: Build AppImage
         run: |
-          mkdir -p dist
-          cp build/game dist/
-          
-          # Copy SFML shared libs
-          ldd dist/game | grep sfml | awk '{print $3}' | xargs -I{} cp {} dist/
-          
-          # Optional: set rpath so it finds libs in its own dir
-          patchelf --set-rpath '$ORIGIN' dist/game
-          
-          # zip up the package
+          wget https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
+          chmod +x linuxdeploy-x86_64.AppImage
+          cmake --install build --prefix AppDir
+          ./linuxdeploy-x86_64.AppImage --appdir AppDir --executable AppDir/usr/bin/game --output appimage
           zip -r mygame-${{ runner.os }}.zip dist
 
       - name: MacOS packaging  # eventually an .app
         if: runner.os == 'macOS'
-        run: |
-          set -e
-          mkdir -p dist
-          cp build/game dist/
-          
-          # Collect non-system dylibs
-          otool -L build/game | tail -n +2 | awk '{print $1}' | grep -E 'sfml|openal|vorbis|flac' | while read lib; do cp "$lib" dist/ done
-          
-          # Fix dylib paths
-          install_name_tool -add_rpath "@executable_path" dist/game
-          
-          # zip it up
-          zip -r mygame-${{ runner.os }}.zip dist
+        run: cmake --install build --prefix dist && zip -r mygame-${{ runner.os }}.zip dist
 
       - name: Windows packaging
         if: runner.os == 'Windows'
         run: |
-          mkdir dist
-          copy build\Release\game.exe dist\
-          copy C:\SFML\bin\sfml-*.dll dist\
+          cpack -G NSIS
           powershell Compress-Archive dist mygame-${{ runner.os }}.zip
 
       - name: Grab assets
@@ -83,4 +63,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: mygame-${{ runner.os }}
-          path: dist/
+          path: dist/*
