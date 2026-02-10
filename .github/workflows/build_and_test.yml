@@ -25,6 +25,10 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y libx11-dev libxrandr-dev libudev-dev libgl1-mesa-dev libopenal-dev libvorbis-dev libogg-dev libflac-dev libxcursor-dev libfreetype-dev libfreetype6 libfreetype6-dev
+          wget https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
+          chmod +x linuxdeploy-x86_64.AppImage
+          FILE_PATH=$(realpath linuxdeploy-x86_64.AppImage)
+          sudo ln -s "$FILE_PATH" /usr/local/bin/linuxdeploy
 
       - name: Configure CMake
         run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
@@ -36,15 +40,16 @@ jobs:
         working-directory: build
         run: ctest -C Release --output-on-failure
 
+      - name: Make distribution directory
+        working-directory: build
+        run: mkdir dist
+
       - name: Build AppImage
         if: runner.os == 'Linux'
         working-directory: build
         run: |
-          wget https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
-          chmod +x linuxdeploy-x86_64.AppImage
           cmake --install . --prefix AppDir
-          ./linuxdeploy-x86_64.AppImage -v1 --appdir AppDir --executable AppDir/usr/bin/coregaming --output appimage --desktop-file ../packaging/coregaming.desktop --icon-file ../packaging/coregaming.png
-          mkdir dist
+          linuxdeploy -v1 --appdir AppDir --executable AppDir/usr/bin/coregaming --output appimage --desktop-file ../packaging/coregaming.desktop --icon-file ../packaging/coregaming.png
           cp Core_Gaming-x86_64.AppImage dist/
 
       - name: MacOS packaging
@@ -55,9 +60,7 @@ jobs:
       - name: Windows packaging
         if: runner.os == 'Windows'
         working-directory: build
-        run: |
-          cpack -G NSIS
-          cmake --install . --prefix dist
+        run: cmake --install . --prefix dist
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
