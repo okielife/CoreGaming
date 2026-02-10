@@ -42,7 +42,7 @@ jobs:
           wget https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
           chmod +x linuxdeploy-x86_64.AppImage
           cmake --install . --prefix AppDir
-          linuxdeploy -v0 --appdir AppDir --executable AppDir/usr/bin/game --output appimage --desktop-file ../packaging/game.desktop --icon-file ../packaging/coregaming.png
+          ./linuxdeploy-x86_64.AppImage -v0 --appdir AppDir --executable AppDir/usr/bin/game --output appimage --desktop-file ../packaging/game.desktop --icon-file ../packaging/coregaming.png
           cp *.AppImage ../dist
 
       - name: MacOS packaging  # eventually an .app
