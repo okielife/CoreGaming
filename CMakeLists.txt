@@ -68,16 +68,9 @@ add_custom_command(TARGET game POST_BUILD
 )
 
 if (APPLE)
-    set_target_properties(game PROPERTIES
-            MACOSX_BUNDLE_BUNDLE_NAME "CoreGaming"
-    )
-    install(
-            DIRECTORY ${CMAKE_SOURCE_DIR}/src/assets
-            DESTINATION CoreGaming.app/Contents/Resources
-    )
-    include(BundleUtilities)
-    install(TARGETS game BUNDLE DESTINATION .
-    )
+    set_target_properties(game PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "CoreGaming")
+    install(DIRECTORY ${CMAKE_SOURCE_DIR}/src/assets DESTINATION CoreGaming.app/Contents/Resources)
+    install(TARGETS game BUNDLE DESTINATION .)
     install(CODE [[
         include(BundleUtilities)
         fixup_bundle(
