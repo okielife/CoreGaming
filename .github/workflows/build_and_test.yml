@@ -34,3 +34,53 @@ jobs:
 
       - name: Run Tests
         run: cd build && ctest -C Release --output-on-failure
+
+      - name: Linux packaging  # eventually use AppImage
+        if: runner.os == 'Linux'
+        run: |
+          mkdir -p dist
+          cp build/game dist/
+          
+          # Copy SFML shared libs
+          ldd dist/game | grep sfml | awk '{print $3}' | xargs -I{} cp {} dist/
+          
+          # Optional: set rpath so it finds libs in its own dir
+          patchelf --set-rpath '$ORIGIN' dist/game
+          
+          # zip up the package
+          zip -r mygame-${{ runner.os }}.zip dist
+
+      - name: MacOS packaging  # eventually an .app
+        if: runner.os == 'macOS'
+        run: |
+          mkdir -p dist
+          cp build/game dist/
+          
+          # Copy SFML dylibs (Homebrew location)
+          cp /usr/local/lib/libsfml-*.dylib dist/ || true
+          cp /opt/homebrew/lib/libsfml-*.dylib dist/ || true
+          
+          # Fix dylib paths
+          install_name_tool -add_rpath "@executable_path" dist/game
+          
+          # zip it up
+          zip -r mygame-${{ runner.os }}.zip dist
+
+      - name: Windows packaging
+        if: runner.os == 'Windows'
+        run: |
+          mkdir dist
+          copy build\game.exe dist\
+          copy C:\SFML\bin\sfml-*.dll dist\
+          powershell Compress-Archive dist mygame-${{ runner.os }}.zip
+
+      - name: Grab assets
+        shell: bash
+        run: |
+          cp -r src/assets dist/
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: mygame-${{ runner.os }}
+          path: dist/
