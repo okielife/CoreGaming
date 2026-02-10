@@ -9,7 +9,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
+        os: [ubuntu-latest, windows-latest]
 
     steps:
       - name: Checkout Code
@@ -51,11 +51,6 @@ jobs:
           cmake --install . --prefix AppDir
           linuxdeploy -v1 --appdir AppDir --executable AppDir/usr/bin/coregaming --output appimage --desktop-file ../packaging/coregaming.desktop --icon-file ../packaging/coregaming.png
           cp Core_Gaming-x86_64.AppImage dist/
-
-      - name: MacOS packaging
-        if: runner.os == 'macOS'
-        working-directory: build
-        run: cmake --install . --prefix dist && zip -r mygame-${{ runner.os }}.zip dist
 
       - name: Windows packaging
         if: runner.os == 'Windows'

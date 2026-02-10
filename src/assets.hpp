@@ -66,15 +66,7 @@ struct AssetManager
      */
     static std::filesystem::path root()
     {
-#ifdef __APPLE__
-        // MyGame.app/Contents/MacOS/MyGame
-        char executableRelativePath[1024];
-        uint32_t pathSize = sizeof(executableRelativePath);
-        _NSGetExecutablePath(executableRelativePath, &pathSize);
-        const std::filesystem::path exePath = executableRelativePath;
-        auto assets = exePath.parent_path() / "Resources" / "assets";
-        return std::filesystem::weakly_canonical(assets);
-#elif __linux__
+#if __linux__
         char executableRelativePath[1024];
         if (const char* appdir = std::getenv("APPDIR")) {
             // we are running from the AppImage launcher, so APPDIR gives us the root of the appimage bundle

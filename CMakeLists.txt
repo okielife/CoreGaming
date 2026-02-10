@@ -79,15 +79,7 @@ add_custom_command(TARGET coregaming POST_BUILD
         $<TARGET_FILE_DIR:coregaming>/assets
 )
 
-if (APPLE)
-    set_target_properties(coregaming PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "CoreGaming")
-    install(DIRECTORY ${CMAKE_SOURCE_DIR}/src/assets/ DESTINATION CoreGaming.app/Contents/Resources)
-    install(TARGETS coregaming BUNDLE DESTINATION .)
-    install(CODE [[
-        include(BundleUtilities)
-        fixup_bundle("${CMAKE_INSTALL_PREFIX}/CoreGaming.app" "" "")
-    ]])
-elseif (UNIX)
+if (UNIX AND NOT APPLE)
     install(TARGETS coregaming RUNTIME DESTINATION usr/bin)
     install(TARGETS sfml-system sfml-window sfml-graphics sfml-audio LIBRARY DESTINATION usr/lib)
     # TODO: May eventually need to bring in assets from the build directory if they were changed by the build step
