@@ -71,13 +71,30 @@ struct AssetManager
         //     uint32_t pathSize = sizeof(executableRelativePath);
         //     _NSGetExecutablePath(executableRelativePath, &pathSize);
 #ifdef __linux__
+        if (const char* appdir = std::getenv("APPDIR")) {
+            return std::filesystem::path(appdir) / "usr" / "share" / "coregaming" / "assets";
+        }
         const ssize_t len = readlink("/proc/self/exe", executableRelativePath, sizeof(executableRelativePath) - 1);
         executableRelativePath[len] = '\0';
 #elif _WIN32
         GetModuleFileName(NULL, executableRelativePath, sizeof(executableRelativePath));
 #endif
-        std::filesystem::path const exe = executableRelativePath;
-        return exe.parent_path() / "assets";
+        // std::filesystem::path const exe = executableRelativePath;
+
+        std::filesystem::path const exePath = executableRelativePath;
+        std::filesystem::path const exeDir  = exePath.parent_path();
+
+        // normal install (build tree)
+        std::filesystem::path assetsDir = exeDir / "assets";
+
+        // AppImage case
+        if (!std::filesystem::exists(assetsDir)) {
+            assetsDir = exeDir.parent_path().parent_path() / "usr" / "share" / "coregaming" / "assets";
+        }
+
+        assetsDir = std::filesystem::weakly_canonical(assetsDir);
+
+        return assetsDir;
     }
 
     /**

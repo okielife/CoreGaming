@@ -9,7 +9,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
+        os: [ubuntu-latest]  #, macos-latest, windows-latest]
 
     steps:
       - name: Checkout Code
@@ -37,12 +37,13 @@ jobs:
         run: ctest -C Release --output-on-failure
 
       - name: Build AppImage
+        working-directory: build
         run: |
           wget https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
           chmod +x linuxdeploy-x86_64.AppImage
-          cmake --install build --prefix AppDir
-          ./linuxdeploy-x86_64.AppImage --appdir AppDir --executable AppDir/usr/bin/game --output appimage
-          zip -r mygame-${{ runner.os }}.zip dist
+          cmake --install . --prefix AppDir
+          linuxdeploy -v0 --appdir AppDir --executable AppDir/usr/bin/game --output appimage --desktop-file ../packaging/game.desktop --icon-file ../packaging/coregaming.png
+          cp *.AppImage ../dist
 
       - name: MacOS packaging  # eventually an .app
         if: runner.os == 'macOS'
@@ -52,12 +53,7 @@ jobs:
         if: runner.os == 'Windows'
         run: |
           cpack -G NSIS
-          powershell Compress-Archive dist mygame-${{ runner.os }}.zip
-
-      - name: Grab assets
-        shell: bash
-        run: |
-          cp -r src/assets dist/
+          cmake --install build --prefix dist
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v4

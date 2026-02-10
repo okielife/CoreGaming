@@ -1,9 +1,31 @@
-cmake_minimum_required(VERSION 3.31)
+cmake_minimum_required(VERSION 3.28)
 project(CoreGaming)
 set(CMAKE_CXX_STANDARD 20)
 
+if(UNIX AND NOT APPLE)
+    set(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
+    set(CMAKE_INSTALL_RPATH "$ORIGIN/../lib")
+    set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+endif()
+
 # build and setup the sfml libraries
-include(cmake/sfml.cmake)
+include(FetchContent)
+set(SFML_BUILD_NETWORK OFF CACHE BOOL "" FORCE)
+set(SFML_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+set(SFML_BUILD_DOC OFF CACHE BOOL "" FORCE)
+set(SFML_BUILD_AUDIO TRUE)
+set(SFML_BUILD_GRAPHICS TRUE)
+set(SFML_BUILD_NETWORK FALSE)
+set(SFML_BUILD_WINDOW TRUE)
+set(SFML_INSTALL_PKGCONFIG_FILES FALSE)
+set(SFML_INSTALL_PDB FALSE)
+if (WIN32)
+    set(SFML_STATIC_LIBRARIES ON CACHE BOOL "" FORCE)
+else()
+    set(SFML_STATIC_LIBRARIES OFF CACHE BOOL "" FORCE)
+endif()
+FetchContent_Declare(sfml GIT_REPOSITORY https://github.com/SFML/SFML.git GIT_TAG 2.6.1)
+FetchContent_MakeAvailable(sfml)
 
 # on MSVC, the min/max macros are expanded and cause compile failures; disable them
 if (WIN32)
@@ -12,7 +34,7 @@ endif()
 
 # build the game binary and link it to the SFML libraries
 add_executable(game
-        MACOSX_BUNDLE
+        # MACOSX_BUNDLE
         src/assets.hpp
         src/audio.cpp
         src/audio.hpp
@@ -52,12 +74,7 @@ add_executable(game
         src/scenes/World.cpp
 )
 target_include_directories(game PRIVATE src)
-target_link_libraries(game PRIVATE
-        sfml-graphics
-        sfml-window
-        sfml-system
-        sfml-audio
-)
+target_link_libraries(game PRIVATE sfml-graphics sfml-window sfml-system sfml-audio)
 
 # after each build, copy the assets from src/assets to build/assets so the assets
 # can be found when running in a build tree
@@ -67,56 +84,7 @@ add_custom_command(TARGET game POST_BUILD
         $<TARGET_FILE_DIR:game>/assets
 )
 
-if (APPLE)
-    set_target_properties(game PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "CoreGaming")
-    install(DIRECTORY ${CMAKE_SOURCE_DIR}/src/assets DESTINATION CoreGaming.app/Contents/Resources)
-    install(TARGETS game BUNDLE DESTINATION .)
-    install(CODE [[
-        include(BundleUtilities)
-        fixup_bundle(
-            "${CMAKE_INSTALL_PREFIX}/CoreGaming.app"
-            ""
-            ""
-        )
-    ]])
-elseif (UNIX)  # AND NOT APPLE
-    install(TARGETS game RUNTIME DESTINATION usr/bin)
-    install(DIRECTORY ${CMAKE_SOURCE_DIR}/src/assets DESTINATION .)
-    # Define the content you want to write
-    set(FILE_CONTENT [=[
-"#!/bin/sh
-HERE="$(dirname "$(readlink -f "$0")")"
-export LD_LIBRARY_PATH="$HERE/usr/lib:$LD_LIBRARY_PATH"
-exec "$HERE/usr/bin/game" "$@"
-]=]
-    )
-    set(OUTPUT_FILE "${CMAKE_BINARY_DIR}/cmake/AppRun.in")
-    file(WRITE "${OUTPUT_FILE}" "${FILE_CONTENT}")
-    install(PROGRAMS
-            ${CMAKE_SOURCE_DIR}/cmake/AppRun.in
-            DESTINATION .
-            RENAME AppRun
-    )
-elseif (WIN32)
-    install(TARGETS game RUNTIME DESTINATION .)
-    install(DIRECTORY ${CMAKE_SOURCE_DIR}/src/assets DESTINATION assets)
-    include(InstallRequiredSystemLibraries)
-
-    set(CPACK_PACKAGE_NAME "CoreGaming")
-    set(CPACK_PACKAGE_VENDOR "Name")
-    set(CPACK_PACKAGE_VERSION "1.0.0")
-
-    set(CPACK_PACKAGE_INSTALL_DIRECTORY "CoreGaming")
-
-    set(CPACK_NSIS_DISPLAY_NAME "CoreGaming")
-    set(CPACK_NSIS_PACKAGE_NAME "CoreGaming")
-    set(CPACK_NSIS_CONTACT "notlee@notlee.notlee")
-
-    set(CPACK_NSIS_MODIFY_PATH OFF)
-    set(CPACK_NSIS_ENABLE_UNINSTALL_BEFORE_INSTALL ON)
-
-    set(CPACK_GENERATOR "NSIS")
-
-    include(CPack)
-    set(CPACK_NSIS_CREATE_ICONS_EXTRA "${CPACK_NSIS_CREATE_ICONS_EXTRA} CreateShortCut '$DESKTOP\\\\MyGame.lnk' '$INSTDIR\\\\game.exe'")
-endif ()
+install(TARGETS game RUNTIME DESTINATION usr/bin)
+install(DIRECTORY ${CMAKE_SOURCE_DIR}/src/assets DESTINATION usr/share/coregaming)
+# install(PROGRAMS ${CMAKE_SOURCE_DIR}/packaging/AppRun.in DESTINATION . RENAME AppRun)
+install(TARGETS sfml-system sfml-window sfml-graphics sfml-audio LIBRARY DESTINATION usr/lib)
