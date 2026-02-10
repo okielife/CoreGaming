@@ -4,7 +4,7 @@
 #include <unordered_map>
 
 #include <command.hpp>
-#include <scenes/RoomBase.hpp>
+#include <rooms/RoomBase.hpp>
 
 class Game;
 

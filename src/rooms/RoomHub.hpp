@@ -3,7 +3,7 @@
 #include <array>
 #include <map>
 
-#include <scenes/RoomBase.hpp>
+#include <rooms/RoomBase.hpp>
 #include <renderer.hpp>
 #include <command.hpp>
 

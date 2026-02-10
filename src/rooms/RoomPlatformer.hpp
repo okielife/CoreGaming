@@ -1,6 +1,6 @@
 #pragma once
 
-#include <scenes/RoomBase.hpp>
+#include <rooms/RoomBase.hpp>
 #include <camera.hpp>
 #include <drawables.hpp>
 

@@ -72,29 +72,27 @@ struct AssetManager
         //     _NSGetExecutablePath(executableRelativePath, &pathSize);
 #ifdef __linux__
         if (const char* appdir = std::getenv("APPDIR")) {
-            return std::filesystem::path(appdir) / "usr" / "share" / "coregaming" / "assets";
+            // we are running from the AppImage launcher, so APPDIR gives us the root of the appimage bundle
+            auto const p =  std::filesystem::path(appdir) / "usr" / "share" / "coregaming" / "assets";
+            return std::filesystem::weakly_canonical(p);
         }
         const ssize_t len = readlink("/proc/self/exe", executableRelativePath, sizeof(executableRelativePath) - 1);
         executableRelativePath[len] = '\0';
+        const std::filesystem::path exePath = executableRelativePath;
+        const std::filesystem::path exeDir  = exePath.parent_path();
+        const std::filesystem::path assetsDirNextToBinary = exeDir / "assets";
+        if (std::filesystem::exists(assetsDirNextToBinary)) {
+            // we are running from the cmake build tree, and we pull the assets right next to the binary
+            return std::filesystem::weakly_canonical(assetsDirNextToBinary);
+        }
+        // really the only other option is that we are running as a raw executable right from the installation bundle
+        auto const p = exeDir.parent_path().parent_path() / "usr" / "share" / "coregaming" / "assets";
+        return std::filesystem::weakly_canonical(p);
 #elif _WIN32
         GetModuleFileName(NULL, executableRelativePath, sizeof(executableRelativePath));
 #endif
         // std::filesystem::path const exe = executableRelativePath;
 
-        std::filesystem::path const exePath = executableRelativePath;
-        std::filesystem::path const exeDir  = exePath.parent_path();
-
-        // normal install (build tree)
-        std::filesystem::path assetsDir = exeDir / "assets";
-
-        // AppImage case
-        if (!std::filesystem::exists(assetsDir)) {
-            assetsDir = exeDir.parent_path().parent_path() / "usr" / "share" / "coregaming" / "assets";
-        }
-
-        assetsDir = std::filesystem::weakly_canonical(assetsDir);
-
-        return assetsDir;
     }
 
     /**

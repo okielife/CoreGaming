@@ -1,6 +1,6 @@
 #include <game.hpp>
 #include <collision.hpp>
-#include <scenes/RoomPlatformer.hpp>
+#include <rooms/RoomPlatformer.hpp>
 
 void RoomPlatformer::update(Game & game, const float dt)
 {

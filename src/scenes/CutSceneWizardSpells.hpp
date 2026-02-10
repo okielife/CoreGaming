@@ -4,7 +4,7 @@
 
 #include <constants.hpp>
 #include <drawables.hpp>
-#include <scenes/RoomBase.hpp>
+#include <rooms/RoomBase.hpp>
 
 enum class ScenePhase
 {

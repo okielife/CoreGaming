@@ -1,7 +1,7 @@
 #pragma once
 
-#include <scenes/StateBase.hpp>
-#include <scenes/World.hpp>
+#include <states/StateBase.hpp>
+#include <worlds/World.hpp>
 
 class Game;
 class Renderer;

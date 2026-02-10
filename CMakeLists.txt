@@ -33,8 +33,8 @@ if (WIN32)
 endif()
 
 # build the game binary and link it to the SFML libraries
-add_executable(game
-        # MACOSX_BUNDLE
+add_executable(coregaming
+        MACOSX_BUNDLE
         src/assets.hpp
         src/audio.cpp
         src/audio.hpp
@@ -55,36 +55,63 @@ add_executable(game
         src/renderer.hpp
         src/scenes/CutSceneWizardSpells.cpp
         src/scenes/CutSceneWizardSpells.hpp
-        src/scenes/RoomBase.hpp
-        src/scenes/RoomBulletHell.cpp
-        src/scenes/RoomBulletHell.hpp
-        src/scenes/RoomGridShow.cpp
-        src/scenes/RoomGridShow.hpp
-        src/scenes/RoomHub.cpp
-        src/scenes/RoomHub.hpp
-        src/scenes/RoomMaze.hpp
-        src/scenes/RoomMaze.cpp
-        src/scenes/RoomPlatformer.hpp
-        src/scenes/RoomPlatformer.cpp
-        src/scenes/StateBase.hpp
-        src/scenes/StatePause.hpp
-        src/scenes/StatePlaying.cpp
-        src/scenes/StatePlaying.hpp
-        src/scenes/World.hpp
-        src/scenes/World.cpp
+        src/rooms/RoomBase.hpp
+        src/rooms/RoomBulletHell.cpp
+        src/rooms/RoomBulletHell.hpp
+        src/rooms/RoomGridShow.cpp
+        src/rooms/RoomGridShow.hpp
+        src/rooms/RoomHub.cpp
+        src/rooms/RoomHub.hpp
+        src/rooms/RoomMaze.hpp
+        src/rooms/RoomMaze.cpp
+        src/rooms/RoomPlatformer.hpp
+        src/rooms/RoomPlatformer.cpp
+        src/states/StateBase.hpp
+        src/states/StatePause.hpp
+        src/states/StatePlaying.cpp
+        src/states/StatePlaying.hpp
+        src/worlds/World.hpp
+        src/worlds/World.cpp
 )
-target_include_directories(game PRIVATE src)
-target_link_libraries(game PRIVATE sfml-graphics sfml-window sfml-system sfml-audio)
+target_include_directories(coregaming PRIVATE src)
+target_link_libraries(coregaming PRIVATE sfml-graphics sfml-window sfml-system sfml-audio)
 
 # after each build, copy the assets from src/assets to build/assets so the assets
 # can be found when running in a build tree
-add_custom_command(TARGET game POST_BUILD
+add_custom_command(TARGET coregaming POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_directory
         ${CMAKE_SOURCE_DIR}/src/assets
-        $<TARGET_FILE_DIR:game>/assets
+        $<TARGET_FILE_DIR:coregaming>/assets
 )
 
-install(TARGETS game RUNTIME DESTINATION usr/bin)
-install(DIRECTORY ${CMAKE_SOURCE_DIR}/src/assets DESTINATION usr/share/coregaming)
-# install(PROGRAMS ${CMAKE_SOURCE_DIR}/packaging/AppRun.in DESTINATION . RENAME AppRun)
-install(TARGETS sfml-system sfml-window sfml-graphics sfml-audio LIBRARY DESTINATION usr/lib)
+if (UNIX AND NOT APPLE)
+    install(TARGETS coregaming RUNTIME DESTINATION usr/bin)
+    install(TARGETS sfml-system sfml-window sfml-graphics sfml-audio LIBRARY DESTINATION usr/lib)
+    # TODO: May eventually need to bring in assets from the build directory if they were changed by the build step
+    install(DIRECTORY ${CMAKE_SOURCE_DIR}/src/assets DESTINATION usr/share/coregaming)
+elseif (WIN32)
+    install(TARGETS coregaming RUNTIME DESTINATION .)
+    install(DIRECTORY ${CMAKE_SOURCE_DIR}/src/assets DESTINATION assets)
+    include(InstallRequiredSystemLibraries)
+    set(CPACK_PACKAGE_NAME "CoreGaming")
+    set(CPACK_PACKAGE_VENDOR "Name")
+    set(CPACK_PACKAGE_VERSION "1.0.0")
+    set(CPACK_PACKAGE_INSTALL_DIRECTORY "CoreGaming")
+    set(CPACK_NSIS_DISPLAY_NAME "CoreGaming")
+    set(CPACK_NSIS_PACKAGE_NAME "CoreGaming")
+    set(CPACK_NSIS_CONTACT "notlee@notlee.notlee")
+    set(CPACK_NSIS_MODIFY_PATH OFF)
+    set(CPACK_NSIS_ENABLE_UNINSTALL_BEFORE_INSTALL ON)
+    set(CPACK_GENERATOR "NSIS")
+    include(CPack)
+    set(CPACK_NSIS_CREATE_ICONS_EXTRA "${CPACK_NSIS_CREATE_ICONS_EXTRA} CreateShortCut '$DESKTOP\\\\CoreGaming.lnk' '$INSTDIR\\\\coregaming.exe'")
+endif ()
+
+#if (APPLE)
+#    set_target_properties(game PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "CoreGaming")
+#    install(DIRECTORY ${CMAKE_SOURCE_DIR}/src/assets DESTINATION CoreGaming.app/Contents/Resources)
+#    install(TARGETS game BUNDLE DESTINATION .)
+#    install(CODE [[
+#        include(BundleUtilities)
+#        fixup_bundle("${CMAKE_INSTALL_PREFIX}/CoreGaming.app" "" "")
+#    ]])

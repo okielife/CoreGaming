@@ -1,6 +1,6 @@
-#include <scenes/RoomHub.hpp>
+#include <rooms/RoomHub.hpp>
 #include <game.hpp>
-#include <scenes/World.hpp>
+#include <worlds/World.hpp>
 
 void RoomHub::update(Game& game, const float)
 {
@@ -127,8 +127,8 @@ void RoomHub::render(Game&, Renderer& renderer)
         if (world.isRoomCompleted(option))
         {
             crossedOutTransform.y = yValue + 25;
-            float const stringCharacters = optionText.text.length();
-            float const width = 9.681 * stringCharacters + 27.445;
+            auto const stringCharacters = static_cast<float>(optionText.text.length());
+            float const width = 9.681f * stringCharacters + 27.445f;
             crossedOutOption.w = width;;
             renderer.drawUI(crossedOutOption, crossedOutTransform);
         }

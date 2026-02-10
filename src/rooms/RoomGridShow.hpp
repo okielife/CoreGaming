@@ -1,7 +1,7 @@
 #pragma once
 
 #include <camera.hpp>
-#include <scenes/RoomBase.hpp>
+#include <rooms/RoomBase.hpp>
 
 struct RoomGridShow : RoomBase
 {

@@ -1,4 +1,4 @@
-#include <scenes/StatePlaying.hpp>
+#include <states/StatePlaying.hpp>
 
 #include "game.hpp"
 

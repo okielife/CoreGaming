@@ -1,5 +1,5 @@
 #include <game.hpp>
-#include <scenes/RoomGridShow.hpp>
+#include <rooms/RoomGridShow.hpp>
 
 void RoomGridShow::update(Game & game, const float dt)
 {

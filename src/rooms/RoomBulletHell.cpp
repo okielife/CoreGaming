@@ -1,6 +1,6 @@
 #include <collision.hpp>
 #include <game.hpp>
-#include <scenes/RoomBulletHell.hpp>
+#include <rooms/RoomBulletHell.hpp>
 
 void RoomBulletHell::update(Game& game, float const dt)
 {

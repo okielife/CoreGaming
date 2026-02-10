@@ -2,7 +2,7 @@
 
 #include <array>
 
-#include <scenes/RoomBase.hpp>
+#include <rooms/RoomBase.hpp>
 #include <drawables.hpp>
 
 constexpr int TILE_WIDTH = WINDOW_WIDTH / 17;

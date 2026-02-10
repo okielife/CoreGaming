@@ -1,7 +1,7 @@
 #include <game.hpp>
 #include <input.hpp>
 #include <iostream>
-#include <scenes/StatePlaying.hpp>
+#include <states/StatePlaying.hpp>
 
 Game::Game(Input& input, AudioManager& audio) : input(input), audio(audio)
 {

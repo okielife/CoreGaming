@@ -1,10 +1,10 @@
 #include <scenes/CutSceneWizardSpells.hpp>  // TODO: Remove this as a room
-#include <scenes/RoomBulletHell.hpp>
-#include <scenes/RoomGridShow.hpp>
-#include <scenes/RoomHub.hpp>
-#include <scenes/RoomMaze.hpp>
-#include <scenes/RoomPlatformer.hpp>
-#include "scenes/World.hpp"
+#include <rooms/RoomBulletHell.hpp>
+#include <rooms/RoomGridShow.hpp>
+#include <rooms/RoomHub.hpp>
+#include <rooms/RoomMaze.hpp>
+#include <rooms/RoomPlatformer.hpp>
+#include "worlds/World.hpp"
 
 std::unique_ptr<RoomBase> World::getNewRoomInstance(RoomID const room)
 {

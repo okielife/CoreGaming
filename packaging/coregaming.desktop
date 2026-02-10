@@ -1,7 +1,6 @@
 [Desktop Entry]
 Type=Application
 Name=Core Gaming
-Exec=game
+Exec=coregaming
 Icon=coregaming
 Categories=Game;
-

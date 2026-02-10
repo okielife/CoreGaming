@@ -1,9 +1,9 @@
 #include <game.hpp>
-#include <scenes/RoomMaze.hpp>
+#include <rooms/RoomMaze.hpp>
 
 class Game;
 
-void RoomMaze::update(Game & game, const float dt)
+void RoomMaze::update(Game & game, [[maybe_unused]] const float dt)
 {
     const auto& input = game.input;
     if (input.wasPressed(Action::Quit))
