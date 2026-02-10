@@ -37,6 +37,7 @@ jobs:
         run: ctest -C Release --output-on-failure
 
       - name: Build AppImage
+        if: runner.os == 'Linux'
         working-directory: build
         run: |
           wget https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
