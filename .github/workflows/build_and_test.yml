@@ -53,8 +53,8 @@ jobs:
           cp Core_Gaming-x86_64.AppImage dist/
 
       - name: MacOS packaging
-        working-directory: build
         if: runner.os == 'macOS'
+        working-directory: build
         run: cmake --install . --prefix dist && zip -r mygame-${{ runner.os }}.zip dist
 
       - name: Windows packaging
