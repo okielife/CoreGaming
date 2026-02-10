@@ -53,12 +53,12 @@ jobs:
       - name: MacOS packaging  # eventually an .app
         if: runner.os == 'macOS'
         run: |
+          set -e
           mkdir -p dist
           cp build/game dist/
           
-          # Copy SFML dylibs (Homebrew location)
-          cp /usr/local/lib/libsfml-*.dylib dist/ || true
-          cp /opt/homebrew/lib/libsfml-*.dylib dist/ || true
+          # Collect non-system dylibs
+          otool -L build/game | tail -n +2 | awk '{print $1}' | grep -E 'sfml|openal|vorbis|flac' | while read lib; do cp "$lib" dist/ done
           
           # Fix dylib paths
           install_name_tool -add_rpath "@executable_path" dist/game
@@ -70,7 +70,7 @@ jobs:
         if: runner.os == 'Windows'
         run: |
           mkdir dist
-          copy build\game.exe dist\
+          copy build\Release\game.exe dist\
           copy C:\SFML\bin\sfml-*.dll dist\
           powershell Compress-Archive dist mygame-${{ runner.os }}.zip
 
