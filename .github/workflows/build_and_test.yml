@@ -62,6 +62,24 @@ jobs:
         working-directory: build
         run: cmake --install . --prefix dist
 
+      # CMake installs produce a UNIX-like layout (bin/, lib/, share/).
+      # Normalize to a flat Windows game directory for distribution.
+      - name: Normalize Windows layout
+        if: runner.os == 'Windows'
+        shell: pwsh
+        working-directory: build
+        run: |
+          $dist = "dist"
+          if (Test-Path "$dist/bin") {
+            Get-ChildItem "$dist/bin" -Filter *.dll | ForEach-Object {
+              Move-Item $_.FullName "$dist/" -Force
+            }
+            Remove-Item "$dist/bin" -Recurse -Force
+          }
+          Remove-Item "$dist/include" -Recurse -Force -ErrorAction SilentlyContinue
+          Remove-Item "$dist/lib"     -Recurse -Force -ErrorAction SilentlyContinue
+          Remove-Item "$dist/share"   -Recurse -Force -ErrorAction SilentlyContinue
+
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
         with:
