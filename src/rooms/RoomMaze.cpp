@@ -14,10 +14,10 @@ void RoomMaze::update(Game & game, [[maybe_unused]] const float dt)
     }
     int nextX = playerXIndex;
     int nextY = playerYIndex;
-    if (game.input.axisCurrentValue(Axis::X) > 0.5) nextX++;
-    if (game.input.axisCurrentValue(Axis::X) < -0.5) nextX--;
-    if (game.input.axisCurrentValue(Axis::Y) > 0.5) nextY++;
-    if (game.input.axisCurrentValue(Axis::Y) < -0.5) nextY--;
+    if (game.input.pressedThisFrame(Axis::X, AxisDirection::Positive)) nextX++;
+    if (game.input.pressedThisFrame(Axis::X, AxisDirection::Negative)) nextX--;
+    if (game.input.pressedThisFrame(Axis::Y, AxisDirection::Positive)) nextY++;
+    if (game.input.pressedThisFrame(Axis::Y, AxisDirection::Negative)) nextY--;
     // assuming that the path is bounded by valid wall tiles here
     if (map[nextY][nextX] != 'X') {
         playerXIndex = nextX;
