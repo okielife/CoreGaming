@@ -4,6 +4,7 @@
 
 #include <rooms/RoomBase.hpp>
 #include <drawables.hpp>
+#include <movement.hpp>
 
 constexpr int TILE_WIDTH = WINDOW_WIDTH / 17;
 constexpr int TILE_HEIGHT = WINDOW_HEIGHT / 15;
@@ -39,4 +40,7 @@ struct RoomMaze : RoomBase
         "XXXXXXXXXXX111XXX",
         "XXXXXXXXXXXXXXXXX",
     };
+    AxisRepeater horizontal;
+    AxisRepeater vertical;
+    bool won = false;
 };

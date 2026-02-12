@@ -191,6 +191,14 @@ bool Input::pressedThisFrame(Axis const a, AxisDirection const d) const
     return false;
 }
 
+int Input::axisCurrentDigitalValue(Axis const a) const
+{
+    float const analogVal = axisCurrentValue(a);
+    if (analogVal > 0) return 1;
+    if (analogVal < 0) return -1;
+    return 0;
+}
+
 float Input::axisCurrentValue(Axis const a) const
 {
     if (joystickActiveID >= 0)

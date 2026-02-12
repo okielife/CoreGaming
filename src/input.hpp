@@ -45,6 +45,7 @@ struct Input {
     [[nodiscard]] bool pressedThisFrame(Axis a, AxisDirection d) const;
     bool actionCurrentlyPressed(Action a) const;
     float axisCurrentValue(Axis a) const;
+    int axisCurrentDigitalValue(Axis a) const;
     void setAsPressed(Action a);
 
     bool anyButtonPressedThisFrame = false;

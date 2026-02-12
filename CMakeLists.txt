@@ -67,6 +67,7 @@ add_executable(coregaming
         src/states/StatePlaying.hpp
         src/worlds/World.hpp
         src/worlds/World.cpp
+        src/movement.hpp
 )
 target_include_directories(coregaming PRIVATE src)
 target_link_libraries(coregaming PRIVATE sfml-graphics sfml-window sfml-system sfml-audio)

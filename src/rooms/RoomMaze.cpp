@@ -1,4 +1,5 @@
 #include <game.hpp>
+#include <movement.hpp>
 #include <rooms/RoomMaze.hpp>
 
 class Game;
@@ -9,15 +10,24 @@ void RoomMaze::update(Game & game, [[maybe_unused]] const float dt)
     if (input.pressedThisFrame(Action::Quit))
     {
         // TODO: Use a "won" flag instead so the screen stays on the maze.
-        if (status == RoomStatus::None) status = RoomStatus::Incomplete;
+        status = won ? RoomStatus::Complete : RoomStatus::Incomplete;
         return;
     }
+
+    int const dx = input.axisCurrentDigitalValue(Axis::X);
+    int const dy = input.axisCurrentDigitalValue(Axis::Y);
     int nextX = playerXIndex;
     int nextY = playerYIndex;
-    if (game.input.pressedThisFrame(Axis::X, AxisDirection::Positive)) nextX++;
-    if (game.input.pressedThisFrame(Axis::X, AxisDirection::Negative)) nextX--;
-    if (game.input.pressedThisFrame(Axis::Y, AxisDirection::Positive)) nextY++;
-    if (game.input.pressedThisFrame(Axis::Y, AxisDirection::Negative)) nextY--;
+    if (horizontal.update(dt, dx))
+    {
+        nextX += dx;
+    }
+
+    if (vertical.update(dt, dy))
+    {
+        nextY += dy;
+    }
+
     // assuming that the path is bounded by valid wall tiles here
     if (map[nextY][nextX] != 'X') {
         playerXIndex = nextX;
@@ -25,7 +35,7 @@ void RoomMaze::update(Game & game, [[maybe_unused]] const float dt)
     }
     if (map[playerYIndex][playerXIndex] == '2')
     {
-        status = RoomStatus::Complete;
+        won = true;
     }
     playerTransform.x = static_cast<float>(playerXIndex) * TILE_WIDTH;
     playerTransform.y = static_cast<float>(playerYIndex) * TILE_HEIGHT;
@@ -50,7 +60,7 @@ void RoomMaze::render(Game &, Renderer & renderer)
     // Draw player
     renderer.draw(player, playerTransform);
 
-    if (status == RoomStatus::Complete)
+    if (won)
     {
         message.text = "WINNER!";
         message.color = sf::Color::Green;
