@@ -1,10 +1,14 @@
 #include <rooms/RoomHub.hpp>
 #include <game.hpp>
+#include <iostream>
 #include <worlds/World.hpp>
 
 void RoomHub::update(Game& game, const float)
 {
-    if (game.input.wasPressed(Action::MoveDown))
+    // auto const x = game.input.axisCurrentValue(Axis::X);
+    // auto const y = game.input.axisCurrentValue(Axis::Y);
+    // std::cout << "RoomHub::update, current joystick X/Y: " << x << ", " << y << std::endl;
+    if (game.input.pressedThisFrame(Axis::Y, AxisDirection::Positive))
     {
         if (exitIsSelected)
         {
@@ -35,7 +39,7 @@ void RoomHub::update(Game& game, const float)
             }
         }
     }
-    if (game.input.wasPressed(Action::MoveUp))
+    if (game.input.pressedThisFrame(Axis::Y, AxisDirection::Negative))
     {
         if (exitIsSelected)
         {
@@ -66,7 +70,7 @@ void RoomHub::update(Game& game, const float)
             }
         }
     }
-    if (game.input.wasPressed(Action::Confirm))
+    if (game.input.pressedThisFrame(Action::Confirm))
     {
         if (exitIsSelected)
         {
@@ -100,7 +104,7 @@ void RoomHub::update(Game& game, const float)
         default: break;
         }
     }
-    if (game.input.wasPressed(Action::Quit))
+    if (game.input.pressedThisFrame(Action::Quit))
     {
         status = RoomStatus::ExitGame;
     }

@@ -6,7 +6,7 @@ class Game;
 void RoomMaze::update(Game & game, [[maybe_unused]] const float dt)
 {
     const auto& input = game.input;
-    if (input.wasPressed(Action::Quit))
+    if (input.pressedThisFrame(Action::Quit))
     {
         // TODO: Use a "won" flag instead so the screen stays on the maze.
         if (status == RoomStatus::None) status = RoomStatus::Incomplete;
@@ -14,10 +14,10 @@ void RoomMaze::update(Game & game, [[maybe_unused]] const float dt)
     }
     int nextX = playerXIndex;
     int nextY = playerYIndex;
-    if (input.wasPressed(Action::MoveUp)) nextY--;
-    if (input.wasPressed(Action::MoveDown))  nextY++;
-    if (input.wasPressed(Action::MoveLeft))  nextX--;
-    if (input.wasPressed(Action::MoveRight)) nextX++;
+    if (game.input.axisCurrentValue(Axis::X) > 0.5) nextX++;
+    if (game.input.axisCurrentValue(Axis::X) < -0.5) nextX--;
+    if (game.input.axisCurrentValue(Axis::Y) > 0.5) nextY++;
+    if (game.input.axisCurrentValue(Axis::Y) < -0.5) nextY--;
     // assuming that the path is bounded by valid wall tiles here
     if (map[nextY][nextX] != 'X') {
         playerXIndex = nextX;

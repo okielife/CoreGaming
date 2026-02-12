@@ -89,3 +89,5 @@ elseif (WIN32)
     install(FILES $<TARGET_RUNTIME_DLLS:coregaming> DESTINATION .)
     install(DIRECTORY ${CMAKE_SOURCE_DIR}/src/assets/ DESTINATION assets)
 endif ()
+
+add_subdirectory(utility)

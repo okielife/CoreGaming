@@ -5,7 +5,7 @@
 
 void RoomWizardSpells::update(Game& game, float const dt)
 {
-    if (game.input.anyPressed())
+    if (game.input.anyButtonPressedThisFrame)
     {
         status = RoomStatus::Complete;
         return;

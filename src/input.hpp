@@ -7,40 +7,50 @@
 
 #include <input.hpp>
 
-enum class Action {
-    MoveUp,
-    MoveDown,
-    MoveLeft,
-    MoveRight,
-    Enter,
-    ZoomIn,
-    ZoomOut,
-    Confirm,
-    Quit
+enum class Axis
+{
+    X,
+    Y,
+    Zoom
 };
 
-constexpr std::array actionsList = {
-    Action::MoveUp,
-    Action::MoveDown,
-    Action::MoveLeft,
-    Action::MoveRight,
-    Action::Enter,
-    Action::ZoomIn,
-    Action::ZoomOut,
-    Action::Quit,
-    Action::Confirm
+struct AxisState
+{
+    float raw = 0.f;
+    bool engagedPositive = false;
+    bool engagedNegative = false;
+    bool pulsePositive = false;
+    bool pulseNegative = false;
+};
+
+enum class AxisDirection
+{
+    Positive,
+    Negative
+};
+
+enum class Action {
+    Space,
+    Confirm,
+    Quit
 };
 
 struct Input {
     Input();
     void beginFrame();
-    void update(const sf::Event& e);
+    void handleEvent(const sf::Event& e);
+    void update();
 
-    [[nodiscard]] bool anyPressed() const;
-    [[nodiscard]] bool wasPressed(Action a) const;
-    static bool isDown(Action a) ;
+    [[nodiscard]] bool pressedThisFrame(Action a) const;
+    [[nodiscard]] bool pressedThisFrame(Axis a, AxisDirection d) const;
+    bool actionCurrentlyPressed(Action a) const;
+    float axisCurrentValue(Axis a) const;
     void setAsPressed(Action a);
 
-    bool anyPressed_ = false;
+    bool anyButtonPressedThisFrame = false;
     std::unordered_map<Action, bool> pressed{};
+
+private:
+    int joystickActiveID = -1;
+    std::unordered_map<Axis, AxisState> axes;
 };

@@ -5,7 +5,7 @@
 void RoomPlatformer::update(Game & game, const float dt)
 {
     const auto& input = game.input;
-    if (input.wasPressed(Action::Quit))
+    if (input.pressedThisFrame(Action::Quit))
     {
         status = won ? RoomStatus::Complete : RoomStatus::Incomplete;
         return;
@@ -13,7 +13,7 @@ void RoomPlatformer::update(Game & game, const float dt)
 
     if (won)
     {
-        if (input.anyPressed())
+        if (input.anyButtonPressedThisFrame)
         {
             status = RoomStatus::Complete;
         }
@@ -21,11 +21,10 @@ void RoomPlatformer::update(Game & game, const float dt)
     }
 
     // move
-    if (Input::isDown(Action::MoveLeft)) playerTransform.x -= 4.5;
-    if (Input::isDown(Action::MoveRight)) playerTransform.x += 4.5;
+    playerTransform.x += game.input.axisCurrentValue(Axis::X) * 4.5f;
 
     // Jump
-    if (input.wasPressed(Action::Enter) && grounded) {
+    if (input.pressedThisFrame(Action::Space) && grounded) {
         constexpr float jumpSpeed = 650.f;
         velocityY = -jumpSpeed;
         grounded = false;

@@ -4,7 +4,7 @@
 
 void RoomBulletHell::update(Game& game, float const dt)
 {
-    if (game.input.wasPressed(Action::Quit))
+    if (game.input.pressedThisFrame(Action::Quit))
     {
         if (won)
         {
@@ -23,15 +23,13 @@ void RoomBulletHell::update(Game& game, float const dt)
 
     if (lost)
     {
-        if (game.input.wasPressed(Action::Confirm)) resetAfterFailure();
+        if (game.input.pressedThisFrame(Action::Confirm)) resetAfterFailure();
     }
 
     // Player movement
     constexpr float playerSpeed = 300.f;
-    if (Input::isDown(Action::MoveUp)) playerTransform.y -= playerSpeed * dt;
-    if (Input::isDown(Action::MoveDown)) playerTransform.y += playerSpeed * dt;
-    if (Input::isDown(Action::MoveLeft)) playerTransform.x -= playerSpeed * dt;;
-    if (Input::isDown(Action::MoveRight)) playerTransform.x += playerSpeed * dt;
+    playerTransform.x += game.input.axisCurrentValue(Axis::X) * playerSpeed * dt;
+    playerTransform.y += game.input.axisCurrentValue(Axis::Y) * playerSpeed * dt;
 
     // Keep player in action window
     playerTransform.x = std::clamp(

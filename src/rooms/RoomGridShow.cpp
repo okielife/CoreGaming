@@ -7,21 +7,18 @@ void RoomGridShow::update(Game & game, const float dt)
     msSinceLastSword += dt;
 
     const auto& input = game.input;
-    if (input.wasPressed(Action::Quit))
+    if (input.pressedThisFrame(Action::Quit))
     {
         status = RoomStatus::Complete;
         return;
     }
 
     constexpr float speed = 200;
-    if (Input::isDown(Action::MoveUp)) playerTransform.y -= speed * dt;
-    if (Input::isDown(Action::MoveDown)) playerTransform.y += speed * dt;
-    if (Input::isDown(Action::MoveLeft))playerTransform.x -= speed * dt;
-    if (Input::isDown(Action::MoveRight)) playerTransform.x += speed * dt;
-    if (Input::isDown(Action::ZoomIn)) camera.zoom *= 1.01;
-    if (Input::isDown(Action::ZoomOut)) camera.zoom /= 1.01;
+    playerTransform.x += game.input.axisCurrentValue(Axis::X) * speed * dt;
+    playerTransform.y += game.input.axisCurrentValue(Axis::Y) * speed * dt;
+    camera.zoom += game.input.axisCurrentValue(Axis::Zoom) * 1.01f;
 
-    if (input.wasPressed(Action::Enter))
+    if (input.pressedThisFrame(Action::Space))
     {
         if (msSinceLastSword >= swordCooldownMS)
         {

@@ -37,13 +37,16 @@ void Platform::run(Game & game) {
                 break;
 
             case sf::Event::KeyPressed:
-                input_.update(event);
+            case sf::Event::JoystickButtonPressed:
+                input_.handleEvent(event);
                 break;
 
             default:
                 break;
             }
         }
+
+        input_.update(); // additional per-frame, but not event-based updates
 
         float const dt = clock.restart().asSeconds();
         game.update(dt);
